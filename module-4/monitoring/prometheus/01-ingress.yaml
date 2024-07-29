@@ -1,0 +1,16 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`prometheus.${EXTERNAL_IP}.sslip.io`)
+      services:
+        - name: prometheus
+          port: 9090
+          namespace: monitoring

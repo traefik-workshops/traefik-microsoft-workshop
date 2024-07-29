@@ -1,0 +1,17 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: world-time-api-external-name
+  namespace: apps
+  labels:
+    area: external
+    external: name
+spec:
+  pathPrefix: /world-time-api
+  service:
+    openApiSpec:
+      url: https://worldtimeapi.org/api
+    name: world-time-api
+    port:
+      number: 443

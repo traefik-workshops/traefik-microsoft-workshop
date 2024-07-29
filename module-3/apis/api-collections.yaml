@@ -1,0 +1,11 @@
+apiVersion: hub.traefik.io/v1alpha1
+kind: APICollection
+metadata:
+  name: crm-all
+  labels:
+    module: crm
+spec:
+  pathPrefix: "/crm"
+  apiSelector:
+    matchLabels:
+      module: crm

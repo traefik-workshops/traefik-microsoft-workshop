@@ -1,0 +1,17 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: customer-api
+  namespace: apps
+  labels:
+    area: customers
+    module: crm
+spec:
+  pathPrefix: "/customers"
+  service:
+    openApiSpec:
+      path: /openapi.yaml
+    name: customer-app
+    port:
+      number: 3000

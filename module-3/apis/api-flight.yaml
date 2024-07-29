@@ -1,0 +1,17 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: flight-api
+  namespace: apps
+  labels:
+    area: flights
+    module: erp
+spec:
+  pathPrefix: "/flights"
+  service:
+    openApiSpec:
+      path: /openapi.yaml
+    name: flight-app
+    port:
+      number: 3000

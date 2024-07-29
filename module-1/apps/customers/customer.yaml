@@ -1,0 +1,66 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: customer-data
+  namespace: apps
+data:
+  api.json: |
+    {
+      "customers": [
+        { "id": 1, "firstName": "John", "lastName": "Doe", "points": 100, "status": "bronze" },
+        { "id": 2, "firstName": "Jane", "lastName": "Doe", "points": 200, "status": "silver" },
+        { "id": 3, "firstName": "John", "lastName": "Smith", "points": 300, "status": "gold" }
+      ]
+    }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-app
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-app
+  template:
+    metadata:
+      labels:
+        app: customer-app
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/traefik-workshops/api-server:v0.1.0
+          args: ["-data", "/api/api.json", "-openapi", "/public/openapi.yaml", "-errorrate", "2"]
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: api-data
+            mountPath: /api
+          - name: openapi
+            mountPath: /public
+      volumes:
+        - name: api-data
+          configMap:
+            name: customer-data
+        - name: openapi
+          configMap:
+            name: customer-apispec
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-app
+  namespace: apps
+  labels:
+    app: customer-app
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      name: api
+  selector:
+    app: customer-app
+

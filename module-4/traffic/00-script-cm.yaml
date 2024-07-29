@@ -1,0 +1,18 @@
+apiVersion: v1
+data:
+  traffic.sh: "#!/usr/bin/env bash\n#\nGW_DOMAIN=$(cat /var/shared/apigw)\n\nrandom()
+    {\n\tNUMBER=$RANDOM\n\tlet \"NUMBER%=$1\"\n\n\techo $NUMBER\n}\n\ncall() {\n   METHOD=$1\n
+    \  HPATH=$2\n   RDNB=$3\n   NB=$(random $RDNB)\n\n   echo \"$HPATH => \"\n\n\n
+    \  # add 10 to have a minimum of 10 for the -c option of hey\n   let \"NB+=10\"\n
+    \  hey -m \"$METHOD\" -c 10 -n $NB \\\n  \t-H 'accept: application/json' \\\n
+    \ \t-H \"Authorization: Bearer $TOKEN\" \"https://$GW_DOMAIN$HPATH\" | grep responses\n
+    \  echo \"\"\n\n}\n\nfor (( ; ; ))\ndo\n call 'GET' \"/customers/customers\" 1000
+    2\n call 'GET' \"/customers-versioned/v2/customers\" 1000 2\n call 'GET' \"/customers-versioned/customers?v=3\"
+    1000 2\n call 'GET' \"/flights/flights\" 1000 5\n call 'GET' \"/tickets/tickets\"
+    1000 2\n call 'POST' \"/tickets/tickets\" 1000 2\n call 'POST' \"/employees/employees\"
+    1000 2\n\n sleep 2;\ndone;\n"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: script
+  namespace: traffic

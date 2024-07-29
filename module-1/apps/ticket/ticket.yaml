@@ -1,0 +1,66 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ticket-data
+  namespace: apps
+data:
+  api.json: |
+    {
+      "tickets": [
+        { "id": 1, "flightCode": "TL123", "fare": 500, "class": "first", "available": 5, "total": 20 },
+        { "id": 2, "flightCode": "TL234", "fare": 200, "class": "economy", "available": 2, "total": 5 },
+        { "id": 3, "flightCode": "TL345", "fare": 300, "class": "business", "available": 3, "total": 10 }
+      ]
+    }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticket-app
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticket-app
+  template:
+    metadata:
+      labels:
+        app: ticket-app
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/traefik-workshops/api-server:v0.1.0
+          args: ["-data", "/api/api.json", "-openapi", "/public/openapi.yaml", "-errorrate", "1"]
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+          - name: api-data
+            mountPath: /api
+          - name: openapi
+            mountPath: /public
+      volumes:
+        - name: api-data
+          configMap:
+            name: ticket-data
+        - name: openapi
+          configMap:
+            name: ticket-openapi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticket-app
+  namespace: apps
+  labels:
+    app: ticket-app
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      name: api
+  selector:
+    app: ticket-app
+

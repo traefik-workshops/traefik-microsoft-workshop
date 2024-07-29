@@ -1,0 +1,43 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIRateLimit
+metadata:
+  name: crm-user-ratelimit
+spec:
+  limit: 2 # 2 requests
+  period: 5s # 5 seconds
+  groups:
+    - crm-user
+  apiSelector:
+    matchLabels:
+      module: crm
+  apis:
+    - name: employee-api
+      namespace: apps
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIRateLimit
+metadata:
+  name: support-ratelimit
+spec:
+  limit: 15
+  period: 1m
+  groups:
+    - support
+  apiSelector:
+    matchExpressions:
+      - key: area
+        operator: In
+        values:
+          - flights
+          - tickets
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIRateLimit
+metadata:
+  name: fallback-ratelimit
+spec:
+  limit: 2000
+  period: 65s
+  anyGroups: true
+  apiSelector: {}

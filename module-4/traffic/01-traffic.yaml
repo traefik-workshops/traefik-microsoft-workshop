@@ -1,0 +1,125 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: traffic
+  namespace: traffic
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: traffic
+rules:
+- apiGroups: ["hub.traefik.io"]
+  resources: ["apigateways"]
+  verbs: ["get"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: traffic
+roleRef:
+  kind: ClusterRole
+  name: traffic
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: traffic
+  namespace: traffic
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-app-admin
+  namespace: traffic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traffic-app-admin
+  template:
+    metadata:
+      labels:
+        app: traffic-app-admin
+    spec:
+      serviceAccountName: traffic
+      initContainers:
+        - name: get-gw-url
+          image: alpine/k8s:1.27.7
+          command: [ "sh", "-c", "kubectl get apigateways.hub.traefik.io api-gateway -o template --template '{{ .status.hubDomain }}' > /var/shared/apigw" ]
+          volumeMounts:
+            - mountPath: /var/shared
+              name: shared
+      containers:
+        - name: traffic
+          image: mmatur/tools:latest
+          args:
+            - /usr/local/bin/traffic.sh
+          env:
+            - name: TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tokens
+                  key: admin
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: script
+              mountPath: /usr/local/bin
+            - mountPath: /var/shared
+              name: shared
+      volumes:
+        - name: script
+          configMap:
+            name: script
+            defaultMode: 0777
+        - name: shared
+          emptyDir: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-app-support
+  namespace: traffic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traffic-app-support
+  template:
+    metadata:
+      labels:
+        app: traffic-app-support
+    spec:
+      serviceAccountName: traffic
+      initContainers:
+        - name: get-gw-url
+          image: alpine/k8s:1.27.7
+          command: [ "sh", "-c", "kubectl get apigateways.hub.traefik.io api-gateway -o template --template '{{ .status.hubDomain }}' > /var/shared/apigw" ]
+          volumeMounts:
+            - mountPath: /var/shared
+              name: shared
+      containers:
+        - name: traffic
+          image: mmatur/tools:latest
+          args:
+            - /usr/local/bin/traffic.sh
+          env:
+            - name: TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tokens
+                  key: support
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: script
+              mountPath: /usr/local/bin
+            - mountPath: /var/shared
+              name: shared
+      volumes:
+        - name: script
+          configMap:
+            name: script
+            defaultMode: 0777
+        - name: shared
+          emptyDir: {}

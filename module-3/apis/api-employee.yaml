@@ -1,0 +1,17 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: employee-api
+  namespace: apps
+  labels:
+    area: employee
+    module: crm
+spec:
+  pathPrefix: "/employees"
+  service:
+    openApiSpec:
+      path: /openapi.yaml
+    name: employee-app
+    port:
+      number: 3000

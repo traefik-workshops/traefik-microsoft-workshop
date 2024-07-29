@@ -1,0 +1,17 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: ticket-api
+  namespace: apps
+  labels:
+    area: tickets
+    module: crm
+spec:
+  pathPrefix: "/tickets"
+  service:
+    openApiSpec:
+      path: /openapi.yaml
+    name: ticket-app
+    port:
+      number: 3000
