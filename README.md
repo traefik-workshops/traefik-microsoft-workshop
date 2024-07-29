@@ -6,7 +6,7 @@
 
 # Overview
 
-This workshop will walk you through the steps to deploy the Traefik Hub API gateway on Azure Kubernetes Service (AKS) and how to publish and manage access to your backend services. 
+This workshop will walk you through the journey from deploying <b>Traefik Application Proxy</b> on Azure Kubernetes Service (AKS) and how easy it is to publish your backend services to the outside world. Then, we will explore how to upgrade our existing <b>Application Proxy</b> instance to <b>API Gateway</b> and take advantage of all the enterprise-level capabilities available in <b>Traefik Hub API Gateway</b> to secure access to our backend application. Finally, we will enable API Management feature and manage our APIs at scale with <b>Traefik Hub API Management Solutions</b>.
 
 The hands-on lab is divided into multiple modules. Each module covers a particular topic, depending on the previous module's completion. It is essential to follow the guide as we progress through the lab.   
 
