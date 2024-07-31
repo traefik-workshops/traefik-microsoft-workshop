@@ -1,14 +1,14 @@
 <br/>
 
 <div align="center" style="margin: 30px;">
-<a href="https://hub.traefik.io/">
+<a href="https://traefik.io/traefik/">
   <img src="https://doc.traefik.io/traefik/assets/images/logo-traefik-proxy-logo.svg"   style="width:250px;" align="center" />
 </a>
 <br />
 </div>
 <div align="center">
-    <a href="https://hub.traefik.io">Log In</a> |
-    <a href="https://doc.traefik.io/traefik-hub/">Documentation</a> 
+    <a href="https://traefik.io/traefik/">Website</a> |
+    <a href="https://doc.traefik.io/traefik/">Documentation</a> 
 </div>
 
 # What is Traefik Application Proxy
