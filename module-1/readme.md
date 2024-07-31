@@ -13,23 +13,25 @@
 
 # What is Traefik Application Proxy
 
-Traefik Hub is the industry’s first Kubernetes-native API Management solution for publishing, securing, and managing APIs.
-
-Traefik Hub, purpose-built for K8s environments and GitOps workflows, drastically simplifies and accelerates the API lifecycle management, so organizations experience quick time to value, unleash workforce productivity, and focus on building great applications.
+Traefik Proxy is a cloud-native, GitOps-driven, lightweight ingress controller that embraces Kubernetes architecture in its design to allow seamless migration from proxy to API gateway and all the way to full API management lifecycle solution with no interruption to your existing services.
 
 <br>
 
 ___
 
-## Get started with Traefik Hub
+## Get started with Traefik Application Proxy
 
-1. login to Traefik Hub using the below credentials:
+1. Install Traefik using helm.
 
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://hub.traefik.io                             
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username: COMMON-USERNAME                         
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password: COMMON-PASSWORD            
+    - Add the helm repository     
+    ```bash
+    helm repo add --force-update traefik https://traefik.github.io/charts
+    ```
+    - Install Traefik Application Proxy using Helm and create a new namespace.    
+    ```
+    helm install traefik -n traefik --create-namespace traefik/traefik
+    ```
+      
 
 2. Navigate to "Cluster agents" and select "Create new agent"
 
