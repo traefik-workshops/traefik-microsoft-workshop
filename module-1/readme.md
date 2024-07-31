@@ -2,7 +2,7 @@
 
 <div align="center" style="margin: 30px;">
 <a href="https://hub.traefik.io/">
-  <img src="https://doc.traefik.io/traefik-hub/assets/images/logos-traefik-hub-horizontal.svg"   style="width:250px;" align="center" />
+  <img src="https://doc.traefik.io/traefik/assets/images/logo-traefik-proxy-logo.svg"   style="width:250px;" align="center" />
 </a>
 <br />
 </div>
@@ -11,7 +11,7 @@
     <a href="https://doc.traefik.io/traefik-hub/">Documentation</a> 
 </div>
 
-# What is Traefik Hub
+# What is Traefik Application Proxy
 
 Traefik Hub is the industry’s first Kubernetes-native API Management solution for publishing, securing, and managing APIs.
 
