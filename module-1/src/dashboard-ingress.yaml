@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - web
   routes:
-  - match: Host(`dashboard.traefik.4.249.137.41.sslip.io`)
+  - match: Host(`dashboard.traefik.4.249.233.99.sslip.io`)
     kind: Rule
     services:
     - name: api@internal
