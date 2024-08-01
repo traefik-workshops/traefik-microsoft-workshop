@@ -50,7 +50,8 @@ ___
 
     - We should be able to access Traefik Proxy Dashboard
 
-        <details><summary> :bulb: Traefik Dashboard</summary>![logo](../media/demo_logo.png)
+        <details><summary> :bulb: Traefik Dashboard</summary> <img src="../media/proxy_dashboard.png" width="2900" height="1000">
+       
 
 </details>
 </p>
