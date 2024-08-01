@@ -15,15 +15,21 @@
 
 ## Overview:
 
-Traefik Hub agent is a drop-in replacement for Traefik Proxy, it can do everything Traefik Proxy does, with additional capabilities and support out of the box. 
+The Traefik Hub API Gateway combines the world’s most trusted cloud native, fully declarative application proxy with enterprise-grade access control, distributed security, and premium integrations. 
 
-In this module, we will go through the steps on how to expose a backend service "whoami", modify the incoming request with the use of middleware. Then, securing access to the backend service using OpenId Connect with Entra ID. 
+In this module, we will go through the steps on how to perfrom seamless upgrade of <b>Traefik Application Proxy</b> to <b>Traefik Hub API Gateway</b> with minimum imapct to existing services.  
 
 <br>
 
 ___
 
-## Concept:
+## Upgrade Traefik Application Proxy to Traefik Hub API Gateway:
+
+1. Traefik Hub API Gateway requires a license key. To obtain a license key, login to <b><a href="https://hub.traefik.io/dashboard">Traefik Hub Dashboard</a></b>
+  - Login to hub.traefik.io 
+
+
+
 
 Traefik is based on the concept of <b>EntryPoints</b>, <b>Routers</b>, <b>Middlewares</b> and <b>Services</b>. 
 
