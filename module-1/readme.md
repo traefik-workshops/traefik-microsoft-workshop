@@ -21,7 +21,26 @@ ___
 
 ## Get started with Traefik Application Proxy
 
-1. Install Traefik using helm.
+> [!NOTE]     
+> :pencil2: *Run below steps in your cluster.*
+
+
+1. Clone git repo into your client
+
+    ```bash
+    git clone <GIT-REPO-URL>
+    ```
+
+2. Update the cloned repo with your cluster External IP. We are utilizing sslip.io for DNS services. 
+
+    ```bash
+    export EXTERNAL_IP=$(kubectl get svc/traefik-hub -n traefik-hub --no-headers | awk {'print $4'})
+    ```
+    ```bash
+    for i in $(grep -Rl '${EXTERNAL_IP}'); do sed -i 's/${EXTERNAL_IP}/'$EXTERNAL_IP'/g' $i; done
+
+    ```
+3. Install Traefik using helm.
 
     - Add the helm repository     
     ```bash
@@ -33,13 +52,13 @@ ___
     ```
       
 
-2. Expose Traefik Dashboard.   
+4. Expose Traefik Dashboard.   
 
    ```bash
    kubectl apply -f module-1/src/dashboard-ingress.yaml
    ```
 
-3. Verify Access to Traefik Dashboard
+5. Verify Access to Traefik Dashboard
 
     - From the broswer, navigate to the <b>Host</b> URL defined in dashboard-ingress manifest file. 
 
@@ -73,33 +92,15 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 
 ## Deploy the Demo application
 
-> [!NOTE]     
-> :pencil2: *Run below steps in your cluster.*
 
 
-1. Clone git repo into your client
-
-    ```bash
-    git clone <GIT-REPO-URL>
-    ```
-
-2. Update the cloned repo with your cluster External IP. We are utilizing sslip.io for DNS services. 
-
-    ```bash
-    export EXTERNAL_IP=$(kubectl get svc/traefik-hub -n traefik-hub --no-headers | awk {'print $4'})
-    ```
-    ```bash
-    for i in $(grep -Rl '${EXTERNAL_IP}'); do sed -i 's/${EXTERNAL_IP}/'$EXTERNAL_IP'/g' $i; done
-
-    ```
-
-3. Create a new namespace for the application
+1. Create a new namespace for the application
 
     ```bash
     kubectl create namespace apps
     ```
 
-4. Deploy the demo app.
+2. Deploy the demo app.
 
     ```bash
     kubectl apply -f module-1/apps/customers/ -f module-1/apps/employee/ -f module-1/apps/flight/ -f module-1/apps/ticket/ -f module-1/apps/external/ -f module-1/apps/whoami.yaml
