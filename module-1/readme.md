@@ -33,42 +33,29 @@ ___
     ```
       
 
-2. Navigate to "Cluster agents" and select "Create new agent"
+2. Expose Traefik Dashboard.   
 
-<details><summary> :bulb: Hint</summary>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../media/cluster_agents.png" width="200" height="700">
+   ```bash
+   kubectl apply -f module-1/src/dashboard-ingress.yaml
+   ```
+
+3. Verify Access to Traefik Dashboard
+
+    - From the broswer, navigate to the <b>Host</b> URL defined in dashboard-ingress manifest file. 
+
+    example:
+    ```bash
+    http://dashboard.traefik.{EXTERNAL_IP}.sslip.io
+    ```
+
+    - We should be able to access Traefik Proxy Dashboard
+
+        <details><summary> :bulb: Traefik Dashboard</summary>![logo](../media/demo_logo.png)
 
 </details>
 </p>
 
-3. 
 
-
-> [!NOTE]     
-> :pencil2: *Follow the instructions to install the Traefik Hub agent on your Kubernetes cluster.*   
-
-</p>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../media/add_agent.png" width="500" height="600">
-
-<p>
-<div align="left">
-
-
-```bash
-k8s:~$ kubectl get pod --namespace traefik-hub
-NAME                           READY   STATUS    RESTARTS   AGE
-traefik-hub-596c9c846d-n94j4   1/1     Running   0          62s
-```
-
-</p>
-</div>
-
-4. Provide a name to your agent before selecting "Configuration Done." (example: <code>firstname-lastname</code>)
-
-5. All Done! You should be able to see your cluster ONLINE
-
-<p>
 
 <br>
 
