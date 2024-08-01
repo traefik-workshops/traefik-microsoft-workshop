@@ -48,7 +48,7 @@ ___
     ```bash
     for i in $(grep -Rl '${EXTERNAL_IP}'); do sed -i 's/${EXTERNAL_IP}/'$EXTERNAL_IP'/g' $i; done
     ```      
-4. Expose Traefik Dashboard.   
+4. Publish Traefik Dashboard.   
 
    ```bash
    kubectl apply -f module-1/src/dashboard-ingress.yaml
@@ -155,15 +155,105 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
    </p>
    </div>
 
-3. To publish <b>customer-app</b> as an example to the outside world, we need to apply an ingress definition that will instruct traefik to route the incoming request to the backend service.      
+## Publish demo app 
+1. To publish <b>customer-app</b> as an example to the outside world, we need to apply an ingress definition that will instruct traefik to route the incoming request to the backend service.      
 
+    ```yaml
+    ---
+    apiVersion: traefik.io/v1alpha1
+    kind: IngressRoute
+    metadata:
+      name: api-ingress-customers
+      namespace: apps                                                                     # Namespace where the application is deployed. 
+    spec:
+      entryPoints:
+        - websecure                                                                       # Request is coming on HTTPS (port 443).
+      routes:
+        - kind: Rule
+          match: Host(`api.traefik.EXTERNAL_IP.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
+          services:
+            - name: customer-app                                                          # The request routed to customer-app service on port 3000.
+              port: 3000
+      tls:
+        certResolver: le
+    ```
+   Lets apply the IngressRoute definition. 
     ```bash
     kubectl apply -f module-1/apps/customers/ingress/customer-ingress.yaml
     ```
+2. Traefik Dashboard will list the newly created route.
+
+    ![customer-route](../media/customer-route.png)
+
+3. Verify connectivity to the customer-app API. 
+
+    ```bash
+     $curl https://api.traefik.EXTERNAL_IP.sslip.io/customers
+
+      {
+        "customers": [
+          { "id": 1, "firstName": "John", "lastName": "Doe", "points": 100, "status": "bronze" },
+          { "id": 2, "firstName": "Jane", "lastName": "Doe", "points": 200, "status": "silver" },
+          { "id": 3, "firstName": "John", "lastName": "Smith", "points": 300, "status": "gold" }
+        ]
+      }
+      ```
+## Tweak incoming request with middleware
+
+1. Middlewares are attached to the ingress definition to tweak the request before passing it to the application service. Middleware can be used to modify the request, the headers, in charge or redirection, ...etc. 
+
+    ![customer-route](../media/middleware.png)
+
+2. Header middleware as an example, can be used to manages the headers of the requests and the responses. In below example, the middleware will add a custom header to the response received from the application back to the client. 
+
+    ```yaml
+    apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: customer-header                 # Name of the middleware
+      namespace: apps                       # Namespace where the middleware will deployed. 
+    spec:
+      headers:                              # Type of the middleware
+        customResponseHeaders:
+          X-HEADER-APP: "Customer API"
+      ```    
+3. The middleware will need to be attached to the ingress definition in order to tweak the request. Multiple middlewares can be combined into chain to fit every scenario. 
+
+    Let us modify customer-ingress.yaml definition to add the header middleware. 
+
+    ```yaml
+    ---
+    apiVersion: traefik.io/v1alpha1
+    kind: IngressRoute
+    metadata:
+      name: api-ingress-customers
+      namespace: apps                                                                     # Namespace where the application is deployed. 
+    spec:
+      entryPoints:
+        - websecure                                                                       # Request is coming on HTTPS (port 443).
+      routes:
+        - kind: Rule
+          match: Host(`api.traefik.EXTERNAL_IP.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
+          services:
+            - name: customer-app                                                          # The request routed to customer-app service on port 3000.
+              port: 3000
+          middlewares:                                                                    
+            - name: customer-header                                                       # <<< Specify the name of the middleware that we need to associate with the route.
+      tls:
+        certResolver: le
+    ```
+4. Apply the updated ingress definition. 
+
+    ```bash
+    kubectl apply -f module-1/apps/customers/ingress/customer-ingress-middleware.yaml
+    ```
+5. Verify the new custom header is received
+
 
 
 
 </br>
+
 
 ## Reference
 
