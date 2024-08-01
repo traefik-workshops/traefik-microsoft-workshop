@@ -24,7 +24,8 @@ Traefik Application proxy is based on the concept of <b>EntryPoints</b>, <b>Rout
 - <b>middlewares</b>: Attached to the routers, middlewares can modify the requests or responses before they are sent to your service.
 - <b>Services</b>: are responsible for configuring how to reach the actual application that will eventually handle the incoming requests.
 <br>
-![proxy](../media/proxy.png)
+![proxy](../media/proxy.png)        
+
 ___
 
 ## Get started with Traefik Application Proxy
