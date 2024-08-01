@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-customers
+  namespace: apps
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.4.249.233.99.sslip.io`) && PathPrefix(`/customers`)
+      services:
+        - name: customer-app
+          port: 3000
+  tls:
+    certResolver: le

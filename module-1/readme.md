@@ -155,12 +155,13 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
    </p>
    </div>
 
-3. [Optional] Explore the application from the Traefik Hub dashboard
+3. To publish <b>customer-app</b> as an example to the outside world, we need to apply an ingress definition that will instruct traefik to route the incoming request to the backend service.      
 
-    - From the Traefik Hub dashboard, navigate to Cluster Agents and select your cluster. 
-    - Under services, Traefik Hub has automatically detected all services running in your cluster.  
+    ```bash
+    kubectl apply -f module-1/apps/customers/ingress/customer-ingress.yaml
+    ```
 
-    ![services](../media/services.png)
+
 
 </br>
 
