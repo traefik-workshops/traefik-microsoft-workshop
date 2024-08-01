@@ -5,10 +5,12 @@ metadata:
   namespace: traefik
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
   - match: Host(`dashboard.traefik.4.249.233.99.sslip.io`)
     kind: Rule
     services:
     - name: api@internal
       kind: TraefikService
+  tls:
+    certResolver: le
