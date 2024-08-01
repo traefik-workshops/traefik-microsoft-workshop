@@ -47,13 +47,31 @@ ___
     ```
     ```bash
     for i in $(grep -Rl '${EXTERNAL_IP}'); do sed -i 's/${EXTERNAL_IP}/'$EXTERNAL_IP'/g' $i; done
-
     ```      
-
 4. Expose Traefik Dashboard.   
 
    ```bash
    kubectl apply -f module-1/src/dashboard-ingress.yaml
+   ```
+   Treafik uses <b>IngressRoute</b> to publish the application based on the concept of <b>EntryPoint</b>, <b>Routers</b>, <b>Middleware</b> and <b>Service</b>.  
+
+   ```yaml
+   apiVersion: traefik.io/v1alpha1
+   kind: IngressRoute
+   metadata:
+     name: traefik-dashboard
+     namespace: traefik
+   spec:
+     entryPoints:                                                # Network port which will receive the packet (HTTP, HTTPS, TCP,..etc). 
+       - websecure
+     routes:
+     - match: Host(`dashboard.traefik.EXTERNAL_IP.sslip.io`)     # URL to match before routing to backend service
+       kind: Rule
+       services:                                                 # Backend service name and port number. 
+       - name: api@internal
+         kind: TraefikService
+     tls:                                                        # LetsEncrypt to auto generate certificate for the application
+       certResolver: le
    ```
 
 5. Verify Access to Traefik Dashboard
@@ -98,46 +116,46 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
     kubectl create namespace apps
     ```
 
-2. Deploy the demo app.
+2. Deploy the demo applications that we will use throughout the lab. 
 
     ```bash
     kubectl apply -f module-1/apps/customers/ -f module-1/apps/employee/ -f module-1/apps/flight/ -f module-1/apps/ticket/ -f module-1/apps/external/ -f module-1/apps/whoami.yaml
     ```
 
-<p>
-<div align="left">
-  <details><summary>Expected output</summary>
-  
-  <p>
-  
-  ```bash
-  kubectl get pod,svc --namespace apps
-  NAME                                   READY   STATUS    RESTARTS   AGE
-  pod/customer-app-v4-795fbf45bf-cqss2   1/1     Running   0          84s
-  pod/customer-app-v3-698c85568c-nsv54   1/1     Running   0          84s
-  pod/employee-app-6d7656d69f-m8lnr      1/1     Running   0          84s
-  pod/flight-app-8f696784f-g8qn8         1/1     Running   0          83s
-  pod/customer-app-59bcb5b9bc-4z7xw      1/1     Running   0          84s
-  pod/ticket-app-867959bdbd-vkwx5        1/1     Running   0          83s
-  pod/customer-app-v2-5ccf4544f7-tv7lt   1/1     Running   0          84s
-  pod/whoami-697f8c6cbc-qp5nw            1/1     Running   0          84s
-  
-  NAME                      TYPE           CLUSTER-IP      EXTERNAL-IP        PORT(S)    AGE
-  service/customer-app-v2   ClusterIP      10.43.233.33    <none>             3000/TCP   84s
-  service/customer-app-v3   ClusterIP      10.43.47.208    <none>             3000/TCP   84s
-  service/customer-app-v4   ClusterIP      10.43.127.91    <none>             3000/TCP   84s
-  service/customer-app      ClusterIP      10.43.64.46     <none>             3000/TCP   84s
-  service/employee-app      ClusterIP      10.43.211.198   <none>             3000/TCP   84s
-  service/flight-app        ClusterIP      10.43.174.194   <none>             3000/TCP   83s
-  service/ticket-app        ClusterIP      10.43.73.169    <none>             3000/TCP   83s
-  service/world-time-api    ExternalName   <none>          worldtimeapi.org   443/TCP    83s
-  service/whoami            ClusterIP      10.43.142.176   <none>             80/TCP     84s
-  ```
-  </details>
-</p>
-</div>
+   <p>
+   <div align="left">
+     <details><summary>Expected output</summary>
+     
+     <p>
+     
+     ```bash
+     kubectl get pod,svc --namespace apps
+     NAME                                   READY   STATUS    RESTARTS   AGE
+     pod/customer-app-v4-795fbf45bf-cqss2   1/1     Running   0          84s
+     pod/customer-app-v3-698c85568c-nsv54   1/1     Running   0          84s
+     pod/employee-app-6d7656d69f-m8lnr      1/1     Running   0          84s
+     pod/flight-app-8f696784f-g8qn8         1/1     Running   0          83s
+     pod/customer-app-59bcb5b9bc-4z7xw      1/1     Running   0          84s
+     pod/ticket-app-867959bdbd-vkwx5        1/1     Running   0          83s
+     pod/customer-app-v2-5ccf4544f7-tv7lt   1/1     Running   0          84s
+     pod/whoami-697f8c6cbc-qp5nw            1/1     Running   0          84s
+     
+     NAME                      TYPE           CLUSTER-IP      EXTERNAL-IP        PORT(S)    AGE
+     service/customer-app-v2   ClusterIP      10.43.233.33    <none>             3000/TCP   84s
+     service/customer-app-v3   ClusterIP      10.43.47.208    <none>             3000/TCP   84s
+     service/customer-app-v4   ClusterIP      10.43.127.91    <none>             3000/TCP   84s
+     service/customer-app      ClusterIP      10.43.64.46     <none>             3000/TCP   84s
+     service/employee-app      ClusterIP      10.43.211.198   <none>             3000/TCP   84s
+     service/flight-app        ClusterIP      10.43.174.194   <none>             3000/TCP   83s
+     service/ticket-app        ClusterIP      10.43.73.169    <none>             3000/TCP   83s
+     service/world-time-api    ExternalName   <none>          worldtimeapi.org   443/TCP    83s
+     service/whoami            ClusterIP      10.43.142.176   <none>             80/TCP     84s
+     ```
+     </details>
+   </p>
+   </div>
 
-5. [Optional] Explore the application from the Traefik Hub dashboard
+3. [Optional] Explore the application from the Traefik Hub dashboard
 
     - From the Traefik Hub dashboard, navigate to Cluster Agents and select your cluster. 
     - Under services, Traefik Hub has automatically detected all services running in your cluster.  
