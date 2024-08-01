@@ -29,7 +29,7 @@ ___
     ```
     - Install Traefik Application Proxy using Helm and create a new namespace.    
     ```
-    helm install traefik -n traefik --create-namespace traefik/traefik
+    helm install traefik -n traefik --create-namespace --values module-1/src/values.yaml traefik/traefik
     ```
       
 
