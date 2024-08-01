@@ -256,6 +256,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
     date: Thu, 01 Aug 2024 18:30:32 GMT
     x-header-app: Customer API              <<< New custom response header added by the middleware 
     ```
+    The Traefik Dashboard list the middleware as part of the route definition. 
     ![customer-middleware](../media/customer-ingress-middleware.png)
 
 </br>
