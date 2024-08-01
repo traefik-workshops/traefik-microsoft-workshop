@@ -13,10 +13,18 @@
 
 # What is Traefik Application Proxy
 
-Traefik Proxy is a cloud-native, GitOps-driven, lightweight ingress controller that embraces Kubernetes architecture in its design to allow seamless migration from proxy to API gateway and all the way to full API management lifecycle solution with no interruption to your existing services.
+Traefik Application Proxy is a cloud-native, GitOps-driven, lightweight ingress controller that embraces Kubernetes architecture in its design to allow seamless migration from proxy to API gateway and all the way to full API management lifecycle solution with no interruption to your existing services.
 
+## Concept:
+
+Traefik Application proxy is based on the concept of <b>EntryPoints</b>, <b>Routers</b>, <b>Middlewares</b> and <b>Services</b>. 
+
+- <b>EntryPoints</b>: are the network entry points into Traefik. They define the port which will receive the packets, and whether to listen for TCP or UDP.
+- <b>Routers</b>: are the bridge between the incoming requests and the backend services.
+- <b>middlewares</b>: Attached to the routers, middlewares can modify the requests or responses before they are sent to your service.
+- <b>Services</b>: are responsible for configuring how to reach the actual application that will eventually handle the incoming requests.
 <br>
-
+![proxy](../media/proxy.png)
 ___
 
 ## Get started with Traefik Application Proxy
