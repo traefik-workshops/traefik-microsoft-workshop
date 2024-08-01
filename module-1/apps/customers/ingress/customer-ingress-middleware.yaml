@@ -1,4 +1,12 @@
-
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: customer-header               
+  namespace: apps                       
+spec:
+  headers:                              
+    customResponseHeaders:
+      X-HEADER-APP: "Customer API"
 
 ---
 apiVersion: traefik.io/v1alpha1
