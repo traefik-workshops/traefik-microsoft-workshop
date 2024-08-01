@@ -249,8 +249,14 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
     ```
 5. Verify the new custom header is received
 
-
-
+    ```bash
+     $curl -I https://api.traefik.EXTERNAL_IP.sslip.io/customers
+    
+    HTTP/2 200 
+    date: Thu, 01 Aug 2024 18:30:32 GMT
+    x-header-app: Customer API              <<< New custom response header added by the middleware 
+    ```
+    ![customer-middleware](../media/customer-ingress-middleware.png)
 
 </br>
 
