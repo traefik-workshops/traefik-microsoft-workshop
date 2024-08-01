@@ -1,4 +1,15 @@
-![proxy](../media/proxy.png)
+<br/>
+
+<div align="center" style="margin: 30px;">
+<a href="https://traefik.io/traefik-hub-api-gateway">
+  <img src="../media/hub_api_gw_logo.png"   style="width:250px;" align="center" />
+</a>
+<br />
+</div>
+<div align="center">
+    <a href="https://traefik.io/traefik-hub-api-gateway/">Website</a> |
+    <a href="https://doc.traefik.io/traefik-hub/api-gateway/api-gateway-intro">Documentation</a> 
+</div>
 
 # Traefik Hub API Gateway
 
