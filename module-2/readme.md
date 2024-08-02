@@ -25,24 +25,48 @@ ___
 
 ## Upgrade Traefik Application Proxy to Traefik Hub API Gateway:
 
-1. Traefik Hub API Gateway requires a license key. To obtain a license key, login to <b><a href="https://hub.traefik.io/dashboard">Traefik Hub Dashboard</a></b>
-  - Login to hub.traefik.io 
+1. Traefik Hub API Gateway requires a license key. To obtain a license key, login to <b><a href="https://hub.traefik.io/dashboard">Traefik Hub Dashboard</a></b>           
 
+    username: COMMON-USERNAME                         
+    password: COMMON-PASSWORD      
 
+2. Navigate to <b>Gateways</b> and select <b>Create new gateway</b> 
 
+   ![add_gateway](../media/add_gateway.png)      
 
-Traefik is based on the concept of <b>EntryPoints</b>, <b>Routers</b>, <b>Middlewares</b> and <b>Services</b>. 
+3. Copy your new gateway token.     
 
-- <b>EntryPoints</b>: are the network entry points into Traefik. They define the port which will receive the packets, and whether to listen for TCP or UDP.
-- <b>Routers</b>: are the bridge between the incoming requests and the backend services.
-- <b>middlewares</b>: Attached to the routers, middlewares can modify the requests or responses before they are sent to your service.
-- <b>Services</b>: are responsible for configuring how to reach the actual application that will eventually handle the incoming requests.
+   ![copy_token](../media/copy_token.png)
 
-<br>
+4. Store the new gateway token as environment variable in your terminal.      
+
+    ```bash 
+    export TRAEFIK_HUB_TOKEN=
+    ```
+5. Create a secret to store the newly obtain gateway token.    
+
+    ```bash
+    kubectl create secret generic traefik-hub-license --namespace traefik --from-literal=token=$TRAEFIK_HUB_TOKEN
+    ```
+6. Now that the license key is stored under the same namespace as our existing Traefik Application proxy deployment, we can proceed with upgrading to Traefik Hub API Gateway using the same Helm chart. 
+
+    ```bash
+    helm upgrade traefik -n traefik --wait \
+      --version v30.0.2 \
+      --reuse-values \
+      --set hub.token=traefik-hub-license \
+      --set image.registry=ghcr.io \
+      --set image.repository=traefik/traefik-hub \
+      --set image.tag=v3.3.1 \
+       traefik/traefik
+   ```
+
 
 ___
 
-## Exposing whoami service:
+## Secure access with JWT         
+
+
 
 whoami application was deployed in module-1. Below steps will need to be followed to expose the application. 
 
