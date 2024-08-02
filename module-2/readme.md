@@ -48,11 +48,10 @@ ___
     ```bash
     kubectl create secret generic traefik-hub-license --namespace traefik --from-literal=token=$TRAEFIK_HUB_TOKEN
     ```
-6. Now that the license key is stored under the same namespace as our existing Traefik Application proxy deployment, we can proceed with upgrading to Traefik Hub API Gateway using the same Helm chart. 
+6. Now that the license key is stored under the same namespace as our existing Traefik Application proxy deployment, we can perform in-place upgrade to <b>Traefik Hub API Gateway</b> using the same Helm chart. 
 
     ```bash
     helm upgrade traefik -n traefik --wait \
-      --version v30.0.2 \
       --reuse-values \
       --set hub.token=traefik-hub-license \
       --set image.registry=ghcr.io \
@@ -61,6 +60,7 @@ ___
        traefik/traefik
    ```
 
+7. Once the Helm upgrade command is executed successfully, you can refresh the Traefik Dashboard webpage and you will be presented with the new UI. Since <b>Traefik API Gateway</b> is based on <b>Traefik Application Proxy</b>, there is no impact to any of the existing services. 
 
 ___
 
