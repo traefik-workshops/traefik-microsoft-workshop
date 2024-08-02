@@ -19,7 +19,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`api.traefik.4.249.233.99.sslip.io`) && PathPrefix(`/customers`)
+      match: Host(`api.traefik.172.169.37.234.sslip.io`) && PathPrefix(`/customers`)
       services:
         - name: customer-app
           port: 3000
