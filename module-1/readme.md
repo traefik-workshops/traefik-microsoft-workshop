@@ -53,7 +53,7 @@ ___
 3. Update the cloned repo with your cluster External IP. We are utilizing sslip.io for DNS services. 
 
     ```bash
-    export EXTERNAL_IP=$(kubectl get svc/traefik-hub -n traefik-hub --no-headers | awk {'print $4'})
+    export EXTERNAL_IP=$(kubectl get svc/traefik -n traefik --no-headers | awk {'print $4'})
     ```
     ```bash
     for i in $(grep -Rl '${EXTERNAL_IP}'); do sed -i 's/${EXTERNAL_IP}/'$EXTERNAL_IP'/g' $i; done
