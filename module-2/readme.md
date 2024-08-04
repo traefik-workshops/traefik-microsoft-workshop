@@ -74,7 +74,7 @@ The OpenID Connect Authentication middleware secures your applications by delega
 
 To authenticate the user, the middleware redirects through the authentication provider. Once the authentication is complete, users are redirected back to the middleware before being authorized to access the upstream application.    
 
-1. We have <b>whoami</b> application running under apps namespace. 
+1. We have <b>whoami</b> application running under <b>apps</b> namespace. 
 
 
    ```bash
@@ -108,56 +108,58 @@ To authenticate the user, the middleware redirects through the authentication pr
               port: 80                          # Backend service is listening on Port 80.
     ```
 
-3. Deploy IngressRoute definition.  
+   > [!NOTE]     
+   > :pencil2: *Run below steps in your cluster.*
+   
+   ```bash
+   kubectl apply -f module-2/manifests/whoami-ingress.yaml
+   ```
 
-> [!NOTE]     
-> :pencil2: *Run below steps in your cluster.*
 
-```bash
-kubectl apply -f module-2/manifests/whoami-ingressroute.yaml
-```
-```bash
-# Verify IngressRoute
+   <details><summary>Verification commands</summary>
 
-kubectl -n apps get ingressroute.traefik.io
-
-NAME             AGE
-whoami-ingress   173m
-```
-```bash
-kubectl -n apps describe ingressroute.traefik.io
-
-Name:         whoami-ingress
-Namespace:    apps
-Labels:       <none>
-Annotations:  <none>
-API Version:  traefik.io/v1alpha1
-Kind:         IngressRoute
-Metadata:
-  Creation Timestamp:  2024-02-29T18:34:03Z
-  Generation:          1
-  Resource Version:    1230
-  UID:                 306f20de-9c84-4a81-9c2b-02e06360c89f
-Spec:
-  Entry Points:
-    web
-  Routes:
-    Kind:   Rule
-    Match:  Host(`whoami.EXTERNAL_IP.sslip.io`)      # URL the service is exposed on
-    Services:
-      Name:  whoami
-      Port:  80
-Events:      <none>
-```
-
+   ```bash
+   # Verify IngressRoute
+   
+   kubectl -n apps get ingressroute.traefik.io
+   
+   NAME             AGE
+   whoami-ingress   173m
+   ```
+   ```bash
+   kubectl -n apps describe ingressroute.traefik.io
+   
+   Name:         whoami-ingress
+   Namespace:    apps
+   Labels:       <none>
+   Annotations:  <none>
+   API Version:  traefik.io/v1alpha1
+   Kind:         IngressRoute
+   Metadata:
+     Creation Timestamp:  2024-02-29T18:34:03Z
+     Generation:          1
+     Resource Version:    1230
+     UID:                 306f20de-9c84-4a81-9c2b-02e06360c89f
+   Spec:
+     Entry Points:
+       web
+     Routes:
+       Kind:   Rule
+       Match:  Host(`whoami.EXTERNAL_IP.sslip.io`)      # URL the service is exposed on
+       Services:
+         Name:  whoami
+         Port:  80
+   Events:      <none>
+   ```
+   </details>
+   </br>
+   
 4. The whoami application should be accessible using the URL defined in the IngressRoute definition. 
 
     <details><summary>Expected output</summary>
 
     ![whoami](../media/whoami.png)
     </details>  
-
-<br>
 
 ___
 
