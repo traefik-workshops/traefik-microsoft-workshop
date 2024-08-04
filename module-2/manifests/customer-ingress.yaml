@@ -1,3 +1,4 @@
+---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -7,6 +8,17 @@ spec:
   headers:                              
     customResponseHeaders:
       X-HEADER-APP: "Customer API"
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+    name: jwt-azure
+    namespace: apps
+spec:
+  plugin:
+    jwt:
+      jwksUrl: "https://login.microsoftonline.com/common/discovery/v2.0/keys"
 
 ---
 apiVersion: traefik.io/v1alpha1
@@ -25,5 +37,6 @@ spec:
           port: 3000
       middlewares:
         - name: customer-header
+        - name: jwt-azure
   tls:
     certResolver: le

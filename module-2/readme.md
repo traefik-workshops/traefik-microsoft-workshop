@@ -87,8 +87,25 @@ To authenticate the user, the middleware redirects through the authentication pr
    service/whoami            ClusterIP      10.43.142.176   <none>             80/TCP     68m
    ```
 
+2. Create OIDC middleware to redirect the request to EntraID
 
-2. Let us publish the service using <b>ingressroute</b>.
+   ```bash
+   ---
+   apiVersion: traefik.io/v1alpha1
+   kind: Middleware
+   metadata:
+     name: oidc-whoami
+     namespace: apps
+   spec:
+     plugin:
+       oidc:
+         issuer: "https://sts.windows.net/AZURE_TENANT_ID/"
+         clientID: "AZURE_CLIENT_ID"
+         clientSecret: "AZURE_CLIENT_SECRET"
+         redirectUrl: "/cback"
+   ```
+
+2. Publish the service using <b>ingressroute</b> and attach the OIDC middleware to the route definition.
 
 
     ```yaml
@@ -106,6 +123,8 @@ To authenticate the user, the middleware redirects through the authentication pr
           services:
             - name: whoami                      # Forward the request to backend service
               port: 80                          # Backend service is listening on Port 80.
+          middlewares:
+            - name: oidc-whoami                 # List of middlewares that the request need to go through.
     ```
 
 > [!NOTE]     
@@ -154,93 +173,77 @@ To authenticate the user, the middleware redirects through the authentication pr
    </details>
    </br>
 
-4. The whoami application should be accessible using the URL defined in the IngressRoute definition. 
+3. The whoami application should be accessible using the URL defined in the IngressRoute definition. The request will be redirected to EntraID for verification before its routed to the backend service.
 
-    <details><summary>Expected output</summary>
+    <details><summary>Expected output after successful login</summary>
 
     ![whoami](../media/whoami.png)
     </details>  
 
+
 ___
 
-## Traffic modification with Middlewares:
+### Secure access with JWT:
 
-Middlewares are attached to the routers and it can tweak the incoming requests before it is handed over to the backend service. Depends on the middleware in use, Traefik can modify the incoming requests, the headers, the responses sent by the backend service, and it can also re-direct the requests, apply authentications and many more. 
+The JWT middleware verifies that a valid JWT token is provided in the Authorization header 
 
-To add a custom header to the incoming request, follow below steps:
+To add a JWT verification method to the incoming request for <b>customer-app</b> API application, follow below steps:
 
-1. Create a middleware definition to add custom header
+1. Create JWT middleware definition
 
     ```yaml
-    apiVersion: traefik.io/v1alpha1
-    kind: Middleware
-    metadata:
-      name: whoami-header                       # Name of the middleware.
-      namespace: apps                           # Namespaec where the backend service is running.
-    spec:
-      headers:                                  # Type of middleware
-        customRequestHeaders:                   # Add Custom Header to the request
-          X-HEADER-WHOAMI: "TRAEFIKHUB"         
+   ---
+   apiVersion: traefik.io/v1alpha1
+   kind: Middleware
+   metadata:
+       name: jwt-azure
+       namespace: apps
+   spec:
+     plugin:
+       jwt:
+         jwksUrl: "https://login.microsoftonline.com/common/discovery/v2.0/keys"    
     ```
-2. Deploy the middleware definition
+2. Update the <b>IngressRoute</b> definition to attach the new middleware.
+
+    ```yaml
+    ---
+    apiVersion: traefik.io/v1alpha1
+    kind: IngressRoute
+    metadata:
+      name: api-ingress-customers
+      namespace: apps                                                                     # Namespace where the application is deployed. 
+    spec:
+      entryPoints:
+        - websecure                                                                       # Request is coming on HTTPS (port 443).
+      routes:
+        - kind: Rule
+          match: Host(`api.traefik.EXTERNAL_IP.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
+          services:
+            - name: customer-app                                                          # The request routed to customer-app service on port 3000.
+              port: 3000
+          middlewares:                                                                    
+            - name: customer-header                                                       # CustomResponse Header.
+            - name: jwt-azure  # Add JWT verification 
+      tls:
+        certResolver: le
+    ```
 
 > [!NOTE]     
 > :pencil2: *Run below steps in your cluster.*
 
 ```bash
-kubectl apply -f module-2/manifests/whoami-middleware.yaml
+kubectl apply -f module-2/manifests/customer-ingress.yaml
 ```    
-```bash
-# Verify middleware
-kubectl -n apps get middleware.traefik.io
-NAME            AGE
-whoami-header   178m
-```
 
-3. Middleware needs to be attached to the router for it to tweak the traffic. Modify <b>*whoami-ingressroute*</b> definition file to reference the middleware. 
 
-> [!NOTE]     
-> :pencil2: *Edit whoami-ingressroute.yaml file*
+3. Any request to <b>customer-app</b> application will fail without proper token as part of the header. 
 
 ```bash
-vi module-2/manifests/whoami-ingressroute.yaml
+curl -I https://api.traefik.EXTERNAL_IP.sslip.io/customers
+
+HTTP/2 401 
 ```
-```yaml
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: whoami-ingress
-  namespace: apps
-spec:
-  entryPoints:
-    - web
-  routes:
-    - kind: Rule
-      match: Host(`whoami.URL`)
-      services:
-        - name: whoami
-          port: 80
-      middlewares:                  # Attach middlewares under routes definition  
-        - name: whoami-header       # Which middleware should be attached to this route. 
-```
-4. Re-deploy <b>whoami-ingressroute.yaml</b> manifest file for the new changes to take effect. 
 
-
-    ```bash
-    kubectl apply -f module-2/manifests/whoami-ingressroute.yaml
-    ```
-
-    <details><summary>Expected output</summary>
-
-    ![whoami](../media/whoami-middleware.png)
-    </details>  
-
-<br>
-
-___
-
-## Securing whoami application with OIDC and Azure Entra ID:
 
 
 ## References:
