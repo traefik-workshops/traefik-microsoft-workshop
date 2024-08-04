@@ -64,25 +64,31 @@ ___
 
 ___
 
-## Secure access with JWT         
+## Secure access to your application
+
+Now that we have <b> Traefik Hub API Gateway</b> running, we can take advantage of some the enterprise-level middlewares to secure access to our application so only authrorized users have access. 
+
+### Secure access with OIDC
+
+The OpenID Connect Authentication middleware secures your applications by delegating the authentication to an external provider (ex: EntraID) and obtaining the end user's session claims and scopes for authorization purposes.
+
+To authenticate the user, the middleware redirects through the authentication provider. Once the authentication is complete, users are redirected back to the middleware before being authorized to access the upstream application.    
+
+1. We have <b>whoami</b> application running under apps namespace. 
 
 
-
-whoami application was deployed in module-1. Below steps will need to be followed to expose the application. 
-
-```bash
-kubectl -n apps get pod,svc | egrep "NAME|whoami"
-
-NAME                                   READY   STATUS    RESTARTS        AGE
-pod/whoami-697f8c6cbc-qp5nw            1/1     Running   0               68m
-
-NAME                      TYPE           CLUSTER-IP      EXTERNAL-IP        PORT(S)    AGE
-service/whoami            ClusterIP      10.43.142.176   <none>             80/TCP     164m
-```
+   ```bash
+   kubectl -n apps get pod,svc | egrep "NAME|whoami"
+   
+   NAME                                   READY   STATUS    RESTARTS        AGE
+   pod/whoami-697f8c6cbc-qp5nw            1/1     Running   0               68m
+   
+   NAME                      TYPE           CLUSTER-IP      EXTERNAL-IP        PORT(S)    AGE
+   service/whoami            ClusterIP      10.43.142.176   <none>             80/TCP     68m
+   ```
 
 
-1. By default, Traefik Hub agent is configured with <b>*web*</b> (port 80) and <b>*websecure*</b> (port 443) EntryPoints. Similar to Traefik Proxy, you can define custom EntryPoints using static config. 
-2. Define the route to the backend service using <b>IngressRoute</b> Kubernetes custom resource definition.
+2. Let us publish the service using <b>ingressroute</b>.
 
 
     ```yaml
