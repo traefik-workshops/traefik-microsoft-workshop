@@ -108,8 +108,8 @@ To authenticate the user, the middleware redirects through the authentication pr
               port: 80                          # Backend service is listening on Port 80.
     ```
 
-   > [!NOTE]     
-   > :pencil2: *Run below steps in your cluster.*
+> [!NOTE]     
+> :pencil2: *Run below steps in your cluster.*
    
    ```bash
    kubectl apply -f module-2/manifests/whoami-ingress.yaml
@@ -153,7 +153,7 @@ To authenticate the user, the middleware redirects through the authentication pr
    ```
    </details>
    </br>
-   
+
 4. The whoami application should be accessible using the URL defined in the IngressRoute definition. 
 
     <details><summary>Expected output</summary>
