@@ -1,4 +1,15 @@
-![hub-landing](../media/traefik-hub-arch.png)
+<br/>
+
+<div align="center" style="margin: 30px;">
+<a href="https://traefik.io/traefik-hub/">
+  <img src="https://traefik.io/static/7a9b107b920108490fe35a055c5e505f/41007/traefik-hub-logo.webp"   style="width:250px;" align="center" />
+</a>
+<br />
+</div>
+<div align="center">
+    <a href="https://traefik.io/traefik-hub/">Website</a> |
+    <a href="https://doc.traefik.io/traefik-hub/">Documentation</a> 
+</div>
 
 # API management lifecycle
 
