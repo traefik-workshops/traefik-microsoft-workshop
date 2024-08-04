@@ -25,5 +25,6 @@ spec:
           port: 3000
       middlewares:
         - name: customer-header
+        - name: jwt-azure
   tls:
     certResolver: le

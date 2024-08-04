@@ -13,5 +13,7 @@ spec:
       services:
         - name: whoami
           port: 80
+      middlewares:
+        - name: oidc-whoami
   tls:
     certResolver: le

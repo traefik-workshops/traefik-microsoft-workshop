@@ -1,0 +1,24 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oidc-whoami
+  namespace: apps
+spec:
+  plugin:
+    oidc:
+      issuer: "https://sts.windows.net/c7e2c1de-ea00-4c1f-bddc-19bab581b482/"
+      clientID: "bd9a0a6f-e226-4ae4-a804-e98d2e561a73"
+      clientSecret: "~Zl8Q~3esXFzEbkMognt0htMraKBEF0tQNv1~c-g"
+      redirectUrl: "/cback"
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+    name: jwt-azure
+    namespace: apps
+spec:
+  plugin:
+    jwt:
+      jwksUrl: "https://login.microsoftonline.com/common/discovery/v2.0/keys"
