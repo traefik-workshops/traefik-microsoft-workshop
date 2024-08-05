@@ -4,16 +4,22 @@
 <a href="https://traefik.io/traefik-hub/">
   <img src="../media/traefik_hub_logo.png"   style="width:250px;" align="center" />
 </a>
-<br />
+<br/>
 </div>
 <div align="center">
     <a href="https://traefik.io/traefik-hub/">Website</a> |
     <a href="https://doc.traefik.io/traefik-hub/">Documentation</a> 
 </div>
+</br>
 
-# API management lifecycle
+# Traefik Hub API Management
 
-Now that we have the API demo application deployed on the Kubernetes cluster, it's time to publish, secure, and manage access to the API demo application. 
+## Overview:
+Traefik Hub is the industry’s first Kubernetes-native API Management solution for publishing, securing, and managing APIs.
+
+Traefik Hub, purpose-built for K8s environments and GitOps workflows, drastically simplifies and accelerates the API lifecycle management, so organizations experience quick time to value, unleash workforce productivity, and focus on building great applications.
+
+## Upgrade API Gateway to API Management: 
 
 In this module, we will cover how to:      
 1. Create API resources for our backend services. 
