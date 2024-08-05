@@ -1,0 +1,46 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: customer-api
+  namespace: apps
+  labels:
+    area: customer
+    module: crm
+spec:
+  openApiSpec:
+    path: /openapi.yaml
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIAccess
+metadata:
+  name: admin-access
+  namespace: apps
+spec:
+  groups:
+    - admin
+  apiSelector:
+    matchExpressions:
+      - key: area
+        operator: Exists
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-customers
+  namespace: apps
+  annotations:                                      # Add API annotation to enable APIM
+    hub.traefik.io/api: customer-api
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.demo.traefiklabs.tech`) && PathPrefix(`/customers`)
+      services:
+        - name: customer-app
+          port: 3000
+  tls:
+    certResolver: le
