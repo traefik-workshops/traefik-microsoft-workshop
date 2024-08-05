@@ -21,6 +21,28 @@ Traefik Hub, purpose-built for K8s environments and GitOps workflows, drasticall
 
 ## Upgrade API Gateway to API Management: 
 
+Upgrading <b>Traefik Hub API Gateway</b> deployment to <b>API Management</b> has never been easier. The license key will need to be updated to include the API Management feature. Then, <b>API Management</b> feature will need to be enabled using below command:
+
+> [!NOTE]     
+> :pencil2: *Follow the steps below to enable API Management features*.
+
+```bash
+helm upgrade traefik -n traefik --wait \
+  --reuse-values \
+  --set hub.apimanagement.enabled=true \
+   traefik/traefik
+```
+
+## Manage an App with APIM:
+
+To manage an application using API Management services, we will need to do the following:
+
+1. Create an API object for Hub APIM service to manage.
+2. Create an API Access object to control which group has access to this API.
+3. Update the Ingress definition for the application to bind it to the newly created API. 
+
+
+
 In this module, we will cover how to:      
 1. Create API resources for our backend services. 
 2. Create API version resources to publish different versions of the backend application. 
