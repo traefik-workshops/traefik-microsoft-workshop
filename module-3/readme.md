@@ -101,7 +101,12 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
        certResolver: le
    ```
 
+> [!NOTE]     
+> :pencil2: *Follow the steps below to promote customer-api to be managed by APIM*.
 
+```bash
+kubectl apply -f module-3/manifests/customer-ingress-api.yaml
+```
 
 
 
