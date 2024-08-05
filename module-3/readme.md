@@ -87,7 +87,7 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
      name: api-ingress-customers
      namespace: apps
      annotations:                                      # Add API annotation to enable APIM
-       hub.traefik.io/api: customer-api
+       hub.traefik.io/api: customer-api                # API object that the ingressroute needs to bind to.
    spec:
      entryPoints:
        - websecure
