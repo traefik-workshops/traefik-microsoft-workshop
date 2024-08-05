@@ -135,7 +135,7 @@ Now that we have the application managed by Traefik Hub API Management services,
 > :pencil2: *Deploy API Dev Portal and IngressRoute*.
 
 ```bash
-kubectl apply -f module-3/manifests/customer-ingress-api.yaml
+kubectl apply -f module-3/manifests/api-portal.yaml
 ```
 
 ## References
