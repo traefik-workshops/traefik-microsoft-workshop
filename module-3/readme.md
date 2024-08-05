@@ -130,6 +130,28 @@ Now that we have the application managed by Traefik Hub API Management services,
        - https://demo-portal.traefik.EXTERNAL_IP.sslip.io
    ```
 2. Create Ingress definition to publish API Dev Portal. 
+   ```bash
+   ---
+   apiVersion: traefik.io/v1alpha1
+   kind: IngressRoute
+   metadata:
+     name: demo-apiportal
+     namespace: apps
+     annotations:                              
+       hub.traefik.io/api-portal: demo-portal          # Add annotation to reference api-portal object
+   spec:
+     entryPoints:
+       - websecure
+     routes:
+     - match: Host(`demo-portal.traefik.EXTERNAL_IP.sslip.io`)
+       kind: Rule
+       services:
+       - name: apiportal
+         namespace: traefik
+         port: 9903
+     tls:
+       certResolver: le
+   ```
 
 > [!NOTE]     
 > :pencil2: *Deploy API Dev Portal and IngressRoute*.
@@ -137,6 +159,33 @@ Now that we have the application managed by Traefik Hub API Management services,
 ```bash
 kubectl apply -f module-3/manifests/api-portal.yaml
 ```
+
+3. Traefik Dashboard should list a new route for api-portal. The portal can be accessible using the HOST url defined in the Ingress definition
+
+   ```bash
+   https://demo-portal.traefik.EXTERNAL_IP.sslip.io
+   ```
+   <details><summary> :bulb: API Developer Portal </summary> 
+   ![Dev Portal](../media/dev_portal.png)
+   </details>
+
+
+## API Dev Portal Access:
+
+The API Portal is automatically protected and require username/password to login. 
+
+Access can be defined using either a <b>built-in</b> identity provider or <b>any 3rd party Idp using OIDC</b>. 
+
+### [Option 1] Built-in Identity Provider
+
+This is the default option for any deployment. 
+
+1. login to <b><a href="https://hub.traefik.io">Hub Dashboard</a></b> and create users and groups as shown below.
+
+   ![built-in-user](../media/built-in-user.png)
+   ![built-in-user](../media/built-in-group.png)
+
+
 
 ## References
 
