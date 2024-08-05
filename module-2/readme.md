@@ -68,6 +68,68 @@ ___
 
 Now that we have <b> Traefik Hub API Gateway</b> running, we can take advantage of some the enterprise-level middlewares to secure access to our application so only authrorized users have access. 
 
+### Secure access with JWT:
+
+The JWT middleware verifies that a valid JWT token is provided in the Authorization header 
+
+To add a JWT verification method to the incoming request for <b>customer-app</b> API application, follow below steps:
+
+1. Create JWT middleware definition
+
+    ```yaml
+   ---
+   apiVersion: traefik.io/v1alpha1
+   kind: Middleware
+   metadata:
+       name: jwt-azure
+       namespace: apps
+   spec:
+     plugin:
+       jwt:
+         jwksUrl: "https://login.microsoftonline.com/common/discovery/v2.0/keys"    
+    ```
+2. Update <b> customer-app's</b> <b>IngressRoute</b> definition to attach the newly created JWT middleware.
+
+    ```yaml
+    ---
+    apiVersion: traefik.io/v1alpha1
+    kind: IngressRoute
+    metadata:
+      name: api-ingress-customers
+      namespace: apps                                                                     # Namespace where the application is deployed. 
+    spec:
+      entryPoints:
+        - websecure                                                                       # Request is coming on HTTPS (port 443).
+      routes:
+        - kind: Rule
+          match: Host(`api.traefik.EXTERNAL_IP.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
+          services:
+            - name: customer-app                                                          # The request routed to customer-app service on port 3000.
+              port: 3000
+          middlewares:                                                                    
+            - name: customer-header                                                       # CustomResponse Header.
+            - name: jwt-azure  # Add JWT verification 
+      tls:
+        certResolver: le
+    ```
+
+> [!NOTE]     
+> :pencil2: *Run below steps in your cluster.*
+
+
+```bash
+kubectl apply -f module-2/manifests/customer-ingress.yaml
+```    
+
+
+3. Any request to <b>customer-app</b> application will fail without proper token as part of the header. 
+
+   ```bash
+   curl -I https://api.traefik.EXTERNAL_IP.sslip.io/customers
+   
+   HTTP/2 401 
+   ```
+
 ### Secure access with OIDC
 
 The OpenID Connect Authentication middleware secures your applications by delegating the authentication to an external provider (ex: EntraID) and obtaining the end user's session claims and scopes for authorization purposes.
@@ -183,66 +245,7 @@ To authenticate the user, the middleware redirects through the authentication pr
 
 ___
 
-### Secure access with JWT:
 
-The JWT middleware verifies that a valid JWT token is provided in the Authorization header 
-
-To add a JWT verification method to the incoming request for <b>customer-app</b> API application, follow below steps:
-
-1. Create JWT middleware definition
-
-    ```yaml
-   ---
-   apiVersion: traefik.io/v1alpha1
-   kind: Middleware
-   metadata:
-       name: jwt-azure
-       namespace: apps
-   spec:
-     plugin:
-       jwt:
-         jwksUrl: "https://login.microsoftonline.com/common/discovery/v2.0/keys"    
-    ```
-2. Update the <b>IngressRoute</b> definition to attach the new middleware.
-
-    ```yaml
-    ---
-    apiVersion: traefik.io/v1alpha1
-    kind: IngressRoute
-    metadata:
-      name: api-ingress-customers
-      namespace: apps                                                                     # Namespace where the application is deployed. 
-    spec:
-      entryPoints:
-        - websecure                                                                       # Request is coming on HTTPS (port 443).
-      routes:
-        - kind: Rule
-          match: Host(`api.traefik.EXTERNAL_IP.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
-          services:
-            - name: customer-app                                                          # The request routed to customer-app service on port 3000.
-              port: 3000
-          middlewares:                                                                    
-            - name: customer-header                                                       # CustomResponse Header.
-            - name: jwt-azure  # Add JWT verification 
-      tls:
-        certResolver: le
-    ```
-
-> [!NOTE]     
-> :pencil2: *Run below steps in your cluster.*
-
-```bash
-kubectl apply -f module-2/manifests/customer-ingress.yaml
-```    
-
-
-3. Any request to <b>customer-app</b> application will fail without proper token as part of the header. 
-
-```bash
-curl -I https://api.traefik.EXTERNAL_IP.sslip.io/customers
-
-HTTP/2 401 
-```
 
 
 
