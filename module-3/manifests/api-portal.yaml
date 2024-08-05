@@ -1,0 +1,32 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPortal
+metadata:
+  name: demo-portal
+  namespace: apps
+spec:
+  title: Demo API Portal
+  description: "Demo Developer Portal"
+  trustedUrls:
+    - https://demo-portal.traefik.172.169.37.234.sslip.io
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: demo-apiportal
+  namespace: apps
+  annotations:
+    hub.traefik.io/api-portal: demo-portal
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`demo-portal.traefik.172.169.37.234.sslip.io`)
+    kind: Rule
+    services:
+    - name: apiportal
+      namespace: traefik
+      port: 9903
+  tls:
+    certResolver: le

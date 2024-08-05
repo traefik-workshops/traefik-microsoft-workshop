@@ -33,9 +33,9 @@ helm upgrade traefik -n traefik --wait \
    traefik/traefik
 ```
 
-## Manage an App with APIM:
+## Manage an API with API Management Services:
 
-To manage an application using API Management services, we will need to do the following:
+To manage an API application using API Management services, we will need to do the following:
 
 1. Create an API object for Hub APIM service to manage.
 2. Create an API Access object to control which group has access to this API.
@@ -77,7 +77,7 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
             operator: Exists 
     ```
 
-3. Promote existing <b>IngressRoute</b> to be managed by <b>APIM</b>.
+3. Promote the existing <b>IngressRoute</b> to be managed by <b>APIM</b>.
 
    ```bash
    ---
@@ -108,7 +108,35 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
 kubectl apply -f module-3/manifests/customer-ingress-api.yaml
 ```
 
+## API Developer Portal:
 
+Traefik Hub API Developer Portal provides developers the ability to discover, access, and utilize API services. This platform serves as the space where API Users can explore, understand how to utilize the APIs, manage API Key access, and experiment with their functionalities.
+
+Now that we have the application managed by Traefik Hub API Management services, let us deploy API Developer portal so we can interact with the APIs
+
+1. Deploy API Dev Portal. 
+
+   ```bash
+   ---
+   apiVersion: hub.traefik.io/v1alpha1
+   kind: APIPortal
+   metadata:
+     name: demo-portal
+     namespace: apps
+   spec:
+     title: Demo API Portal
+     description: "Demo Developer Portal"
+     trustedUrls:
+       - https://demo-portal.traefik.EXTERNAL_IP.sslip.io
+   ```
+2. Create Ingress definition to publish API Dev Portal. 
+
+> [!NOTE]     
+> :pencil2: *Deploy API Dev Portal and IngressRoute*.
+
+```bash
+kubectl apply -f module-3/manifests/customer-ingress-api.yaml
+```
 
 ## References
 
