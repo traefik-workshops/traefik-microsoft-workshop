@@ -274,8 +274,8 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 
 ## Reference
 
-- Install the Traefik Hub Agent  
-https://doc.traefik.io/traefik-hub/operations/installation/ingress-mode/
+- Install the Traefik Hub API Gateway  
+https://doc.traefik.io/traefik-hub/api-gateway/setup/installation/kubernetes
 
 </br>
 
