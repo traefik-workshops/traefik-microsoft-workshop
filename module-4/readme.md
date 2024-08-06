@@ -245,7 +245,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 
 ### Generate Traffic:
 
-Now that we have the observability stack deployed, let's generate some traffic! 
+Now that the observability stack is deployed, let's generate some traffic! 
 
 
 
