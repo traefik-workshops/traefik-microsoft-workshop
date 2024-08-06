@@ -63,7 +63,7 @@ ___
    ```bash
    kubectl apply -f module-1/src/dashboard-ingress.yaml
    ```
-   Treafik uses <b>IngressRoute</b> to publish the application based on the concept of <b>EntryPoint</b>, <b>Routers</b>, <b>Middleware</b> and <b>Service</b>.  
+   Traefik uses <b>IngressRoute</b> to publish the application based on the concept of <b>EntryPoint</b>, <b>Routers</b>, <b>Middleware</b> and <b>Service</b>.  
 
    ```yaml
    apiVersion: traefik.io/v1alpha1
