@@ -17,7 +17,7 @@
 
 The Traefik Hub API Gateway combines the world’s most trusted cloud native, fully declarative application proxy with enterprise-grade access control, distributed security, and premium integrations. 
 
-In this module, we will go through the steps on how to perfrom seamless upgrade of <b>Traefik Application Proxy</b> to <b>Traefik Hub API Gateway</b> with minimum imapct to existing services.  
+In this module, we will go through the steps on how to perform a seamless upgrade of <b>Traefik Application Proxy</b> to <b>Traefik Hub API Gateway</b> with minimum impact on existing services.  
 
 <br>
 
@@ -38,7 +38,7 @@ ___
 
    ![copy_token](../media/copy_token.png)
 
-4. Store the new gateway token as environment variable in your terminal.      
+4. Store the new gateway token as an environment variable in your terminal.      
 
     ```bash 
     export TRAEFIK_HUB_TOKEN=
@@ -48,7 +48,7 @@ ___
     ```bash
     kubectl create secret generic traefik-hub-license --namespace traefik --from-literal=token=$TRAEFIK_HUB_TOKEN
     ```
-6. Now that the license key is stored under the same namespace as our existing Traefik Application proxy deployment, we can perform in-place upgrade to <b>Traefik Hub API Gateway</b> using the same Helm chart. 
+6. Now that the license key is stored under the same namespace as our existing Traefik Application proxy deployment, we can perform an in-place upgrade to <b>Traefik Hub API Gateway</b> using the same Helm chart. 
 
     ```bash
     helm upgrade traefik -n traefik --wait \
@@ -60,19 +60,19 @@ ___
        traefik/traefik
    ```
 
-7. Once the Helm upgrade command is executed successfully, you can refresh the Traefik Dashboard webpage and you will be presented with the new UI. Since <b>Traefik API Gateway</b> is based on <b>Traefik Application Proxy</b>, there is no impact to any of the existing services. 
+7. Once the Helm upgrade command is executed successfully, you can refresh the Traefik local dashboard and be presented with the new UI. Since <b>Traefik API Gateway</b> is based on <b>Traefik Application Proxy</b>, there is no impact to any of the existing services. 
 
 ___
 
 ## Secure access to your application
 
-Now that we have <b> Traefik Hub API Gateway</b> running, we can take advantage of some the enterprise-level middlewares to secure access to our application so only authrorized users have access. 
+Now that we have <b> Traefik Hub API Gateway</b> running, we can take advantage of some of the enterprise-level middlewares to secure access to our application so only authorized users have access. 
 
 ### Secure access with JWT:
 
 The JWT middleware verifies that a valid JWT token is provided in the Authorization header 
 
-To add a JWT verification method to the incoming request for <b>customer-app</b> API application, follow below steps:
+To add a JWT verification method to the incoming request for <b>customer-app</b> API application, follow the below steps:
 
 1. Create JWT middleware definition
 
@@ -122,7 +122,7 @@ kubectl apply -f module-2/manifests/customer-ingress.yaml
 ```    
 
 
-3. Any request to <b>customer-app</b> application will fail without proper token as part of the header. 
+3. Any request to <b>customer-app</b> application will fail without a proper token as part of the header. 
 
    ```bash
    curl -I https://api.traefik.EXTERNAL_IP.sslip.io/customers
@@ -235,7 +235,7 @@ To authenticate the user, the middleware redirects through the authentication pr
    </details>
    </br>
 
-3. The whoami application should be accessible using the URL defined in the IngressRoute definition. The request will be redirected to EntraID for verification before its routed to the backend service.
+3. The whoami application should be accessible using the URL in the IngressRoute definition. The request will be redirected to EntraID for verification before its routed to the backend service.
 
     <details><summary>Expected output after successful login</summary>
 
