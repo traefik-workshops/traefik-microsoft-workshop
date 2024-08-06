@@ -13,7 +13,7 @@
 
 # Traefik Hub API Gateway
 
-## Overview:
+## Overview
 
 The Traefik Hub API Gateway combines the world’s most trusted cloud native, fully declarative application proxy with enterprise-grade access control, distributed security, and premium integrations. 
 
@@ -23,7 +23,7 @@ In this module, we will go through the steps on how to perform a seamless upgrad
 
 ___
 
-## Upgrade Traefik Application Proxy to Traefik Hub API Gateway:
+## Upgrade Traefik Application Proxy to Traefik Hub API Gateway
 
 1. Traefik Hub API Gateway requires a license key. To obtain a license key, login to <b><a href="https://hub.traefik.io/dashboard">Traefik Hub Dashboard</a></b>           
 
@@ -68,7 +68,7 @@ ___
 
 Now that we have <b> Traefik Hub API Gateway</b> running, we can take advantage of some of the enterprise-level middlewares to secure access to our application so only authorized users have access. 
 
-### Secure access with JWT:
+### Secure access with JWT
 
 The JWT middleware verifies that a valid JWT token is provided in the Authorization header 
 
@@ -249,7 +249,7 @@ ___
 
 
 
-## References:
+## References
 
 - 
 
