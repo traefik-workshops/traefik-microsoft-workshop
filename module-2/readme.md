@@ -134,7 +134,7 @@ kubectl apply -f module-2/manifests/customer-ingress.yaml
 
 The OpenID Connect Authentication middleware secures your applications by delegating the authentication to an external provider (ex: EntraID) and obtaining the end user's session claims and scopes for authorization purposes.
 
-To authenticate the user, the middleware redirects through the authentication provider. Once the authentication is complete, users are redirected back to the middleware before being authorized to access the upstream application.    
+To authenticate the user, the middleware redirects to the authentication provider. Once the authentication is complete, users are redirected back to the middleware before being authorized to access the upstream application.    
 
 1. We have <b>whoami</b> application running under <b>apps</b> namespace. 
 
