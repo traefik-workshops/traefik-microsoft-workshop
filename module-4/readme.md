@@ -177,7 +177,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
     ```bash
     helm upgrade --install --namespace traefik-hub traefik-hub traefik/traefik-hub --set additionalArguments='{--hub.metrics.opentelemetry.insecure,--hub.metrics.opentelemetry.address=prometheus.monitoring:9090,--hub.metrics.opentelemetry.path=/api/v1/otlp/v1/metrics}'
     ```
-2. Create a namespace for monitoring stack.
+2. Create a namespace for the monitoring stack.
 
     ```bash
     kubectl create namespace monitoring
