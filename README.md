@@ -27,15 +27,15 @@ The hands-on lab is divided into multiple modules. Each module covers a particul
 > *Each module contains all manifest files for each lab.*.             
 > :pencil2: *This step is required to be implemented in the LAB.*.
 
-- [Module-0: Provision AKS cluster](module-0/readme.md)
+- [Module 0: Provision AKS cluster](module-0/readme.md)
 
-- [module-1: Traefik Application Proxy](module-1/readme.md)
+- [Module 1: Traefik Application Proxy](module-1/readme.md)
 
-- [module-2: Traefik Hub API Gateway](module-2/readme.md)
+- [Module 2: Traefik Hub API Gateway](module-2/readme.md)
 
-- [module-3: Traefik Hub API Management](module-3/readme.md)
+- [Module 3: Traefik Hub API Management](module-3/readme.md)
 
-- [module-4: API Advanced Capabilities](module-4/readme.md)
+- [Module 4: API Advanced Capabilities](module-4/readme.md)
 
 ------
 :arrow_forward: [module-0](module-0/readme.md)
