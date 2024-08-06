@@ -178,7 +178,7 @@ az aks create --resource-group $AKS_RESOURCE_GROUP --name  $CLUSTER_NAME --node-
 6. Retrieve AKS credentials so you can manage the cluster from your laptop.
 
 ```bash
-az aks get-credentials --resource-group $AKS_RESROUCE_GROUP --name --name $CLUSTER_NAME --file ~/.kube/$CLUSTER_NAME.yaml
+az aks get-credentials --resource-group $AKS_RESROUCE_GROUP --name --name $CLUSTER_NAME --file $KUBECONFIG
 ```
 
 7. Verify access to the AKS cluster
