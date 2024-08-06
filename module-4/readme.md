@@ -1,4 +1,4 @@
-# API Advanced Capabilities
+# Advanced API Capabilities
 
 API access control helps ensure the backend application's performance and stability. 
 
