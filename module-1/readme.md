@@ -280,4 +280,4 @@ https://doc.traefik.io/traefik-hub/api-gateway/setup/installation/kubernetes
 </br>
 
 ------
-:house: [HOME](../README.md) | :arrow_forward: [module-2](../module-2/readme.md)
+:house: [HOME](../README.md) | :arrow_forward: [Module 2](../module-2/readme.md)
