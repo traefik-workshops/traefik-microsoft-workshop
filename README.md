@@ -38,4 +38,4 @@ The hands-on lab is divided into multiple modules. Each module covers a particul
 - [Module 4: API Advanced Capabilities](module-4/readme.md)
 
 ------
-:arrow_forward: [module-0](module-0/readme.md)
+:arrow_forward: [Module 0](module-0/readme.md)
