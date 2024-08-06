@@ -17,11 +17,11 @@
 ## Overview:
 Traefik Hub is the industry’s first Kubernetes-native API Management solution for publishing, securing, and managing APIs.
 
-Traefik Hub, purpose-built for K8s environments and GitOps workflows, drastically simplifies and accelerates the API lifecycle management, so organizations experience quick time to value, unleash workforce productivity, and focus on building great applications.
+Traefik Hub, purpose-built for K8s environments and GitOps workflows, drastically simplifies and accelerates API lifecycle management. As a result, organizations experience quick time to value, unleash workforce productivity, and focus on building great applications.
 
 ## Upgrade API Gateway to API Management: 
 
-Upgrading <b>Traefik Hub API Gateway</b> deployment to <b>API Management</b> has never been easier. The license key will need to be updated to include the API Management feature. Then, <b>API Management</b> feature will need to be enabled using below command:
+Upgrading <b>Traefik Hub API Gateway</b> deployment to <b>API Management</b> has never been easier. The license key must be updated to include the API Management feature. Then, the <b>API Management</b> feature will need to be enabled using the below command:
 
 > [!NOTE]     
 > :pencil2: *Follow the steps below to enable API Management features*.
@@ -110,11 +110,11 @@ kubectl apply -f module-3/manifests/customer-ingress-api.yaml
 
 ## API Developer Portal:
 
-Traefik Hub API Developer Portal provides developers the ability to discover, access, and utilize API services. This platform serves as the space where API Users can explore, understand how to utilize the APIs, manage API Key access, and experiment with their functionalities.
+Traefik Hub API Developer Portal allows developers to discover, access, and utilize API services. This platform serves as the space where API Users can explore, understand how to utilize the APIs, manage API Key access, and experiment with their functionalities.
 
-Now that we have the application managed by Traefik Hub API Management services, let us deploy API Developer portal so we can interact with the APIs
+Now that we have the application managed by Traefik Hub API Management services, let us deploy an API Developer portal so we can interact with the APIs
 
-1. Deploy API Dev Portal. 
+1. Deploy an API Dev Portal. 
 
    ```bash
    ---
@@ -160,7 +160,7 @@ Now that we have the application managed by Traefik Hub API Management services,
 kubectl apply -f module-3/manifests/api-portal.yaml
 ```
 
-3. Traefik Dashboard should list a new route for api-portal. The portal can be accessible using the HOST url defined in the Ingress definition
+3. Traefik Dashboard should list a new route for the api-portal. The portal can be accessible using the HOST URL defined in the Ingress definition
 
    ```bash
    https://demo-portal.traefik.EXTERNAL_IP.sslip.io
@@ -172,9 +172,9 @@ kubectl apply -f module-3/manifests/api-portal.yaml
 
 ## API Dev Portal Access:
 
-The API Portal is automatically protected and require username/password to login. 
+The API Portal is automatically protected and requires a username/password to log in. 
 
-Access can be defined using either a <b>built-in</b> identity provider or <b>any 3rd party Idp using OIDC</b>. 
+Access can be defined using either a <b>built-in</b> identity provider or <b>any 3rd party IdP using OIDC</b>. 
 
 ### [Option 1] Built-in Identity Provider
 
