@@ -254,4 +254,4 @@ ___
 - 
 
 ------
-:house: [HOME](../README.md) | :arrow_forward: [module-3](../module-3/readme.md)
+:house: [HOME](../README.md) | :arrow_forward: [Module 3](../module-3/readme.md)
