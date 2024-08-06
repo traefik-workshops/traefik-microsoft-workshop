@@ -170,24 +170,24 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 </br>
 
 > [!NOTE]     
-> :pencil2: *Follow below steps to deploy monitoring stack on your AKS cluster.* 
+> :pencil2: *Follow the below steps to deploy the monitoring stack on your AKS cluster.* 
 
-1. Enable OpenTelemtry on Traefik Hub agent. 
+1. Enable OpenTelemtry on the Traefik Hub GW. 
 
     ```bash
     helm upgrade --install --namespace traefik-hub traefik-hub traefik/traefik-hub --set additionalArguments='{--hub.metrics.opentelemetry.insecure,--hub.metrics.opentelemetry.address=prometheus.monitoring:9090,--hub.metrics.opentelemetry.path=/api/v1/otlp/v1/metrics}'
     ```
-2. Create namespace for monitoring stack.
+2. Create a namespace for monitoring stack.
 
     ```bash
     kubectl create namespace monitoring
     ```
-3. Deploy Prometheus stack.
+3. Deploy the Prometheus stack.
 
     ```bash
     kubectl apply -f module-4/monitoring/prometheus/
     ```
-4. Deploy Grafana stack.
+4. Deploy the Grafana stack.
 
     ```bash
     kubectl apply -f module-4/monitoring/grafana
@@ -205,7 +205,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
     service/grafana                   ClusterIP   10.43.40.181   <none>        3000/TCP   25h
     service/prometheus                ClusterIP   10.43.8.73     <none>        9090/TCP   25h
     ```
-6. Get Grafana URL and access Grafana dashboard (user/password: <b>admin/admin</b>)
+6. Get the Grafana URL and access the Grafana dashboard (user/password: <b>admin/admin</b>)
 
     ```bash
     kubectl -n monitoring describe ingressroute.traefik.io grafana
@@ -245,17 +245,17 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 
 ### Generate Traffic:
 
-Now that we have observability stack deployed, let's generate some traffic! 
+Now that we have the observability stack deployed, let's generate some traffic! 
 
 
 
 > [!NOTE]     
-> :pencil2: *Follow below steps to deploy monitoring stack on your AKS cluster.* 
+> :pencil2: *Follow the below steps to deploy the monitoring stack on your AKS cluster.* 
 
 <br>
 
 
-1. Create a new namespase to host traffic generator deployment. 
+1. Create a new namespace to host traffic generator deployment. 
 
    ```bash
    kubectl create ns traffic
@@ -263,7 +263,7 @@ Now that we have observability stack deployed, let's generate some traffic!
 
 2. To interact with the APIs, we need to generate API Keys for <b>*admin*</b> and <b>*support*</b> users that we created in module-3. 
 
-    - If you don't have the token saved, login to <b>API Portal</b> and <b>*Create token*</b>.
+    - If you don't have the token saved, log in to <b>API Portal</b> and <b>*Create token*</b>.
 
       <details><summary><b>Create Token - Traefik Hub UI :bulb: </b></summary>
 
@@ -282,7 +282,7 @@ Now that we have observability stack deployed, let's generate some traffic!
     ```bash
     kubectl create secret generic tokens -n traffic --from-literal=admin="${ADMIN_TOKEN}" --from-literal=support="${SUPPORT_TOKEN}"
     ```  
-3.  Deploy the load generator app. This should start two instances for each user. 
+3.  Deploy the load generator app. This should start with two instances for each user. 
 
     ```bash
     kubectl apply -f module-4/traffic/
