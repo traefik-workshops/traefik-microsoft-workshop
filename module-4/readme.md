@@ -163,7 +163,7 @@ kubectl apply -f module-4/manifests/api-granular-access.yaml
     <p>
 ___
 
-## OpenTel with Grafana
+## OTel with Grafana
 
 Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine how organizations monitor, manage, and optimize their API infrastructure.
 
