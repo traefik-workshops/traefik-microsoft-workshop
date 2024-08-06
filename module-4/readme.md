@@ -85,7 +85,7 @@ This is done through the use of two definitions:
 1. <code><b>operationSets</b></code> defines the methods allowed as part of the <b>API</b> resource definition.       
 2. <code><b>operationFilter</b></code> references <code>operationSets</code> definition as part the <b>APIAccess</b> policy. 
 <p>
-Below, we modified flight API that we deployed in module-3 to only allow <b>GET</b> method. 
+Below, we modified the flight API that we deployed in module-3 to only allow the <b>GET</b> method. 
 
 
 ```yaml
@@ -172,7 +172,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 > [!NOTE]     
 > :pencil2: *Follow the below steps to deploy the monitoring stack on your AKS cluster.* 
 
-1. Enable OpenTelemtry on the Traefik Hub GW. 
+1. Enable OpenTelemetry on the Traefik Hub GW. 
 
     ```bash
     helm upgrade --install --namespace traefik-hub traefik-hub traefik/traefik-hub --set additionalArguments='{--hub.metrics.opentelemetry.insecure,--hub.metrics.opentelemetry.address=prometheus.monitoring:9090,--hub.metrics.opentelemetry.path=/api/v1/otlp/v1/metrics}'
