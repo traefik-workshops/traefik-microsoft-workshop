@@ -45,7 +45,7 @@ spec:
 > [!NOTE]     
 > :pencil2: *Deploy <code><b>api-rate-limit</b></code> to the cluster.* 
 
-> Apply API rate policy manifest file. 
+> Apply the API rate policy manifest file. 
 ```bash
 kubectl apply -f module-4/manifests/api-rate-limit.yaml
 ```
