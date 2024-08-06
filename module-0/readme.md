@@ -197,4 +197,4 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 </br>
 
 ------
-:house: [HOME](../README.md) | :arrow_forward: [module-1](../module-1/readme.md)
+:house: [HOME](../README.md) | :arrow_forward: [Module 1](../module-1/readme.md)
