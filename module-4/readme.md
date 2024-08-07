@@ -1,6 +1,6 @@
 # Advanced API Capabilities
 
-API access control helps ensure the backend application's performance and stability. 
+Once an API is defined, managing its access becomes crucial. API Access Management governs API availability. It determines who can access the API and which operations can be performed. This layer is configured in a flexible and composable manner using the APIAccess resource. API access management allows organizations to tailor access control policies to their specific requirements.
 
 In this module, we will cover:
 
@@ -9,36 +9,32 @@ In this module, we will cover:
 - OTel with Grafana
 
 ___
-
 ## API Rate Limit Policy
 
-The API rate limit object defines the consumption limit for consumers of APIs.
+API rate limiting defines consumption limits for API consumers. It serves three main purposes: protecting infrastructure, managing quotas, and enabling API monetization.
 
-The limits are attached to groups and applied to APIs or Collections.
+By using the APIRateLimit object, you can apply rate limits to <b>user-groups</b> for specific <b>APIs</b>. This helps to prevent API abuse, control traffic, and ensure a stable and predictable user experience. 
 
-Traefik Hub uses the Token Bucket algorithm, which defines the number of requests that can be served in a given time period.
+Multiple rate limits can be configured using any combination of groups and APIs.
 
-
-
-API Rate Limit can be applied to the <code> anyGroup </code> to set a general limit for all groups. Then, apply exceptions for subsets of APIs.  
+Traefik Hub supports two strategies for rate limiting:
+- <b>Local strategy</b>: applies rate limiting policies to a single Traefik Hub API gateway instance. Each instance manages its own policy. 
+- <b>Distributed strategy</b>: shares rate limiting policies across all Traefik Hub API gateways. This ensures consistency across all instances.
 
 ```yaml
 apiVersion: hub.traefik.io/v1alpha1
 kind: APIRateLimit
 metadata:
-  name: support-ratelimit
+  name: apim-employees-drl
+  namespace: apps
 spec:
-  limit: 15                 # Number of requests allowed (15 requests)                      
-  period: 1m                # Over the time period (1m)
+  apis:
+  - name: employee-api
   groups:
-    - support               # From all users who are members of this group.
-  apiSelector:
-    matchExpressions:       # To all requests going to these APIs matching labels selector. 
-      - key: area
-        operator: In
-        values:
-          - flights
-          - tickets
+  - admin                           # Apply to all users who are part of admin group
+  limit: 5                          # Number of requests allowed (5 requests)    
+  period: 30s                       # Over the time period (30s)
+  strategy: distributed             # Limit will be enforced across all API Gateway instances.  
 ```
 </br>
 
