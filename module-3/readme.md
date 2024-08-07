@@ -180,12 +180,20 @@ Access can be defined using either a <b>built-in</b> identity provider or <b>any
 
 This is the default option for any deployment. 
 
-1. login to <b><a href="https://hub.traefik.io">Hub Dashboard</a></b> and create users and groups as shown below.
+1. login to <b><a href="https://hub.traefik.io">Hub Dashboard</a></b> and create users and groups as shown below. 
 
    ![built-in-user](../media/built-in-user.png)
    ![built-in-user](../media/built-in-group.png)
 
+2. Login to the API Dev Portal with user account that you just created (ex: admin@traefik.io)
 
+### [Option 2] OIDC connection to EntraID
+
+1. login to <b><a href="https://hub.traefik.io">Hub Dashboard</a></b> and navigate to <b>Auth settings</b>
+
+2. Under <b>Portal</b> section, select OIDC and provide the identity provider details
+
+   ![portal-oidc](../media/portal_oidc.png)
 
 ## References
 
