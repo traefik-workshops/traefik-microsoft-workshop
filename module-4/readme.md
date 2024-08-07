@@ -48,12 +48,11 @@ kubectl apply -f module-4/manifests/api-rate-limit.yaml
 ```bash
 # Verify API rate limit policies.
 
-kubectl get apiratelimit
+kubectl -n apps get apiratelimit
 
 NAME                 AGE
-crm-user-ratelimit   13s
-support-ratelimit    13s
-fallback-ratelimit   13s
+apim-employees-drl   14s
+apim-fallback-drl    14s
 ```
 </br>
 
@@ -62,11 +61,11 @@ fallback-ratelimit   13s
 
 - Rate-limit policies across all clusters are listed under <b>Rate Limits</b> view.
 
-  ![get-apiportal](../media/rate-limits.png)
+  ![get-apiportal](../media/hub-rate-limit.png)
 
 - Rate-limit policy details can be obtained by selecting the policy
 
-  ![get-apiportal](../media/support-ratelimit.png)
+  ![get-apiportal](../media/hub-rate-limit-detail.png)
 
   </details>
     <p>
