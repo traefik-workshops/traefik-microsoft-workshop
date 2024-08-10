@@ -25,7 +25,7 @@ ___
 
 ## Upgrade Traefik Application Proxy to Traefik Hub API Gateway
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Run below steps in your cluster.*
 
 1. Traefik Hub API Gateway requires a license key. To obtain a license key, login to <b><a href="https://hub.traefik.io/dashboard">Traefik Hub Dashboard</a></b>           
