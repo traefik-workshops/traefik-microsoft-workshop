@@ -190,9 +190,9 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 > [!NOTE]     
 > :pencil2: *Lets apply the IngressRoute definition.*
     
-    ```bash
-    kubectl apply -f module-1/apps/customers/ingress/customer-ingress.yaml
-    ```
+  ```bash
+  kubectl apply -f module-1/apps/customers/ingress/customer-ingress.yaml
+  ```
 2. Traefik Dashboard will list the newly created route.
 
     ![customer-route](../media/customer-route.png)
