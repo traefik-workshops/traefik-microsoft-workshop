@@ -119,7 +119,7 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
 > [!IMPORTANT]     
 > :pencil2: *Run below steps in your cluster.*
 
-- :star:
+- :bangbang:
 
   ```bash
   kubectl apply -f module-2/manifests/customer-ingress.yaml
