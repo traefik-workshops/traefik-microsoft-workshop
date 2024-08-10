@@ -13,7 +13,7 @@ The hands-on lab is divided into multiple modules. Each module covers a particul
 
 
 
-![AKS-Hub](media/Azure-Hub-Hub-AKS.png)
+![AKS-Hub](media/Diagram.png)
 
 # Prerequisites
 
