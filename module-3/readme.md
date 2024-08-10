@@ -23,7 +23,7 @@ Traefik Hub, purpose-built for K8s environments and GitOps workflows, drasticall
 
 Upgrading <b>Traefik Hub API Gateway</b> deployment to <b>API Management</b> has never been easier. The license key must be updated to include the API Management feature. Then, the <b>API Management</b> feature will need to be enabled using the below command:
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Follow the steps below to enable API Management features*.
 
 ```bash
@@ -101,7 +101,7 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
        certResolver: le
    ```
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Follow the steps below to promote customer-api to be managed by APIM*.
 
 ```bash
@@ -153,7 +153,7 @@ Now that we have the application managed by Traefik Hub API Management services,
        certResolver: le
    ```
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Deploy API Dev Portal and IngressRoute*.
 
 ```bash
