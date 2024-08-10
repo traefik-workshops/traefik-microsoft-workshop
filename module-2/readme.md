@@ -193,7 +193,7 @@ To authenticate the user, the middleware redirects to the authentication provide
             - name: oidc-whoami                 # List of middlewares that the request need to go through.
     ```
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Run below steps in your cluster.*
    
    ```bash
