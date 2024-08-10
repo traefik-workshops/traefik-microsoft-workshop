@@ -187,7 +187,9 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
       tls:
         certResolver: le
     ```
-   Lets apply the IngressRoute definition. 
+> [!NOTE]     
+> :pencil2: *Lets apply the IngressRoute definition.*
+    
     ```bash
     kubectl apply -f module-1/apps/customers/ingress/customer-ingress.yaml
     ```
