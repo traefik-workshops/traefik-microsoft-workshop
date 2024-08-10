@@ -256,9 +256,12 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
     ```
 4. Apply the updated ingress definition. 
 
-    ```bash
-    kubectl apply -f module-1/apps/customers/ingress/customer-ingress-middleware.yaml
-    ```
+> [!NOTE]     
+> :pencil2: *Run below step in your cluster.*
+
+   ```bash
+   kubectl apply -f module-1/apps/customers/ingress/customer-ingress-middleware.yaml
+   ```
 5. Verify the new custom header is received
 
     ```bash
