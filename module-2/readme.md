@@ -116,13 +116,14 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
         certResolver: le
     ```
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Run below steps in your cluster.*
 
+- :pencil2:
 
-```bash
-kubectl apply -f module-2/manifests/customer-ingress.yaml
-```    
+  ```bash
+  kubectl apply -f module-2/manifests/customer-ingress.yaml
+  ```    
 
 
 3. Any request to <b>customer-app</b> application will fail without a proper token as part of the header. 
