@@ -38,7 +38,7 @@ spec:
 ```
 </br>
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Deploy <code><b>api-rate-limit</b></code> to the cluster.* 
 
 > Apply the API rate policy manifest file. 
@@ -135,7 +135,7 @@ spec:
 
 </br>
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Deploy <code><b>api-granular-access.yaml</b></code> to the cluster.* 
 
 > Apply API rate policy manifest file. 
@@ -164,7 +164,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 
 </br>
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Follow the below steps to deploy the monitoring stack on your AKS cluster.* 
 
 1. Enable OpenTelemetry on the Traefik Hub GW. 
@@ -294,16 +294,14 @@ Now that the observability stack is deployed, let's generate some traffic!
 ## References
 
 - API rate limit.   
-https://doc.traefik.io/traefik-hub/reference/crds/api-rate-limit-crd/
+https://doc.traefik.io/traefik-hub/api-management/api-rate-limit
 
-- API operationSets.     
-https://doc.traefik.io/traefik-hub/reference/crds/api-crd/#operationsets
-
-- API operationFilter.    
-https://doc.traefik.io/traefik-hub/reference/crds/api-access-crd/#operationfilters
+- API granular access.     
+https://doc.traefik.io/traefik-hub/api-management/api-access
 
 - Enable OpenTelemetry.  
-https://doc.traefik.io/traefik-hub/operations/telemetry/otel-hub-config/
+https://doc.traefik.io/traefik-hub/operations/metrics
+
 - Enhancing API Observability: Traefik Hub, OpenTelemetry, and the New Era of Data-Driven API Management.  
 https://traefik.io/blog/opentelemetry-traefik-hub/
 
