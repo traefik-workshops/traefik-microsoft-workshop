@@ -197,18 +197,14 @@ This is the default option for any deployment.
 
 ## References
 
-- Deploy APIs with CRDs.  
-https://doc.traefik.io/traefik-hub/tutorials/deploy-apis-from-crds/
-- API Versioning with Traefik Hub: Smooth Transitions, Seamless Innovation.  
-https://traefik.io/blog/api-versioning-with-traefik-hub/
-- API Collections.  
-https://doc.traefik.io/traefik-hub/tutorials/api-collections/
-- API Access policies.   
-https://doc.traefik.io/traefik-hub/reference/crds/#apiaccess
-- API Gateway.   
-https://doc.traefik.io/traefik-hub/reference/crds/#apigateway
-- API Portal.    
-https://doc.traefik.io/traefik-hub/reference/crds/#apiportal
+- Hub API Management upgrade guide.  
+https://doc.traefik.io/traefik-hub/operations/upgrading
+- APIM overview.    
+https://doc.traefik.io/traefik-hub/api-management/apim-overview
+- API Portal.      
+https://doc.traefik.io/traefik-hub/portal/api-portal-overview
+- APIM Authentication and Authorization.        
+https://doc.traefik.io/traefik-hub/authentication-authorization/access-overview
 
 </br>
 
