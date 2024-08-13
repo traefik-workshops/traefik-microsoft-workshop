@@ -31,7 +31,7 @@ ___
 
 ## Get started with Traefik Application Proxy
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Run below steps in your cluster.*
 
 1. Install Traefik using helm.
@@ -118,7 +118,8 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 
 ## Deploy the Demo application
 
-
+> [!IMPORTANT]     
+> :pencil2: *Run below steps in your cluster.*
 
 1. Create a new namespace for the application
 
@@ -187,7 +188,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
       tls:
         certResolver: le
     ```
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Lets apply the IngressRoute definition.*
     
   ```bash
@@ -254,9 +255,9 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
       tls:
         certResolver: le
     ```
-4. Apply the updated ingress definition. 
+4. Apply the updated ingress definition with header middleware. 
 
-> [!NOTE]     
+> [!IMPORTANT]     
 > :pencil2: *Run below step in your cluster.*
 
    ```bash
@@ -279,8 +280,12 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 
 ## Reference
 
-- Install the Traefik Hub API Gateway  
-https://doc.traefik.io/traefik-hub/api-gateway/setup/installation/kubernetes
+- Traefik concept.  
+https://doc.traefik.io/traefik/getting-started/concepts/
+- Traefik Proxy install.  
+https://doc.traefik.io/traefik/getting-started/install-traefik/
+- Traefik middlewares.      
+https://doc.traefik.io/traefik/middlewares/overview/
 
 </br>
 
