@@ -15,7 +15,7 @@
 
 ## Overview
 
-The Traefik Hub API Gateway combines the world’s most trusted cloud native, fully declarative application proxy with enterprise-grade access control, distributed security, and premium integrations. 
+The Traefik Hub API Gateway combines the world’s most trusted cloud native, fully declarative, multitenancy application proxy with enterprise-grade access control, distributed security, and premium integrations. 
 
 In this module, we will go through the steps on how to perform a seamless upgrade of <b>Traefik Application Proxy</b> to <b>Traefik Hub API Gateway</b> with minimum impact on existing services.  
 
@@ -255,7 +255,12 @@ ___
 
 ## References
 
-- 
+- Traefik Hub API Gateway installation.    
+https://doc.traefik.io/traefik-hub/api-gateway/setup/installation/kubernetes
+- JWT middleware.     
+https://doc.traefik.io/traefik-hub/api-gateway/configuration/middleware/http/api-gateway-middleware-jwt
+- OIDC middleware.      
+https://doc.traefik.io/traefik-hub/api-gateway/configuration/middleware/http/api-gateway-middleware-oidc
 
 ------
 :house: [HOME](../README.md) | :arrow_forward: [Module 3](../module-3/readme.md)
