@@ -88,6 +88,10 @@ ___
 
 5. Verify Access to Traefik Dashboard
 
+    - View dashboard ingress definition.
+    ```bash
+    kubectl -n traefik describe ingressroute traefik-dashboard
+    ```
     - From the broswer, navigate to the <b>Host</b> URL defined in dashboard-ingress manifest file. 
 
     example:
