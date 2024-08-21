@@ -136,7 +136,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 2. Deploy the demo applications that we will use throughout the lab. 
 
     ```bash
-    kubectl apply -f module-1/apps/customers/ -f module-1/apps/employee/ -f module-1/apps/flight/ -f module-1/apps/ticket/ -f module-1/apps/external/ -f module-1/apps/whoami.yaml
+    kubectl apply -f module-1/apps/customers/ -f module-1/apps/employee/ -f module-1/apps/flight/ -f module-1/apps/ticket/ -f module-1/apps/external/ -f module-1/apps/whoami/whoami.yaml
     ```
 
    <p>
