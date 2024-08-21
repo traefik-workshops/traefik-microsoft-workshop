@@ -8,7 +8,7 @@ spec:
   title: Demo API Portal
   description: "Demo Developer Portal"
   trustedUrls:
-    - https://demo-portal.traefik.172.169.37.234.sslip.io
+    - https://demo-portal.traefik.${EXTERNAL_IP}.sslip.io
 
 ---
 apiVersion: traefik.io/v1alpha1
@@ -22,7 +22,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`demo-portal.traefik.172.169.37.234.sslip.io`)
+  - match: Host(`demo-portal.traefik.${EXTERNAL_IP}.sslip.io`)
     kind: Rule
     services:
     - name: apiportal

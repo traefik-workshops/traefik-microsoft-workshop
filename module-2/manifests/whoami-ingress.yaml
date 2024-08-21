@@ -23,7 +23,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`whoami.traefik.172.169.37.234.sslip.io`)
+      match: Host(`whoami.traefik.${EXTERNAL_IP}.sslip.io`)
       services:
         - name: whoami
           port: 80

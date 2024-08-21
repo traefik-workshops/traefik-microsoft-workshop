@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`dashboard.traefik.172.169.37.234.sslip.io`)
+  - match: Host(`dashboard.traefik.${EXTERNAL_IP}.sslip.io`)
     kind: Rule
     services:
     - name: api@internal
