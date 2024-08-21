@@ -166,7 +166,9 @@ kubectl apply -f module-3/manifests/api-portal.yaml
    https://demo-portal.traefik.EXTERNAL_IP.sslip.io
    ```
    <details><summary> :bulb: API Developer Portal </summary> 
+
    ![Dev Portal](../media/dev_portal.png)
+   
    </details>
 
 
