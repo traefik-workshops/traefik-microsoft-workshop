@@ -40,16 +40,7 @@ ___
     git clone <GIT-REPO-URL>
     ```
 
-2. Update the cloned repo with your cluster External IP. We are utilizing sslip.io for DNS services. 
-
-    ```bash
-    export EXTERNAL_IP=$(kubectl get svc/traefik -n traefik --no-headers | awk {'print $4'})
-    ```
-    ```bash
-    for i in $(grep -Rl '${EXTERNAL_IP}'); do sed -i 's/${EXTERNAL_IP}/'$EXTERNAL_IP'/g' $i; done
-    ```  
-
-3. Install Traefik using helm.
+2. Install Traefik using helm.
 
     - Add the helm repository     
     ```bash
@@ -59,6 +50,15 @@ ___
     ```
     helm install traefik -n traefik --create-namespace --values module-1/src/values.yaml traefik/traefik
     ```
+
+3. Update the cloned repo with your cluster External IP. We are utilizing sslip.io for DNS services. 
+
+    ```bash
+    export EXTERNAL_IP=$(kubectl get svc/traefik -n traefik --no-headers | awk {'print $4'})
+    ```
+    ```bash
+    for i in $(grep -Rl '${EXTERNAL_IP}'); do sed -i 's/${EXTERNAL_IP}/'$EXTERNAL_IP'/g' $i; done
+    ```  
     
 4. Publish Traefik Dashboard.   
 
