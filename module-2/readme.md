@@ -187,9 +187,9 @@ To authenticate the user, the middleware redirects to the authentication provide
    spec:
      plugin:
        oidc:
-         issuer: "https://sts.windows.net/AZURE_TENANT_ID/"
-         clientID: "AZURE_CLIENT_ID"
-         clientSecret: "AZURE_CLIENT_SECRET"
+         issuer: "https://sts.windows.net/<tenant-id>/"
+         clientID: "<client-id>"
+         clientSecret: "<client-secret>"
          redirectUrl: "/cback"
    ```
 
@@ -218,6 +218,14 @@ To authenticate the user, the middleware redirects to the authentication provide
 > [!IMPORTANT]     
 > :pencil2: *Run below steps in your cluster.*
    
+   ```bash
+   vi module-2/manifests/whoami-ingress.yaml
+   ```
+   Replace:
+   - `<tenant-id>` with the registered application’s tenant ID.
+   - `<client-id>` with the registered application’s client ID.
+   - `<client-secret>` with the registered application’s client secret value.
+
    ```bash
    kubectl apply -f module-2/manifests/whoami-ingress.yaml
    ```
@@ -283,6 +291,8 @@ https://doc.traefik.io/traefik-hub/api-gateway/setup/installation/kubernetes
 https://doc.traefik.io/traefik-hub/api-gateway/configuration/middleware/http/api-gateway-middleware-jwt
 - OIDC middleware.      
 https://doc.traefik.io/traefik-hub/api-gateway/configuration/middleware/http/api-gateway-middleware-oidc
+- Get Microsoft EntraID token
+https://learn.microsoft.com/en-us/azure/databricks/dev-tools/service-prin-aad-token
 
 ------
 :house: [HOME](../README.md) | :arrow_forward: [Module 3](../module-3/readme.md)
