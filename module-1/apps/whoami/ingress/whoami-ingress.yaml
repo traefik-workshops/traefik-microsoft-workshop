@@ -9,7 +9,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`whoami.traefik.demo.traefiklabs.tech`)
+      match: Host(`whoami.traefik.${EXTERNAL_IP}.sslip.io`)
       services:
         - name: whoami
           port: 80
