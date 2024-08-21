@@ -19,9 +19,9 @@
         allowExternalNameServices: true
         allowEmptyServices: true
     logs:
-      general:
-        format: json
-        level: DEBUG
+      # general:
+      #   format: json
+      #   level: DEBUG
       access:
         enabled: true
         format: json
