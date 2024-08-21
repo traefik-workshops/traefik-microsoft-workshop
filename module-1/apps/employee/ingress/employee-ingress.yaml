@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-employees
+  namespace: apps
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/employees`)
+      services:
+        - name: employee-app
+          port: 3000
+  tls:
+    certResolver: le
