@@ -96,7 +96,7 @@ ___
 
     example:
     ```bash
-    http://dashboard.traefik.{EXTERNAL_IP}.sslip.io
+    https://dashboard.traefik.{EXTERNAL_IP}.sslip.io
     ```
 
     - We should be able to access Traefik Proxy Dashboard
