@@ -126,12 +126,34 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
   ```    
 
 
-3. Any request to <b>customer-app</b> application will fail without a proper token as part of the header. 
+3. Any request to <b>customer-app</b> application will fail without a proper access token. 
 
    ```bash
    curl -I https://api.traefik.EXTERNAL_IP.sslip.io/customers
    
    HTTP/2 401 
+   ```
+
+4. Use below command to obtain access token from EntraID
+
+   ```bash
+   curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+   https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token \
+   -d 'client_id=<client-id>' \
+   -d 'grant_type=client_credentials' \
+   -d 'scope=2ff814a6-3304-4ab8-85cb-cd0e6f879c1d%2F.default' \
+   -d 'client_secret=<client-secret>'
+   ```
+
+   Replace:
+   - `<tenant-id>` with the registered application’s tenant ID.
+   - `<client-id>` with the registered application’s client ID.
+   - `<client-secret>` with the registered application’s client secret value.
+
+   To interact with the application, access token will been to be provided as follow
+
+   ```bash
+   curl -H "Authorization: Bearer $access_token" https://api.traefik.EXTERNAL_IP.sslip.io/customers
    ```
 
 ### Secure access with OIDC
