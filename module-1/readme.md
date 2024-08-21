@@ -206,6 +206,9 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 
 3. Verify connectivity to the customer-app API. 
 
+    ```bash 
+    kubectl -n apps describe ingressroute api-ingress-customers
+    ```
     ```bash
      $curl https://api.traefik.EXTERNAL_IP.sslip.io/customers
 
