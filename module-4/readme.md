@@ -298,4 +298,4 @@ https://doc.traefik.io/traefik-hub/operations/metrics
 https://traefik.io/blog/opentelemetry-traefik-hub/
 
 ------
-:house: [HOME](../README.md) | :arrow_forward: [Module 5](../module-5/readme.md)
+:house: [HOME](../README.md) 
