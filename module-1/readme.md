@@ -306,4 +306,4 @@ https://doc.traefik.io/traefik/middlewares/overview/
 </br>
 
 ------
-:house: [HOME](../README.md) | :arrow_forward: [Module 2](../module-2/readme.md)
+:house: [HOME](../README.md) | :arrow_forward: [Module 2: Traefik Hub API Gateway](../module-2/readme.md)
