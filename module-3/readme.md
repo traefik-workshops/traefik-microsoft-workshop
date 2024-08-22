@@ -212,4 +212,4 @@ https://doc.traefik.io/traefik-hub/authentication-authorization/access-overview
 </br>
 
 ------
-:house: [HOME](../README.md) | :arrow_forward: [Module 4](../module-4/readme.md)
+:house: [HOME](../README.md) | :arrow_forward: [Module 4: API Advanced Capabilities](../module-4/readme.md)
