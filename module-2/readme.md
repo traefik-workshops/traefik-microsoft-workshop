@@ -15,7 +15,7 @@
 
 ## Overview
 
-The Traefik Hub API Gateway combines the world’s most trusted cloud native, fully declarative, multitenancy application proxy with enterprise-grade access control, distributed security, and premium integrations. 
+The Traefik Hub API Gateway combines the world’s most trusted cloud native, fully declarative, multitenant application proxy with enterprise-grade access control, distributed security, and premium integrations. 
 
 In this module, we will go through the steps on how to perform a seamless upgrade of <b>Traefik Application Proxy</b> to <b>Traefik Hub API Gateway</b> with minimum impact on existing services.  
 
@@ -26,7 +26,7 @@ ___
 ## Upgrade Traefik Application Proxy to Traefik Hub API Gateway
 
 > [!IMPORTANT]     
-> :pencil2: *Run below steps in your cluster.*
+> :pencil2: *Run the steps below in your cluster.*
 
 1. Traefik Hub API Gateway requires a license key. To obtain a license key, login to <b><a href="https://hub.traefik.io/dashboard">Traefik Hub Dashboard</a></b>           
 
@@ -46,7 +46,7 @@ ___
     ```bash 
     export TRAEFIK_HUB_TOKEN=
     ```
-5. Create a secret to store the newly obtain gateway token.    
+5. Create a secret to store the newly obtained gateway token.    
 
     ```bash
     kubectl create secret generic traefik-hub-license --namespace traefik --from-literal=token=$TRAEFIK_HUB_TOKEN
@@ -63,17 +63,17 @@ ___
        traefik/traefik
    ```
 
-7. Once the Helm upgrade command is executed successfully, you can refresh the Traefik local dashboard and be presented with the new UI. Since <b>Traefik API Gateway</b> is based on <b>Traefik Application Proxy</b>, there is no impact to any of the existing services. 
+7. Once the Helm upgrade command is executed successfully, you can refresh the Traefik local dashboard and be presented with the new UI. Since <b>Traefik API Gateway</b> is based on <b>Traefik Application Proxy</b>, there is no impact on any of the existing services. 
 
 ___
 
 ## Secure access to your application
 
-Now that we have <b> Traefik Hub API Gateway</b> running, we can take advantage of some of the enterprise-level middlewares to secure access to our application so only authorized users have access. 
+Now that we have <b> Traefik Hub API Gateway</b> running, we can use some of the enterprise-level middleware to secure access to our application so only authorized users have access. 
 
 ### Secure access with JWT
 
-The JWT middleware verifies that a valid JWT token is provided in the Authorization header 
+The JWT middleware verifies that a valid JWT token is provided in the Authorization header. 
 
 To add a JWT verification method to the incoming request for <b>customer-app</b> API application, follow the below steps:
 
@@ -107,7 +107,7 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
         - kind: Rule
           match: Host(`api.traefik.EXTERNAL_IP.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
           services:
-            - name: customer-app                                                          # The request routed to customer-app service on port 3000.
+            - name: customer-app                                                          # The request is routed to customer-app service on port 3000.
               port: 3000
           middlewares:                                                                    
             - name: customer-header                                                       # CustomResponse Header.
@@ -117,7 +117,7 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
     ```
 
 > [!IMPORTANT]     
-> :pencil2: *Run below steps in your cluster.*
+> :pencil2: *Run the steps below in your cluster.*
 
 
 
@@ -134,7 +134,7 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
    HTTP/2 401 
    ```
 
-4. Use below command to obtain access token from EntraID
+4. Use the below command to obtain an access token from EntraID
 
    ```bash
    curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
@@ -160,7 +160,7 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
 
 The OpenID Connect Authentication middleware secures your applications by delegating the authentication to an external provider (ex: EntraID) and obtaining the end user's session claims and scopes for authorization purposes.
 
-To authenticate the user, the middleware redirects to the authentication provider. Once the authentication is complete, users are redirected back to the middleware before being authorized to access the upstream application.    
+The middleware redirects to the authentication provider to authenticate the user. Once the authentication is complete, users are redirected back to the middleware before being authorized to access the upstream application.    
 
 1. We have <b>whoami</b> application running under <b>apps</b> namespace. 
 
@@ -209,14 +209,14 @@ To authenticate the user, the middleware redirects to the authentication provide
         - kind: Rule
           match: Host(`whoami.URL`)             # match the request with this URL
           services:
-            - name: whoami                      # Forward the request to backend service
+            - name: whoami                      # Forward the request to the backend service
               port: 80                          # Backend service is listening on Port 80.
           middlewares:
-            - name: oidc-whoami                 # List of middlewares that the request need to go through.
+            - name: oidc-whoami                 # List of middlewares that the request needs to go through.
     ```
 
 > [!IMPORTANT]     
-> :pencil2: *Run below steps in your cluster.*
+> :pencil2: *Run the steps below in your cluster.*
    
    ```bash
    vi module-2/manifests/whoami-ingress.yaml
@@ -269,7 +269,7 @@ To authenticate the user, the middleware redirects to the authentication provide
    </details>
    </br>
 
-3. The whoami application should be accessible using the URL in the IngressRoute definition. The request will be redirected to EntraID for verification before its routed to the backend service.
+3. The whoami application should be accessible using the URL in the IngressRoute definition. The request will be redirected to EntraID for verification before being routed to the backend service.
 
     <details><summary>Expected output after successful login</summary>
 
