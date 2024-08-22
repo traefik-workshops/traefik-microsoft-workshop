@@ -37,7 +37,7 @@ helm upgrade traefik -n traefik --wait \
 
 To manage an API application using API Management services, we will need to do the following:
 
-1. Create an API object for Hub APIM service to manage.
+1. Create an API object for the Hub APIM service to manage.
 2. Create an API Access object to control which group has access to this API.
 3. Update the Ingress definition for the application to bind it to the newly created API. 
 
@@ -102,7 +102,7 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
    ```
 
 > [!IMPORTANT]     
-> :pencil2: *Follow the steps below to promote customer-api to be managed by APIM*.
+> :pencil2: *Follow the steps below to promote the customer-api to be a managed by APIM*.
 
 ```bash
 kubectl apply -f module-3/manifests/customer-ingress-api.yaml
@@ -110,9 +110,9 @@ kubectl apply -f module-3/manifests/customer-ingress-api.yaml
 
 ## API Developer Portal
 
-Traefik Hub API Developer Portal allows developers to discover, access, and utilize API services. This platform serves as the space where API Users can explore, understand how to utilize the APIs, manage API Key access, and experiment with their functionalities.
+Traefik Hub API Developer Portal allows developers to discover, access, and utilize API services. This platform also serves as a space where API Users can explore and understand how to use APIs, manage API Key access, and experiment with their functionalities.
 
-Now that we have the application managed by Traefik Hub API Management services, let us deploy an API Developer portal so we can interact with the APIs
+Now that we have the application managed by Traefik Hub API Management, let us deploy an API Developer portal so we can interact with the APIs
 
 1. Deploy an API Dev Portal. 
 
@@ -129,7 +129,8 @@ Now that we have the application managed by Traefik Hub API Management services,
      trustedUrls:
        - https://demo-portal.traefik.EXTERNAL_IP.sslip.io
    ```
-2. Create Ingress definition to publish API Dev Portal. 
+2. Create an Ingress definition to publish the API Dev Portal.
+ 
    ```bash
    ---
    apiVersion: traefik.io/v1alpha1
@@ -187,11 +188,11 @@ This is the default option for any deployment.
    ![built-in-user](../media/built-in-user.png)
    ![built-in-user](../media/built-in-group.png)
 
-2. Login to the API Dev Portal with user account that you just created (ex: admin@traefik.io)
+2. Login to the API Dev Portal with the user account that you've just created (ex: admin@traefik.io)
 
 ### [Option 2] OIDC connection to EntraID
 
-1. login to <b><a href="https://hub.traefik.io">Hub Dashboard</a></b> and navigate to <b>Auth settings</b>
+1. Log in to <b><a href="https://hub.traefik.io">Hub Dashboard</a></b> and navigate to <b>Auth settings</b>
 
 2. Under <b>Portal</b> section, select OIDC and provide the identity provider details
 
