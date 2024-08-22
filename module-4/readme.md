@@ -104,7 +104,7 @@ spec:
 <p>
 For the above to take effect, <code>operationFilter</code> should be defined as part of the <b>APIAccess</b> policy to restrict access to specific groups. 
 
-In the below example, we are restricting the <b>*admin*</b> user group to only "GET" operation for <b>*flights*</b> API only. 
+In the below example, we are restricting the <b>*support*</b> user group to only "GET" operation for <b>*flights*</b> API only. 
 
 ```yaml
 apiVersion: hub.traefik.io/v1alpha1
