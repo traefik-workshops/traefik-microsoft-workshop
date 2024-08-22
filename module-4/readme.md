@@ -163,7 +163,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 > [!IMPORTANT]     
 > :pencil2: *Follow the below steps to deploy the monitoring stack on your AKS cluster.* 
 
-    ```
+
 1. Create a namespace for the monitoring stack.
 
     ```bash
