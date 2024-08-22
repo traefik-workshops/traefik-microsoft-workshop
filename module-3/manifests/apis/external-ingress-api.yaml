@@ -1,0 +1,32 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: time-api
+  namespace: apps
+  labels:
+    area: external
+    external: name
+spec:
+  openApiSpec:
+    url: https://worldtimeapi.org/api
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: external-ingress-time
+  namespace: apps
+  annotations:
+    hub.traefik.io/api: time-api
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/time`)
+      services:
+        - name: world-time-api
+          port: 443
+  tls:
+    certResolver: le

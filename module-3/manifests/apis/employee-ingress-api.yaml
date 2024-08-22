@@ -1,0 +1,32 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: employee-api
+  namespace: apps
+  labels:
+    area: employee
+    module: crm
+spec:
+  openApiSpec:
+    path: /openapi.yaml
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-employees
+  namespace: apps
+  annotations:
+    hub.traefik.io/api: employee-api
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/employees`)
+      services:
+        - name: employee-app
+          port: 3000
+  tls:
+    certResolver: le

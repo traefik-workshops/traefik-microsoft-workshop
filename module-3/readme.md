@@ -104,9 +104,16 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
 > [!IMPORTANT]     
 > :pencil2: *Follow the steps below to promote the customer-api to be a managed by APIM*.
 
-```bash
-kubectl apply -f module-3/manifests/customer-ingress-api.yaml
-```
+>> ```bash
+>> kubectl apply -f module-3/manifests/customer-ingress-api.yaml
+>> ```
+
+4. Now that we understand how to promote an <b>IngressRoute</b> to be managed by APIM services, let us promote <b>employee</b>, <b>flights</b>, <b>tickets</b>, and <b>external</b> API applications to be managed by Traefik Hub APIM. 
+
+   ```bash
+   kubectl apply -f module-3/manifests/apis/
+   ```
+
 
 ## API Developer Portal
 

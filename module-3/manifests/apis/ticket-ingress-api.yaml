@@ -1,0 +1,32 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: ticket-api
+  namespace: apps
+  labels:
+    area: tickets
+    module: crm
+spec:
+  openApiSpec:
+    path: /openapi.yaml
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-tickets
+  namespace: apps
+  annotations:
+    hub.traefik.io/api: ticket-api
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/tickets`)
+      services:
+        - name: ticket-app
+          port: 3000
+  tls:
+    certResolver: le
