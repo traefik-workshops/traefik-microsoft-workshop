@@ -295,4 +295,4 @@ https://doc.traefik.io/traefik-hub/api-gateway/configuration/middleware/http/api
 https://learn.microsoft.com/en-us/azure/databricks/dev-tools/service-prin-aad-token
 
 ------
-:house: [HOME](../README.md) | :arrow_forward: [Module 3](../module-3/readme.md)
+:house: [HOME](../README.md) | :arrow_forward: [Module 3: Traefik Hub API Management](../module-3/readme.md)
