@@ -286,7 +286,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 
 </br>
 
-## Publish all Applications
+## Publish all applications
 
 Now that we understand how to publish an application using <b>IngressRoute</b> and tweak the request with <b>middelware</b>, let us publish all the demo apps that we have deployed. 
 
