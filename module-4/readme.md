@@ -163,27 +163,23 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 > [!IMPORTANT]     
 > :pencil2: *Follow the below steps to deploy the monitoring stack on your AKS cluster.* 
 
-1. Enable OpenTelemetry on the Traefik Hub GW. 
-
-    ```bash
-    helm upgrade --install --namespace traefik-hub traefik-hub traefik/traefik-hub --set additionalArguments='{--hub.metrics.opentelemetry.insecure,--hub.metrics.opentelemetry.address=prometheus.monitoring:9090,--hub.metrics.opentelemetry.path=/api/v1/otlp/v1/metrics}'
     ```
-2. Create a namespace for the monitoring stack.
+1. Create a namespace for the monitoring stack.
 
     ```bash
     kubectl create namespace monitoring
     ```
-3. Deploy the Prometheus stack.
+2. Deploy the Prometheus stack.
 
     ```bash
     kubectl apply -f module-4/monitoring/prometheus/
     ```
-4. Deploy the Grafana stack.
+3. Deploy the Grafana stack.
 
     ```bash
     kubectl apply -f module-4/monitoring/grafana
     ```
-5. Verify everything is running. 
+4. Verify everything is running. 
 
     ```bash
     kubectl -n monitoring get pods,svc
@@ -196,7 +192,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
     service/grafana                   ClusterIP   10.43.40.181   <none>        3000/TCP   25h
     service/prometheus                ClusterIP   10.43.8.73     <none>        9090/TCP   25h
     ```
-6. Get the Grafana URL and access the Grafana dashboard (user/password: <b>admin/admin</b>)
+5. Get the Grafana URL and access the Grafana dashboard (user/password: <b>admin/admin</b>)
 
     ```bash
     kubectl -n monitoring describe ingressroute.traefik.io grafana
@@ -228,7 +224,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
     http://grafana.{k8s-cluster-external-ip}.sslip.io
     ```
 
-7. Once logged in to Grafana, navigate to Dashboards > Traefik Hub > Hub Dashboard.
+6. Once logged in to Grafana, navigate to Dashboards > Traefik Hub > Hub Dashboard.
 
     ![grafana](../media/grafana.png)
 

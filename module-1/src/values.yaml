@@ -45,7 +45,7 @@
         addserviceslabels: true
         http:
           enabled: true
-          endpoint: http://prometheus-stack-kube-prom-prometheus.monitoring:9090/api/v1/otlp/v1/metrics
+          endpoint: http://prometheus.monitoring:9090/api/v1/otlp/v1/metrics
           tls:
             insecureSkipVerify: true
     tracing:
