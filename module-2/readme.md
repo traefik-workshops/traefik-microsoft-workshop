@@ -121,9 +121,9 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
 
 
 
->>>  ```bash
->>>  kubectl apply -f module-2/manifests/customer-ingress.yaml
->>>  ```    
+>>  ```bash
+>>  kubectl apply -f module-2/manifests/customer-ingress.yaml
+>>  ```    
 
 
 3. Any request to <b>customer-app</b> application will fail without a proper access token. 
