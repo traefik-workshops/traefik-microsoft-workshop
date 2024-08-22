@@ -1,6 +1,6 @@
 # Advanced API Capabilities
 
-Once an API is defined, managing its access becomes crucial. API Access Management governs API availability. It determines who can access the API and which operations can be performed. This layer is configured in a flexible and composable manner using the APIAccess resource. API access management allows organizations to tailor access control policies to their specific requirements.
+Once an API is defined, managing its access becomes crucial. API Access Management governs API availability. It determines who can access the API and which operations can be performed. This layer is configured flexibly and composably using the APIAccess resource. API access management allows organizations to tailor access control policies to their specific requirements.
 
 In this module, we will cover:
 
@@ -11,15 +11,15 @@ In this module, we will cover:
 ___
 ## API Rate Limit Policy
 
-API rate limiting defines consumption limits for API consumers. It serves three main purposes: protecting infrastructure, managing quotas, and enabling API monetization.
+API rate limiting defines consumption limits for API consumers. It serves three primary purposes: protecting infrastructure, managing quotas, and enabling API monetization.
 
-By using the APIRateLimit object, you can apply rate limits to <b>user-groups</b> for specific <b>APIs</b>. This helps to prevent API abuse, control traffic, and ensure a stable and predictable user experience. 
+By using the APIRateLimit object, you can apply rate limits to <b> user groups </b> for specific <b>APIs</b>. This helps to prevent API abuse, control traffic, and ensure a stable and predictable user experience. 
 
 Multiple rate limits can be configured using any combination of groups and APIs.
 
 Traefik Hub supports two strategies for rate limiting:
-- <b>Local strategy</b>: applies rate limiting policies to a single Traefik Hub API gateway instance. Each instance manages its own policy. 
-- <b>Distributed strategy</b>: shares rate limiting policies across all Traefik Hub API gateways. This ensures consistency across all instances.
+- <b>Local strategy</b>: applies rate limiting policies to a single Traefik Hub API Gateway replica. Each instance manages its own counter. 
+- <b>Distributed strategy</b>: shares rate limiting policies across all Traefik Hub API Gateway replicas. This ensures consistency across all instances.
 
 ```yaml
 apiVersion: hub.traefik.io/v1alpha1
@@ -31,7 +31,7 @@ spec:
   apis:
   - name: employee-api
   groups:
-  - admin                           # Apply to all users who are part of admin group
+  - admin                           # Apply to all users who are part of the admin group
   limit: 5                          # Number of requests allowed (5 requests)    
   period: 30s                       # Over the time period (30s)
   strategy: distributed             # Limit will be enforced across all API Gateway instances.  
@@ -74,7 +74,7 @@ ___
 
 ## Granular API access
 
-For more fine-grained control over API expousre, Traefik Hub offers the ability to selectively grant access to a defined set of operations as specified in the API (ex: Only GET) for specific group.   
+For more fine-grained control over API exposure, Traefik Hub offers the ability to selectively grant access to a defined set of operations as specified in the API (e.g., Only GET) for a specific group.   
 
 This is done through the use of two definitions:      
 1. <code><b>operationSets</b></code> defines the methods allowed as part of the <b>API</b> resource definition.       
@@ -97,8 +97,8 @@ spec:
     path: /openapi.yaml
     operationSets:                   # Add operationSets into the API definition file.
       - name: read-flights           # Provide a name that will be referenced by operationFilter.    
-        matchers:                    # Restrict access based on specific critria. 
-          - pathPrefix: "/flight"    # # In this example, only "GET" is allowed to "/flights"   
+        matchers:                    # Restrict access based on specific criteria. 
+          - pathPrefix: "/flight"    # In this example, only "GET" is allowed to "/flights"   
             methods: ["GET"]
 ```
 <p>
