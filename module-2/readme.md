@@ -150,7 +150,7 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
    - `<client-id>` with the registered application’s client ID.
    - `<client-secret>` with the registered application’s client secret value.
 
-   To interact with the application, access token will been to be provided as follow
+   To interact with the application, an access token will be provided as follows:
 
    ```bash
    curl -H "Authorization: Bearer $access_token" https://api.traefik.EXTERNAL_IP.sslip.io/customers
