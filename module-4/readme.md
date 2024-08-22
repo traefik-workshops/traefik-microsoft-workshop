@@ -93,19 +93,13 @@ metadata:
     area: flights
     module: erp
 spec:
-  pathPrefix: "/flights"
-  service:
-    openApiSpec:
-      path: /openapi.yaml
-      operationSets:                  # Add operationSets into the API definition file.          
-        - name: read-flights          # Provide a name that will be referenced by operationFilter.
-          matchers:                   # Restrict access based on specific critria. 
-            - pathPrefix: /flights    # In this example, only "GET" is allowed to "/flights"
-              methods:
-                - GET
-    name: flight-app
-    port:
-      number: 3000
+  openApiSpec:
+    path: /openapi.yaml
+    operationSets:                   # Add operationSets into the API definition file.
+      - name: read-flights           # Provide a name that will be referenced by operationFilter.    
+        matchers:                    # Restrict access based on specific critria. 
+          - pathPrefix: "/flight"    # # In this example, only "GET" is allowed to "/flights"   
+            methods: ["GET"]
 ```
 <p>
 For the above to take effect, <code>operationFilter</code> should be defined as part of the <b>APIAccess</b> policy to restrict access to specific groups. 
@@ -116,7 +110,8 @@ In the below example, we are restricting the <b>*admin*</b> user group to only "
 apiVersion: hub.traefik.io/v1alpha1
 kind: APIAccess
 metadata:
-  name: custom-pick
+  name: support-access
+  namespace: apps
 spec:
   groups:
     - support
@@ -127,10 +122,11 @@ spec:
         values:
           - flights
           - tickets
-  operationFilter:               # Add operationFilter into APIAccess definition file.
+  operationFilter:                  # Add operationFilter into APIAccess definition file.
     include:
-      - read-flights             # Specify the name of the operationSets to include for this group.
+      - read-flights                # Specify the name of the operationSets to include for this group.
       - cru-tickets
+      
 ```
 
 </br>
