@@ -32,9 +32,9 @@ ___
 ## Get started with Traefik Application Proxy
 
 > [!IMPORTANT]     
-> :pencil2: *Run below steps in your cluster.*
+> :pencil2: *Run the steps below in your cluster.*
 
-1. Clone git repo into your client
+1. Clone git repo into your client.
 
     ```bash
     git clone <GIT-REPO-URL>
@@ -60,7 +60,7 @@ ___
     for i in $(grep -Rl '${EXTERNAL_IP}'); do sed -i 's/${EXTERNAL_IP}/'$EXTERNAL_IP'/g' $i; done
     ```  
     
-4. Publish Traefik Dashboard.   
+4. Publish the Traefik Dashboard.   
 
    ```bash
    kubectl apply -f module-1/src/dashboard-ingress.yaml
@@ -82,11 +82,11 @@ ___
        services:                                                 # Backend service name and port number. 
        - name: api@internal
          kind: TraefikService
-     tls:                                                        # LetsEncrypt to auto generate certificate for the application
+     tls:                                                        # LetsEncrypt to auto-generate certificate for the application
        certResolver: le
    ```
 
-5. Verify Access to Traefik Dashboard
+5. Verify Access to the Traefik Dashboard
 
     - View dashboard ingress definition.
     ```bash
@@ -99,7 +99,7 @@ ___
     https://dashboard.traefik.{EXTERNAL_IP}.sslip.io
     ```
 
-    - We should be able to access Traefik Proxy Dashboard
+    - We should be able to access the Traefik Proxy Dashboard
 
         <details><summary> :bulb: Traefik Dashboard</summary> <img src="../media/proxy_dashboard.png" width="2900" height="600">
        
@@ -172,8 +172,8 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
    </p>
    </div>
 
-## Publish demo app 
-1. To publish <b>customer-app</b> as an example to the outside world, we need to apply an ingress definition that will instruct traefik to route the incoming request to the backend service.      
+## Publish the demo app 
+1. To publish <b>customer-app</b> as an example to the outside world, we must apply an ingress definition that will instruct Traefik to route the incoming request to the backend service.      
 
     ```yaml
     ---
@@ -195,7 +195,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
         certResolver: le
     ```
 > [!IMPORTANT]     
-> :pencil2: *Lets apply the IngressRoute definition.*
+> :pencil2: *Let's apply the IngressRoute definition.*
     
   ```bash
   kubectl apply -f module-1/apps/customers/ingress/customer-ingress.yaml
@@ -222,11 +222,11 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
       ```
 ## Tweak incoming request with middleware
 
-1. Middlewares are attached to the ingress definition to tweak the request before passing it to the application service. Middleware can be used to modify the request, the headers, in charge or redirection, ...etc. 
+1. Middlewares are attached to the ingress definition to tweak the request before passing it to the application service. Middlewares can be used to modify the request, the headers, in charge or redirection, etc. 
 
     ![customer-route](../media/middleware.png)
 
-2. Header middleware as an example, can be used to manages the headers of the requests and the responses. In below example, the middleware will add a custom header to the response received from the application back to the client. 
+2. Header middleware, for example, can be used to manage the headers of the requests and responses. In the below example, the middleware will add a custom header to the response received from the application back to the client. 
 
     ```yaml
     apiVersion: traefik.io/v1alpha1
@@ -239,7 +239,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
         customResponseHeaders:
           X-HEADER-APP: "Customer API"
       ```    
-3. The middleware will need to be attached to the ingress definition in order to tweak the request. Multiple middlewares can be combined into chain to fit every scenario. 
+3. The middleware must be attached to the ingress definition to tweak the request. Multiple middlewares can be combined into a chain to fit every scenario. 
 
     Let us modify customer-ingress.yaml definition to add the header middleware. 
 
@@ -257,17 +257,17 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
         - kind: Rule
           match: Host(`api.traefik.EXTERNAL_IP.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
           services:
-            - name: customer-app                                                          # The request routed to customer-app service on port 3000.
+            - name: customer-app                                                          # The request is routed to customer-app service on port 3000.
               port: 3000
           middlewares:                                                                    
             - name: customer-header                                                       # <<< Specify the name of the middleware that we need to associate with the route.
       tls:
         certResolver: le
     ```
-4. Apply the updated ingress definition with header middleware. 
+4. Apply the updated ingress definition with the header middleware. 
 
 > [!IMPORTANT]     
-> :pencil2: *Run below step in your cluster.*
+> :pencil2: *Run the below step in your cluster.*
 
    ```bash
    kubectl apply -f module-1/apps/customers/ingress/customer-ingress-middleware.yaml
@@ -281,7 +281,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
     date: Thu, 01 Aug 2024 18:30:32 GMT
     x-header-app: Customer API              <<< New custom response header added by the middleware 
     ```
-    The Traefik Dashboard list the middleware as part of the route definition. 
+    The Traefik Dashboard lists the middleware as part of the route definition. 
     ![customer-middleware](../media/customer-ingress-middleware.png)
 
 </br>
