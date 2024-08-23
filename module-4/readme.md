@@ -4,9 +4,28 @@ Once an API is defined, managing its access becomes crucial. API Access Manageme
 
 In this module, we will cover:
 
+- API versioning
 - API rate limit policy 
 - Granular API access 
 - OTel with Grafana
+
+---
+## API versioning
+API versioning is crucial for managing changes, updates, and improvements to APIs over time. Traefik Hub provides robust support for effectively managing multiple API versions while maintaining backward compatibility and supporting existing clients.
+
+We have multiple versions of <b>customer-app</b> deployed in our cluster. 
+
+```bash
+kubectl -n apps get pod | grep customer
+customer-app-5c5bdcf6fc-9s2jx      1/1     Running   0          27h
+customer-app-v2-5b47b4d744-wmvbk   1/1     Running   0          27h
+customer-app-v3-978988d6b-48bwv    1/1     Running   0          27h
+customer-app-v4-5bb9f59bc6-6b6j5   1/1     Running   0          27h
+```
+We can publish <b>customer-app</b> as an API using <b>*<code>API</code>*</b> object and have each version of the application attached to it using <b><code>*APIVersion*</code></b>. Each version of the application will have its own ingress definition which allows flexibiity on how each version of the API is exposed. 
+
+
+
 
 ___
 ## API Rate Limit Policy
