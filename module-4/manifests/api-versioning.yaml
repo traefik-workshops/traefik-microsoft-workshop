@@ -1,0 +1,144 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: customer-api-versioned     # API Name
+  namespace: apps
+  labels:
+    area: customers
+    module: crm
+spec:
+  versions:                         # Attach APIVersion objects
+    - name: customer-api-v1         # APIVersion object name 
+    - name: customer-api-v2
+    - name: customer-api-v3
+    - name: customer-api-v4  
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIVersion                   
+metadata:
+  name: customer-api-v1            # APIVersion Object Name     
+  namespace: apps
+spec:
+  release: 1.0.0
+  openApiSpec:
+    path: /openapi.yaml
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIVersion
+metadata:
+  name: customer-api-v2
+  namespace: apps
+spec:
+  release: 2.0.0
+  openApiSpec:
+    path: /openapi.yaml
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIVersion
+metadata:
+  name: customer-api-v3
+  namespace: apps
+spec:
+  release: 3.0.0
+  openApiSpec:
+    path: /openapi.yaml
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIVersion
+metadata:
+  name: customer-api-v4
+  namespace: apps
+spec:
+  release: 4.0.0
+  openApiSpec:
+    path: /openapi.yaml
+
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-customers-v1
+  namespace: apps
+  annotations:                                      
+    hub.traefik.io/api: customer-api-versioned      # API Name  
+    hub.traefik.io/api-version: customer-api-v1     # APIVersion Object Name
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`) && Header(`version`, `v1`)
+      services:
+        - name: customer-app
+          port: 3000
+  tls:
+    certResolver: le
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-customers-v2
+  namespace: apps
+  annotations:                                      # Add API annotation to enable APIM
+    hub.traefik.io/api: customer-api-versioned
+    hub.traefik.io/api-version: customer-api-v2
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`) && Header(`version`, `v2`)
+      services:
+        - name: customer-app-v2
+          port: 3000
+  tls:
+    certResolver: le
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-customers-v3
+  namespace: apps
+  annotations:                                      # Add API annotation to enable APIM
+    hub.traefik.io/api: customer-api-versioned
+    hub.traefik.io/api-version: customer-api-v3
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`) && Header(`version`, `v3`)
+      services:
+        - name: customer-app-v3
+          port: 3000
+  tls:
+    certResolver: le
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-customers-v4
+  namespace: apps
+  annotations:                                      # Add API annotation to enable APIM
+    hub.traefik.io/api: customer-api-versioned
+    hub.traefik.io/api-version: customer-api-v4
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`) && Header(`version`, `v4`)
+      services:
+        - name: customer-app-v4
+          port: 3000
+  tls:
+    certResolver: le

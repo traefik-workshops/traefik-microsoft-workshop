@@ -24,9 +24,74 @@ customer-app-v4-5bb9f59bc6-6b6j5   1/1     Running   0          27h
 ```
 We can publish <b>customer-app</b> as an API using <b>*<code>API</code>*</b> object and have each version of the application attached to it using <b><code>*APIVersion*</code></b>. Each version of the application will have its own ingress definition which allows flexibiity on how each version of the API is exposed. 
 
+1. Create an <b>*<code>API</code>*</b> object 
 
+   ```bash
+   ---
+   apiVersion: hub.traefik.io/v1alpha1
+   kind: API
+   metadata:
+     name: customer-api-versioned     # API Name
+     namespace: apps
+     labels:
+       area: customers
+       module: crm
+   spec:
+     versions:                         # Attach APIVersion objects
+       - name: customer-api-v1         # APIVersion object name 
+       - name: customer-api-v2
+       - name: customer-api-v3
+       - name: customer-api-v4   
+   ```
 
+2. Create <b><code>*APIVersion*</code></b> object for each version of the application. 
 
+   ```bash
+   ---
+   apiVersion: hub.traefik.io/v1alpha1
+   kind: APIVersion                   
+   metadata:
+     name: customer-api-v1            # APIVersion Object Name     
+     namespace: apps
+   spec:
+     release: 1.0.0
+     openApiSpec:
+       path: /openapi.yaml
+   ```
+
+3. Promote <b><code>*IngressRoute*</code></b> definition to be managed by Hub APIM <b><code>APIVersion</code></b> object.
+
+   ```bash
+   ---
+   apiVersion: traefik.io/v1alpha1
+   kind: IngressRoute
+   metadata:
+     name: api-ingress-customers-v1
+     namespace: apps
+     annotations:                                      
+       hub.traefik.io/api: customer-api-versioned      # API Name  
+       hub.traefik.io/api-version: customer-api-v1     # APIVersion Object Name
+   spec:
+     entryPoints:
+       - websecure
+     routes:
+       - kind: Rule
+         match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`) && Header(`version`, `v1`)
+         services:
+           - name: customer-app
+             port: 3000
+     tls:
+       certResolver: le
+   ```
+
+> [!IMPORTANT]     
+> :pencil2: *Deploy <code><b>api-versioning</b></code> to the cluster.* 
+
+```bash
+kubectl apply -f module-4/manifests/api-versioning.yaml
+```
+
+![APIVersion](../media/api-version.png)
 ___
 ## API Rate Limit Policy
 
