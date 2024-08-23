@@ -90,6 +90,7 @@ We can publish <b>customer-app</b> as an API using <b>*<code>API</code>*</b> obj
 ```bash
 kubectl apply -f module-4/manifests/api-versioning.yaml
 ```
+Now, you should be able to interact with all versions of the API via API Dev Portal. 
 
 ![APIVersion](../media/api-version.png)
 ___
