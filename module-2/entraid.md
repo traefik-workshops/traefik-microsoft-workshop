@@ -88,4 +88,4 @@
     <img width=600 src="../media/user-role-assign.png">
 
 ------
-:house: [HOME](../README.md) | :twisted_rightwards_arrows: [Return to module 2: Traefik Hub API Gateway](../module-2/readme.md)
+:house: [HOME](../README.md) | :twisted_rightwards_arrows: [Return to module 2: Traefik Hub API Gateway](../module-2/readme.md#secure-access-to-your-application)
