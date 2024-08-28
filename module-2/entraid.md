@@ -62,3 +62,27 @@
 3. Store the secret <b>value</b> locally as this will be required when we define Traefik OIDC and JWT middlewares. 
 
    <img width=600 src="../media/secret.png">
+
+#### D. Create an App Role
+
+1. From <b>traefik-workshop</b>, navigate to <b>Manage</b>, <b>App roles</b>.
+2. Select <b>Create app role</b> to create <b>admin</b> and <b>support</b> roles. Fill in the information as shown below for each of the roles. 
+
+    <img width=600 src="../media/app_role.png">
+
+3. We should have below roles created. 
+
+    <img width=600 src="../media/roles-list.png">
+
+### Assign App role to a user
+
+1. From Microsoft Entra ID, navitage to <b>Manage</b> and then <b>Enterprise Applications</b>.
+2. Under <b>All applications</b>, select <b>traefik-workshop</b> application. 
+3. Navigate to <b>Manage</b>, <b>Users and Groups</b>, select <b>Add user/group</b>.
+4. Fill in the form to assign <b>ms-admin</b> user to <b>admin</b> role. Similarly, assign <b>ms-support</b> to <b>support</b> role.  
+
+    <img width=600 src="../media/role-assignment.png">
+
+5. We should have two <b>User</b> to <b>Role</b> assignments.
+
+    <img width=600 src="../media/user-role-assign.png">
