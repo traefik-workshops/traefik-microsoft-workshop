@@ -1,6 +1,9 @@
 # Advanced API Capabilities
 
-Once an API is defined, managing its access becomes crucial. API Access Management governs API availability. It determines who can access the API and which operations can be performed. This layer is configured flexibly and composably using the APIAccess resource. API access management allows organizations to tailor access control policies to their specific requirements.
+Once an API is defined, managing its access becomes crucial. API Access Management governs API availability. 
+It determines who can access the API and which operations can be performed. 
+This layer is configured flexibly and composably using the **APIAccess** resource. 
+API access management allows organizations to tailor access control policies to their specific requirements.
 
 In this module, we will cover:
 
@@ -10,24 +13,29 @@ In this module, we will cover:
 - OTel with Grafana
 
 ---
-## API versioning
-API versioning is crucial for managing changes, updates, and improvements to APIs over time. Traefik Hub provides robust support for effectively managing multiple API versions while maintaining backward compatibility and supporting existing clients.
 
-We have multiple versions of <b>customer-app</b> deployed in our cluster. 
+## API versioning
+
+API versioning is crucial for managing changes, updates, and improvements to APIs over time. 
+Traefik Hub provides robust support for effectively managing multiple API versions while maintaining backward
+compatibility and supporting existing clients.
+
+We have multiple versions of **customer-app** deployed in our cluster. 
 
 ```bash
-kubectl -n apps get pod | grep customer
+$ kubectl -n apps get pod | grep customer
 customer-app-5c5bdcf6fc-9s2jx      1/1     Running   0          27h
 customer-app-v2-5b47b4d744-wmvbk   1/1     Running   0          27h
 customer-app-v3-978988d6b-48bwv    1/1     Running   0          27h
 customer-app-v4-5bb9f59bc6-6b6j5   1/1     Running   0          27h
 ```
-We can publish <b>customer-app</b> as an API using <b>*<code>API</code>*</b> object and have each version of the application attached to it using <b><code>*APIVersion*</code></b>. Each version of the application will have its own ingress definition which allows flexibiity on how each version of the API is exposed. 
 
-1. Create an <b>*<code>API</code>*</b> object 
+We can publish **customer-app** as an API using **_API_** object and have each version of the application attached to it using **_APIVersion_**.
+Each version of the application will have its own ingress definition which allows flexibility on how each version of the API is exposed. 
 
-   ```bash
-   ---
+1. Create an **_API_** object 
+
+   ```yaml
    apiVersion: hub.traefik.io/v1alpha1
    kind: API
    metadata:
@@ -44,10 +52,9 @@ We can publish <b>customer-app</b> as an API using <b>*<code>API</code>*</b> obj
        - name: customer-api-v4   
    ```
 
-2. Create <b><code>*APIVersion*</code></b> object for each version of the application. 
+2. Create **_APIVersion_** object for each version of the application. 
 
-   ```bash
-   ---
+   ```yaml
    apiVersion: hub.traefik.io/v1alpha1
    kind: APIVersion                   
    metadata:
@@ -59,10 +66,9 @@ We can publish <b>customer-app</b> as an API using <b>*<code>API</code>*</b> obj
        path: /openapi.yaml
    ```
 
-3. Promote <b><code>*IngressRoute*</code></b> definition to be managed by Hub APIM <b><code>APIVersion</code></b> object.
+3. Promote **_IngressRoute_** definition to be managed by Hub APIM **_APIVersion_** object.
 
-   ```bash
-   ---
+   ```yaml
    apiVersion: traefik.io/v1alpha1
    kind: IngressRoute
    metadata:
@@ -85,26 +91,30 @@ We can publish <b>customer-app</b> as an API using <b>*<code>API</code>*</b> obj
    ```
 
 > [!IMPORTANT]     
-> :pencil2: *Deploy <code><b>api-versioning</b></code> to the cluster.* 
+> :pencil2: Deploy **_`api-versioning`_** to the cluster. 
 
 ```bash
 kubectl apply -f module-4/manifests/api-versioning.yaml
 ```
+
 Now, you should be able to interact with all versions of the API via API Dev Portal. 
 
 ![APIVersion](../media/api-version.png)
+
 ___
+
 ## API Rate Limit Policy
 
 API rate limiting defines consumption limits for API consumers. It serves three primary purposes: protecting infrastructure, managing quotas, and enabling API monetization.
 
-By using the APIRateLimit object, you can apply rate limits to <b> user groups </b> for specific <b>APIs</b>. This helps to prevent API abuse, control traffic, and ensure a stable and predictable user experience. 
+By using the **_APIRateLimit_** object, you can apply rate limits to **_user groups_** for specific **APIs**.
+This helps to prevent API abuse, control traffic, and ensure a stable and predictable user experience. 
 
 Multiple rate limits can be configured using any combination of groups and APIs.
 
 Traefik Hub supports two strategies for rate limiting:
-- <b>Local strategy</b>: applies rate limiting policies to a single Traefik Hub API Gateway replica. Each instance manages its own counter. 
-- <b>Distributed strategy</b>: shares rate limiting policies across all Traefik Hub API Gateway replicas. This ensures consistency across all instances.
+- **Local strategy**: applies rate limiting policies to a single Traefik Hub API Gateway replica. Each instance manages its own counter. 
+- **Distributed strategy**: shares rate limiting policies across all Traefik Hub API Gateway replicas. This ensures consistency across all instances.
 
 ```yaml
 apiVersion: hub.traefik.io/v1alpha1
@@ -121,12 +131,13 @@ spec:
   period: 30s                       # Over the time period (30s)
   strategy: distributed             # Limit will be enforced across all API Gateway instances.  
 ```
-</br>
 
-> [!IMPORTANT]     
-> :pencil2: *Deploy <code><b>api-rate-limit</b></code> to the cluster.* 
+<br/>
 
-> Apply the API rate policy manifest file. 
+> [!IMPORTANT]
+> :pencil2: Deploy **_api-rate-limit_** to the cluster.
+> Apply the API rate policy manifest file.
+
 ```bash
 kubectl apply -f module-4/manifests/api-rate-limit.yaml
 ```
@@ -139,12 +150,12 @@ NAME                 AGE
 apim-employees-drl   14s
 apim-fallback-drl    14s
 ```
-</br>
 
+<br/>
 
-<details><summary><b>Rate Limit Policy - Traefik Hub UI :bulb: </b></summary>
+<details><summary>Rate Limit Policy - Traefik Hub UI :bulb:</summary>
 
-- Rate-limit policies across all clusters are listed under <b>Rate Limits</b> view.
+- Rate-limit policies across all clusters are listed under **Rate Limits** view.
 
   ![get-apiportal](../media/hub-rate-limit.png)
 
@@ -153,7 +164,6 @@ apim-fallback-drl    14s
   ![get-apiportal](../media/hub-rate-limit-detail.png)
 
   </details>
-    <p>
 
 ___
 
@@ -162,11 +172,10 @@ ___
 For more fine-grained control over API exposure, Traefik Hub offers the ability to selectively grant access to a defined set of operations as specified in the API (e.g., Only GET) for a specific group.   
 
 This is done through the use of two definitions:      
-1. <code><b>operationSets</b></code> defines the methods allowed as part of the <b>API</b> resource definition.       
-2. <code><b>operationFilter</b></code> references <code>operationSets</code> definition as part the <b>APIAccess</b> policy. 
-<p>
-Below, we modified the flight API that we deployed in module-3 to only allow the <b>GET</b> method. 
+1. `operationSets` defines the methods allowed as part of the **API** resource definition.       
+2. `operationFilter` references `operationSets` definition as part the **APIAccess** policy. 
 
+Below, we modified the flight API that we deployed in module-3 to only allow the **GET** method. 
 
 ```yaml
 apiVersion: hub.traefik.io/v1alpha1
@@ -186,10 +195,10 @@ spec:
           - pathPrefix: "/flight"    # In this example, only "GET" is allowed to "/flights"   
             methods: ["GET"]
 ```
-<p>
-For the above to take effect, <code>operationFilter</code> should be defined as part of the <b>APIAccess</b> policy to restrict access to specific groups. 
 
-In the below example, we are restricting the <b>*support*</b> user group to only "GET" operation for <b>*flights*</b> API only. 
+For the above to take effect, `operationFilter` should be defined as part of the **APIAccess** policy to restrict access to specific groups. 
+
+In the below example, we are restricting the **_support_** user group to only "GET" operation for **_flights_** API only. 
 
 ```yaml
 apiVersion: hub.traefik.io/v1alpha1
@@ -211,54 +220,55 @@ spec:
     include:
       - read-flights                # Specify the name of the operationSets to include for this group.
       - cru-tickets
-      
 ```
 
-</br>
+<br/>
 
-> [!IMPORTANT]     
-> :pencil2: *Deploy <code><b>api-granular-access.yaml</b></code> to the cluster.* 
+> [!IMPORTANT]
+> :pencil2: Deploy **_`api-granular-access.yaml`_** to the cluster.
+> Apply API rate policy manifest file.
 
-> Apply API rate policy manifest file. 
 ```bash
 kubectl apply -f module-4/manifests/api-granular-access.yaml
 ```
+
 <br>
 
-<details><summary><b>Granular Access Policy - Traefik Hub UI :bulb: </b></summary>
+<details><summary>Granular Access Policy - Traefik Hub UI :bulb:</summary>
 
-- <b>support</b> user has only GET access to flight-api
+- **support** user has only GET access to flight-api
 
   ![get-apiportal](../media/support-get.png)
 
-- API Access display allowed methods under the <b>Portal</b> view
+- API Access display allowed methods under the **Portal** view
 
   ![get-apiportal](../media/apiaccess-get.png)
 
-  </details>
-    <p>
+</details>
+
 ___
 
 ## OTel with Grafana
 
 Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine how organizations monitor, manage, and optimize their API infrastructure.
 
-</br>
+<br/>
 
-> [!IMPORTANT]     
-> :pencil2: *Follow the below steps to deploy the monitoring stack on your AKS cluster.* 
-
+> [!IMPORTANT]
+> :pencil2: Follow the below steps to deploy the monitoring stack on your AKS cluster.
 
 1. Create a namespace for the monitoring stack.
 
     ```bash
     kubectl create namespace monitoring
     ```
+
 2. Deploy the Prometheus stack.
 
     ```bash
     kubectl apply -f module-4/monitoring/prometheus/
     ```
+
 3. Deploy the Grafana stack.
 
     ```bash
@@ -277,7 +287,8 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
     service/grafana                   ClusterIP   10.43.40.181   <none>        3000/TCP   25h
     service/prometheus                ClusterIP   10.43.8.73     <none>        9090/TCP   25h
     ```
-5. Get the Grafana URL and access the Grafana dashboard (user/password: <b>admin/admin</b>)
+
+5. Get the Grafana URL and access the Grafana dashboard (user/password: **admin/admin**)
 
     ```bash
     kubectl -n monitoring describe ingressroute.traefik.io grafana
@@ -298,7 +309,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
         web
       Routes:
         Kind:   Rule
-        Match:  Host(`grafana.EXTERNAL_IP.sslip.io`)    # Grafana URL
+        Match:  Host(`grafana.${EXTERNAL_IP}.sslip.io`)    # Grafana URL
         Services:
           Name:       grafana
           Namespace:  monitoring
@@ -306,7 +317,7 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
     Events:           <none>
     ```
     ```yaml
-    http://grafana.{k8s-cluster-external-ip}.sslip.io
+    http://grafana.${EXTERNAL_IP}.sslip.io
     ```
 
 6. Once logged in to Grafana, navigate to Dashboards > Traefik Hub > Hub Dashboard.
@@ -319,13 +330,10 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 
 Now that the observability stack is deployed, let's generate some traffic! 
 
-
-
 > [!NOTE]     
 > :pencil2: *Follow the below steps to deploy the monitoring stack on your AKS cluster.* 
 
 <br>
-
 
 1. Create a new namespace to host traffic generator deployment. 
 
@@ -333,19 +341,18 @@ Now that the observability stack is deployed, let's generate some traffic!
    kubectl create ns traffic
    ```
 
-2. To interact with the APIs, we need to generate API Keys for <b>*admin*</b> and <b>*support*</b> users that we created in module-3. 
+2. To interact with the APIs, we need to generate API Keys for **admin** and **support** users that we created in module-3. 
 
-    - If you don't have the token saved, log in to <b>API Portal</b> and <b>*Create token*</b>.
+    - If you don't have the token saved, log in to **API Portal** and **Create token**.
 
-      <details><summary><b>Create Token - Traefik Hub UI :bulb: </b></summary>
+      <details><summary>Create Token - Traefik Hub UI :bulb:</summary>
 
       ![api-portal](../media/hub-login.png)
 
       ![api-portal](../media/create-token.png)
       </details>
-      <p>
 
-    - Create a <b>Kubernetes Secret</b> containing the tokens to enable the traffic app to generate load
+    - Create a **Kubernetes Secret** containing the tokens to enable the traffic app to generate load
 
     ```bash
     export ADMIN_TOKEN="xxx"

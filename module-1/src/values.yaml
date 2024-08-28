@@ -3,7 +3,7 @@
     
     certResolvers:
       le:
-        email: maytham.alfouadi@traefik.io
+        email: workshops@traefik.io
         tlsChallenge: true
         storage: /data/acme.json
     ingressClass:

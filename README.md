@@ -10,9 +10,6 @@ This workshop will walk you through the journey from deploying <b>Traefik Applic
 
 The hands-on lab is divided into multiple modules. Each module covers a particular topic, depending on the previous module's completion. It is essential to follow the guide as we progress through the lab.   
 
-
-
-
 ![AKS-Hub](media/Diagram.png)
 
 # Prerequisites
@@ -24,8 +21,8 @@ The hands-on lab is divided into multiple modules. Each module covers a particul
 # Agenda
 
 > [!IMPORTANT]     
-> *Each module contains all manifest files for each lab.*.             
-> :pencil2: *This step is required to be implemented in the LAB.*.
+> Each module contains all manifest files for each lab.             
+> :pencil2: This step is required to be implemented in the LAB.
 
 - [Module 0: Provision AKS cluster](module-0/readme.md)
 
