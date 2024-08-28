@@ -54,3 +54,11 @@
 3. Select <b>Add a scope</b> and fill in the information as shown below to prepare for returning the group information of the users.
 
    <img width=600 src="../media/expose-api.png">
+
+#### C. Create a Secret
+
+1. From <b>traefik-workshop</b>, navigate to <b>Manage</b>, <b>Certificates and Secrets</b>.
+2. Under <b>Client Secrets</b>, select <b>New client secret</b>. Provide description and set the expiry date and select <b>add</b>
+3. Store the secret <b>value</b> locally as this will be required when we define Traefik OIDC and JWT middlewares. 
+
+   ![secret](../media/secret.png)
