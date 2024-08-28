@@ -10,21 +10,22 @@
     <a href="https://traefik.io/traefik-hub/">Website</a> |
     <a href="https://doc.traefik.io/traefik-hub/">Documentation</a> 
 </div>
-</br>
+<br/>
 
 # Traefik Hub API Management
 
 ## Overview
+
 Traefik Hub is the industry’s first Kubernetes-native API Management solution for publishing, securing, and managing APIs.
 
 Traefik Hub, purpose-built for K8s environments and GitOps workflows, drastically simplifies and accelerates API lifecycle management. As a result, organizations experience quick time to value, unleash workforce productivity, and focus on building great applications.
 
 ## Upgrade API Gateway to API Management
 
-Upgrading <b>Traefik Hub API Gateway</b> deployment to <b>API Management</b> has never been easier. The license key must be updated to include the API Management feature. Then, the <b>API Management</b> feature will need to be enabled using the below command:
+Upgrading **Traefik Hub API Gateway** deployment to **API Management** has never been easier. The license key must be updated to include the API Management feature. Then, the **API Management** feature will need to be enabled using the below command:
 
-> [!IMPORTANT]     
-> :pencil2: *Follow the steps below to enable API Management features*.
+> [!IMPORTANT]
+> :pencil2: Follow the steps below to enable API Management features.
 
 ```bash
 helm upgrade traefik -n traefik --wait \
@@ -41,12 +42,11 @@ To manage an API application using API Management services, we will need to do t
 2. Create an API Access object to control which group has access to this API.
 3. Update the Ingress definition for the application to bind it to the newly created API. 
 
-Let us promote <b>customer-app</b> API application to be managed by API Management services. 
+Let us promote **customer-app** API application to be managed by API Management services. 
 
-1. Create an API object for <b>customer-app</b>.
+1. Create an API object for **customer-app**.
 
-   ```bash
-   ---
+   ```yaml
    apiVersion: hub.traefik.io/v1alpha1
    kind: API                        # API Object
    metadata:
@@ -59,10 +59,10 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
      openApiSpec:
        path: /openapi.yaml           # Path to OAS (OpenAPISpec)file
    ```
+
 2. Create an API Access object to control access to this API. 
 
-    ```bash
-    ---
+    ```yaml
     apiVersion: hub.traefik.io/v1alpha1
     kind: APIAccess                         # API Access Object
     metadata:
@@ -77,9 +77,9 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
             operator: Exists 
     ```
 
-3. Promote the existing <b>IngressRoute</b> to be managed by <b>APIM</b>.
+3. Promote the existing **IngressRoute** to be managed by **APIM**.
 
-   ```bash
+   ```yaml
    ---
    apiVersion: traefik.io/v1alpha1
    kind: IngressRoute
@@ -93,7 +93,7 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
        - websecure
      routes:
        - kind: Rule
-         match: Host(`api.traefik.EXTERNAL_IP.sslip.io`) && PathPrefix(`/customers`)
+         match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)
          services:
            - name: customer-app
              port: 3000
@@ -101,19 +101,18 @@ Let us promote <b>customer-app</b> API application to be managed by API Manageme
        certResolver: le
    ```
 
-> [!IMPORTANT]     
-> :pencil2: *Follow the steps below to promote the customer-api to be a managed by APIM*.
+> [!IMPORTANT]
+> :pencil2: Follow the steps below to promote the customer-api to be a managed by APIM.
 
->> ```bash
->> kubectl apply -f module-3/manifests/customer-ingress-api.yaml
->> ```
+```bash
+kubectl apply -f module-3/manifests/customer-ingress-api.yaml
+```
 
-4. Now that we understand how to promote an <b>IngressRoute</b> to be managed by APIM services, let us promote <b>employee</b>, <b>flights</b>, <b>tickets</b>, and <b>external</b> API applications to be managed by Traefik Hub APIM. 
+4. Now that we understand how to promote an **IngressRoute** to be managed by APIM services, let us promote **employee**, **flights**, **tickets**, and **external** API applications to be managed by Traefik Hub APIM. 
 
    ```bash
    kubectl apply -f module-3/manifests/apis/
    ```
-
 
 ## API Developer Portal
 
@@ -123,8 +122,7 @@ Now that we have the application managed by Traefik Hub API Management, let us d
 
 1. Deploy an API Dev Portal. 
 
-   ```bash
-   ---
+   ```yaml
    apiVersion: hub.traefik.io/v1alpha1
    kind: APIPortal
    metadata:
@@ -134,12 +132,12 @@ Now that we have the application managed by Traefik Hub API Management, let us d
      title: Demo API Portal
      description: "Demo Developer Portal"
      trustedUrls:
-       - https://demo-portal.traefik.EXTERNAL_IP.sslip.io
+       - https://demo-portal.traefik.${EXTERNAL_IP}.sslip.io
    ```
+
 2. Create an Ingress definition to publish the API Dev Portal.
  
-   ```bash
-   ---
+   ```yaml
    apiVersion: traefik.io/v1alpha1
    kind: IngressRoute
    metadata:
@@ -151,7 +149,7 @@ Now that we have the application managed by Traefik Hub API Management, let us d
      entryPoints:
        - websecure
      routes:
-     - match: Host(`demo-portal.traefik.EXTERNAL_IP.sslip.io`)
+     - match: Host(`demo-portal.traefik.${EXTERNAL_IP}.sslip.io`)
        kind: Rule
        services:
        - name: apiportal
@@ -161,8 +159,8 @@ Now that we have the application managed by Traefik Hub API Management, let us d
        certResolver: le
    ```
 
-> [!IMPORTANT]     
-> :pencil2: *Deploy API Dev Portal and IngressRoute*.
+> [!IMPORTANT]
+> :pencil2: Deploy API Dev Portal and IngressRoute.
 
 ```bash
 kubectl apply -f module-3/manifests/api-portal.yaml
@@ -171,7 +169,7 @@ kubectl apply -f module-3/manifests/api-portal.yaml
 3. Traefik Dashboard should list a new route for the api-portal. The portal can be accessible using the HOST URL defined in the Ingress definition
 
    ```bash
-   https://demo-portal.traefik.EXTERNAL_IP.sslip.io
+   https://demo-portal.traefik.${EXTERNAL_IP}.sslip.io
    ```
    <details><summary> :bulb: API Developer Portal </summary> 
 
@@ -184,13 +182,13 @@ kubectl apply -f module-3/manifests/api-portal.yaml
 
 The API Portal is automatically protected and requires a username/password to log in. 
 
-Access can be defined using either a <b>built-in</b> identity provider or <b>any 3rd party IdP using OIDC</b>. 
+Access can be defined using either a **built-in** identity provider or **any 3rd party IdP using OIDC**. 
 
 ### [Option 1] Built-in Identity Provider
 
 This is the default option for any deployment. 
 
-1. Log in to the <b><a href="https://hub.traefik.io">Hub Dashboard</a></b> and create users and groups as shown below. 
+1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and create users and groups as shown below. 
 
    ![built-in-user](../media/built-in-user.png)
    ![built-in-user](../media/built-in-group.png)
@@ -199,9 +197,9 @@ This is the default option for any deployment.
 
 ### [Option 2] OIDC connection to EntraID
 
-1. Log in to the <b><a href="https://hub.traefik.io">Hub Dashboard</a></b> and navigate to <b>Auth settings</b>
+1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and navigate to **Auth settings**
 
-2. Under <b>Portal</b> section, select OIDC and provide the identity provider details
+2. Under **Portal** section, select OIDC and provide the identity provider details
 
    ![portal-oidc](../media/portal_oidc.png)
 
@@ -216,7 +214,7 @@ https://doc.traefik.io/traefik-hub/portal/api-portal-overview
 - APIM Authentication and Authorization.        
 https://doc.traefik.io/traefik-hub/authentication-authorization/access-overview
 
-</br>
+<br>
 
 ------
 :house: [HOME](../README.md) | :arrow_forward: [Module 4: API Advanced Capabilities](../module-4/readme.md)

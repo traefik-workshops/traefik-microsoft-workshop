@@ -10,7 +10,6 @@ In this module, we will deploy an AKS cluster using AZ CLI. Traefik Hub will cla
 
 <details><summary>Linux</summary>
 
-<p>
 1. Download the binary.
 
 ```bash
@@ -32,12 +31,10 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ```bash
 kubectl version --client
 ```
-</p>
 </details>
 
 <details><summary>MacOS</summary>
 
-<p>
 1. Download the binary.
 
 ```bash
@@ -59,11 +56,10 @@ chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl && sudo chown roo
 ```bash
 kubectl version --client
 ```
-</p>
 </details>
+
 <details><summary>Windows</summary>
 
-<p>
 1. Download kubectl executable file.
 
 ```bash
@@ -77,7 +73,6 @@ curl.exe -LO "https://dl.k8s.io/release/v1.29.1/bin/windows/amd64/kubectl.exe"
 kubectl version --client
 ```
 
-</p>
 </details>
 <br> 
 
@@ -85,7 +80,6 @@ kubectl version --client
 
 <details><summary>Linux</summary>
 
-<p>
 Install with one command
 
 ```bash
@@ -96,37 +90,34 @@ Verify
 ```bash
 az --version
 ```
-</p>
 </details>
+
 <details><summary>MacOS</summary>
 
-<p>
 Install with Homebrew
 
 ```bash
 brew update && brew install azure-cli
 ```
+
 Verify
 
 ```bash
 az --version
 ```
-</p>
 </details>
+
 <details><summary>Windows</summary>
 
-<p>
 Download and install the AZ CLI install file.
 
 https://aka.ms/installazurecliwindowsx64
-</p>
 Verify
 
 ```bash
 az --version
 ```
 
-</p>
 </details>
 <br> 
 
@@ -138,6 +129,7 @@ az --version
 ```bash
 az login
 ```
+
 2. You can verify your subscription details and change subscriptions if needed using the below commands:
 
 ```bash
@@ -172,13 +164,13 @@ az group create -n $AKS_RESOURCE_GROUP -l $AKS_REGION
 5. Create a production-ready Kubernetes cluster using a single command
 
 ```bash
-az aks create --resource-group $AKS_RESOURCE_GROUP --name  $CLUSTER_NAME --node-count 2 --ssh-key=~/.ssh/id_rsa.pub 
+az aks create --resource-group $AKS_RESOURCE_GROUP --name $CLUSTER_NAME --node-count 2 --ssh-key=~/.ssh/id_rsa.pub 
 ```
 
 6. Retrieve AKS credentials so you can manage the cluster from your laptop.
 
 ```bash
-az aks get-credentials --resource-group $AKS_RESROUCE_GROUP --name --name $CLUSTER_NAME --file $KUBECONFIG
+az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $CLUSTER_NAME --file $KUBECONFIG
 ```
 
 7. Verify access to the AKS cluster
@@ -188,13 +180,11 @@ kubectl get nodes
 ```
 
 #### References
+
 - How to install Azure CLI
 https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
 - How to install Kubectl
 https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
-
-
-</br>
 
 ------
 :house: [HOME](../README.md) | :arrow_forward: [Module 1: Traefik Application Proxy](../module-1/readme.md)

@@ -17,7 +17,7 @@
 
 The Traefik Hub API Gateway combines the world’s most trusted cloud native, fully declarative, multitenant application proxy with enterprise-grade access control, distributed security, and premium integrations. 
 
-In this module, we will go through the steps on how to perform a seamless upgrade of <b>Traefik Application Proxy</b> to <b>Traefik Hub API Gateway</b> with minimum impact on existing services.  
+In this module, we will go through the steps on how to perform a seamless upgrade of **Traefik Application Proxy** to **Traefik Hub API Gateway** with minimum impact on existing services.  
 
 <br>
 
@@ -26,14 +26,16 @@ ___
 ## Upgrade Traefik Application Proxy to Traefik Hub API Gateway
 
 > [!IMPORTANT]     
-> :pencil2: *Run the steps below in your cluster.*
+> :pencil2: Run the steps below in your cluster.
 
-1. Traefik Hub API Gateway requires a license key. To obtain a license key, login to <b><a href="https://hub.traefik.io/dashboard">Traefik Hub Dashboard</a></b>           
+1. Traefik Hub API Gateway requires a license key. To obtain a license key, login to **<a href="https://hub.traefik.io/dashboard">Traefik Hub Dashboard</a>**           
 
-    username: COMMON-USERNAME                         
-    password: COMMON-PASSWORD      
+   ```console
+   email: COMMON-EMAIL
+   password: COMMON-PASSWORD
+   ```
 
-2. Navigate to <b>Gateways</b> and select <b>Create new gateway</b> 
+2. Navigate to **Gateways** and select **Create new gateway** 
 
    ![add_gateway](../media/add_gateway.png)      
 
@@ -51,7 +53,7 @@ ___
     ```bash
     kubectl create secret generic traefik-hub-license --namespace traefik --from-literal=token=$TRAEFIK_HUB_TOKEN
     ```
-6. Now that the license key is stored under the same namespace as our existing Traefik Application proxy deployment, we can perform an in-place upgrade to <b>Traefik Hub API Gateway</b> using the same Helm chart. 
+6. Now that the license key is stored under the same namespace as our existing Traefik Application proxy deployment, we can perform an in-place upgrade to **Traefik Hub API Gateway** using the same Helm chart. 
 
     ```bash
     helm upgrade traefik -n traefik --wait \
@@ -63,24 +65,23 @@ ___
        traefik/traefik
    ```
 
-7. Once the Helm upgrade command is executed successfully, you can refresh the Traefik local dashboard and be presented with the new UI. Since <b>Traefik API Gateway</b> is based on <b>Traefik Application Proxy</b>, there is no impact on any of the existing services. 
+7. Once the Helm upgrade command is executed successfully, you can refresh the Traefik local dashboard and be presented with the new UI. Since **Traefik API Gateway** is based on **Traefik Application Proxy**, there is no impact on any of the existing services. 
 
 ___
 
 ## Secure access to your application
 
-Now that we have <b> Traefik Hub API Gateway</b> running, we can use some of the enterprise-level middleware to secure access to our application so only authorized users have access. 
+Now that we have **Traefik Hub API Gateway** running, we can use some of the enterprise-level middleware to secure access to our application so only authorized users have access. 
 
 ### Secure access with JWT
 
 The JWT middleware verifies that a valid JWT token is provided in the Authorization header. 
 
-To add a JWT verification method to the incoming request for <b>customer-app</b> API application, follow the below steps:
+To add a JWT verification method to the incoming request for **customer-app** API application, follow the below steps:
 
 1. Create JWT middleware definition
 
     ```yaml
-   ---
    apiVersion: traefik.io/v1alpha1
    kind: Middleware
    metadata:
@@ -91,10 +92,10 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
        jwt:
          jwksUrl: "https://login.microsoftonline.com/common/discovery/v2.0/keys"    
     ```
-2. Update <b> customer-app's</b> <b>IngressRoute</b> definition to attach the newly created JWT middleware.
+
+2. Update **customer-app's** **IngressRoute** definition to attach the newly created JWT middleware.
 
     ```yaml
-    ---
     apiVersion: traefik.io/v1alpha1
     kind: IngressRoute
     metadata:
@@ -105,7 +106,7 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
         - websecure                                                                       # Request is coming on HTTPS (port 443).
       routes:
         - kind: Rule
-          match: Host(`api.traefik.EXTERNAL_IP.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
+          match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
           services:
             - name: customer-app                                                          # The request is routed to customer-app service on port 3000.
               port: 3000
@@ -116,20 +117,17 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
         certResolver: le
     ```
 
-> [!IMPORTANT]     
-> :pencil2: *Run the steps below in your cluster.*
+> [!IMPORTANT]
+> :pencil2: Run the steps below in your cluster.
 
+```bash
+kubectl apply -f module-2/manifests/customer-ingress.yaml
+```
 
-
->>  ```bash
->>  kubectl apply -f module-2/manifests/customer-ingress.yaml
->>  ```    
-
-
-3. Any request to <b>customer-app</b> application will fail without a proper access token. 
+3. Any request to **customer-app** application will fail without a proper access token. 
 
    ```bash
-   curl -I https://api.traefik.EXTERNAL_IP.sslip.io/customers
+   curl -I https://api.traefik.${EXTERNAL_IP}.sslip.io/customers
    
    HTTP/2 401 
    ```
@@ -153,7 +151,7 @@ To add a JWT verification method to the incoming request for <b>customer-app</b>
    To interact with the application, an access token will be provided as follows:
 
    ```bash
-   curl -H "Authorization: Bearer $access_token" https://api.traefik.EXTERNAL_IP.sslip.io/customers
+   curl -H "Authorization: Bearer $access_token" https://api.traefik.${EXTERNAL_IP}.sslip.io/customers
    ```
 
 ### Secure access with OIDC
@@ -162,7 +160,7 @@ The OpenID Connect Authentication middleware secures your applications by delega
 
 The middleware redirects to the authentication provider to authenticate the user. Once the authentication is complete, users are redirected back to the middleware before being authorized to access the upstream application.    
 
-1. We have <b>whoami</b> application running under <b>apps</b> namespace. 
+1. We have **whoami** application running under **apps** namespace. 
 
 
    ```bash
@@ -177,7 +175,7 @@ The middleware redirects to the authentication provider to authenticate the user
 
 2. Create OIDC middleware to redirect the request to EntraID
 
-   ```bash
+   ```yaml
    ---
    apiVersion: traefik.io/v1alpha1
    kind: Middleware
@@ -193,8 +191,7 @@ The middleware redirects to the authentication provider to authenticate the user
          redirectUrl: "/cback"
    ```
 
-2. Publish the service using <b>ingressroute</b> and attach the OIDC middleware to the route definition.
-
+2. Publish the service using **ingressroute** and attach the OIDC middleware to the route definition.
 
     ```yaml
     apiVersion: traefik.io/v1alpha1
@@ -215,8 +212,8 @@ The middleware redirects to the authentication provider to authenticate the user
             - name: oidc-whoami                 # List of middlewares that the request needs to go through.
     ```
 
-> [!IMPORTANT]     
-> :pencil2: *Run the steps below in your cluster.*
+> [!IMPORTANT]
+> :pencil2: Run the steps below in your cluster.
    
    ```bash
    vi module-2/manifests/whoami-ingress.yaml
@@ -230,7 +227,6 @@ The middleware redirects to the authentication provider to authenticate the user
    kubectl apply -f module-2/manifests/whoami-ingress.yaml
    ```
 
-
    <details><summary>Verification commands</summary>
 
    ```bash
@@ -242,7 +238,7 @@ The middleware redirects to the authentication provider to authenticate the user
    whoami-ingress   173m
    ```
    ```bash
-   kubectl -n apps describe ingressroute.traefik.io
+   kubectl -n apps describe ingressroute.traefik.io whoami-ingress
    
    Name:         whoami-ingress
    Namespace:    apps
@@ -260,14 +256,14 @@ The middleware redirects to the authentication provider to authenticate the user
        web
      Routes:
        Kind:   Rule
-       Match:  Host(`whoami.EXTERNAL_IP.sslip.io`)      # URL the service is exposed on
+       Match:  Host(`whoami.${EXTERNAL_IP}.sslip.io`)      # URL the service is exposed on
        Services:
          Name:  whoami
          Port:  80
    Events:      <none>
    ```
    </details>
-   </br>
+   <br/>
 
 3. The whoami application should be accessible using the URL in the IngressRoute definition. The request will be redirected to EntraID for verification before being routed to the backend service.
 
@@ -276,12 +272,7 @@ The middleware redirects to the authentication provider to authenticate the user
     ![whoami](../media/whoami.png)
     </details>  
 
-
 ___
-
-
-
-
 
 ## References
 
