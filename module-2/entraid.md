@@ -61,4 +61,4 @@
 2. Under <b>Client Secrets</b>, select <b>New client secret</b>. Provide description and set the expiry date and select <b>add</b>
 3. Store the secret <b>value</b> locally as this will be required when we define Traefik OIDC and JWT middlewares. 
 
-   ![secret](../media/secret.png)
+   <img width=600 src="../media/secret.png">
