@@ -2,10 +2,10 @@
 
 ### Create Demo Users
 
-1. From Microsoft Entra ID, navitage to <b>Manage</b> and then <b> Users</b>.
-2. From <b>New User</b>, select <b>Create New User</b>. 
+1. From Microsoft Entra ID, navitage to **Manage** and then **Users**.
+2. From **New User**, select **Create New User**. 
 
-3. Create <b>ms-admin</b> and <b>ms-support</b> user accounts as shown below: 
+3. Create **ms-admin** and **ms-support** user accounts as shown below: 
 
    <img width=600 src="../media/az-admin.png">
 
@@ -15,11 +15,11 @@
 
 ### Create Demo Groups
 
-1. From Microsoft Entra ID, navitage to <b>Manage</b> and then <b>Groups</b>.
-2. Select <b>New Group</b> and create <b>admin</b> and <b>support</b> groups as shown below.   
-   >*Ensure to add <b>ms-admin</b> user to <b>admin</b> group under <b> Members</b> section*.   
+1. From Microsoft Entra ID, navitage to **Manage** and then **Groups**.
+2. Select **New Group** and create **admin** and **support** groups as shown below.   
+   >_Ensure to add **ms-admin** user to **admin** group under **Members** section_.   
 
-   >*Ensure to add <b>ms-support</b> user to <b>support</b> group under <b> Members</b> section*. 
+   >_Ensure to add **ms-support** user to **support** group under **Members** section_. 
 
    <img width=600 src="../media/admin-group.png">
 
@@ -29,10 +29,10 @@
 
 ### Create App Registration
 
-1. From Microsoft Entra ID, navitage to <b>Manage</b> and then <b>App Registrations</b>.
-2. Select <b>New Registrations</b> and create <b>traefik-workshop</b> app registration as shown below. 
+1. From Microsoft Entra ID, navitage to **Manage** and then **App Registrations**.
+2. Select **New Registrations** and create **traefik-workshop** app registration as shown below. 
 
-   >*Ensure to change EXTERNAL_IP to your Loadbalancer IP*.     
+   >_Ensure to change EXTERNAL_IP to your Loadbalancer IP_.     
 
    <img width=600 src="../media/register-app.png">
 
@@ -40,33 +40,33 @@
 
 #### A. Update Authorization URLs
 
-1. From <b>traefik-workshop</b>, navigate to <b>Manage</b>, <b>Authentication</b>.
-2. Under <b>Web</b>, <b>Redirect URIs</b> section, select <b>add URI</b>. Update the list as shown below to include the portal URL, too:
+1. From **traefik-workshop**, navigate to **Manage**, **Authentication**.
+2. Under **Web**, **Redirect URIs** section, select **add URI**. Update the list as shown below to include the portal URL, too:
 
-   >*Ensure to change EXTERNAL_IP to your Loadbalancer IP*.   
+   >_Ensure to change EXTERNAL_IP to your Loadbalancer IP_.   
 
    <img width=600 src="../media/Authentication.png">
 
 #### B. Expose an API
 
-1. From <b>traefik-workshop</b>, navigate to <b>Manage</b>, <b>Authentication</b>.
-2. Select <b>Add</b> for <b>Application ID URI</b> and then select <b>Save</b>.
-3. Select <b>Add a scope</b> and fill in the information as shown below to prepare for returning the group information of the users.
+1. From **traefik-workshop**, navigate to **Manage**, **Authentication**.
+2. Select **Add** for **Application ID URI** and then select **Save**.
+3. Select **Add a scope** and fill in the information as shown below to prepare for returning the group information of the users.
 
    <img width=600 src="../media/expose-api.png">
 
 #### C. Create a Secret
 
-1. From <b>traefik-workshop</b>, navigate to <b>Manage</b>, <b>Certificates and Secrets</b>.
-2. Under <b>Client Secrets</b>, select <b>New client secret</b>. Provide description and set the expiry date and select <b>add</b>
-3. Store the secret <b>value</b> locally as this will be required when we define Traefik OIDC and JWT middlewares. 
+1. From **traefik-workshop**, navigate to **Manage**, **Certificates and Secrets**.
+2. Under **Client Secrets**, select **New client secret**. Provide description and set the expiry date and select **add**
+3. Store the secret **value** locally as this will be required when we define Traefik OIDC and JWT middlewares. 
 
    <img width=600 src="../media/secret.png">
 
 #### D. Create an App Role
 
-1. From <b>traefik-workshop</b>, navigate to <b>Manage</b>, <b>App roles</b>.
-2. Select <b>Create app role</b> to create <b>admin</b> and <b>support</b> roles. Fill in the information as shown below for each of the roles. 
+1. From **traefik-workshop**, navigate to **Manage**, **App roles**.
+2. Select **Create app role** to create **admin** and **support** roles. Fill in the information as shown below for each of the roles. 
 
     <img width=600 src="../media/app_role.png">
 
@@ -76,13 +76,13 @@
 
 ### Assign App role to a user
 
-1. From Microsoft Entra ID, navitage to <b>Manage</b> and then <b>Enterprise Applications</b>.
-2. Under <b>All applications</b>, select <b>traefik-workshop</b> application. 
-3. Navigate to <b>Manage</b>, <b>Users and Groups</b>, select <b>Add user/group</b>.
-4. Fill in the form to assign <b>ms-admin</b> user to <b>admin</b> role. Similarly, assign <b>ms-support</b> to <b>support</b> role.  
+1. From Microsoft Entra ID, navitage to **Manage** and then **Enterprise Applications**.
+2. Under **All applications**, select **traefik-workshop** application. 
+3. Navigate to **Manage**, **Users and Groups**, select **Add user/group**.
+4. Fill in the form to assign **ms-admin** user to **admin** role. Similarly, assign **ms-support** to **support** role.  
 
     <img width=600 src="../media/role-assignment.png">
 
-5. We should have two <b>User</b> to <b>Role</b> assignments.
+5. We should have two **User** to **Role** assignments.
 
     <img width=600 src="../media/user-role-assign.png">
