@@ -41,7 +41,7 @@
 #### A. Update Authorization URLs
 
 1. From <b>traefik-workshop</b>, navigate to <b>Manage</b>, <b>Authentication</b>.
-2. Under <b>Web</b>, <b>Redirect URIs</b> section, select <b>add URI</b>. Update the list as shown below:
+2. Under <b>Web</b>, <b>Redirect URIs</b> section, select <b>add URI</b>. Update the list as shown below to include the portal URL, too:
 
    >*Ensure to change EXTERNAL_IP to your Loadbalancer IP*.   
 
@@ -51,6 +51,6 @@
 
 1. From <b>traefik-workshop</b>, navigate to <b>Manage</b>, <b>Authentication</b>.
 2. Select <b>Add</b> for <b>Application ID URI</b> and then select <b>Save</b>.
-3. Select <b>Add a scope</b> and fill-up the information as showen below.
+3. Select <b>Add a scope</b> and fill in the information as shown below to prepare for returning the group information of the users.
 
    ![expose-api](../media/expose-api.png)
