@@ -7,8 +7,9 @@
 
 3. Create <b>ms-admin</b> and <b>ms-support</b> user accounts as shown below: 
 
-   ![az-admin](../media/az-admin.png)
-4. We should have two accounts created
+   <img width=600 src="../media/az-admin.png">
+
+5. We should have two accounts created.
 
    ![Users](../media/Users.png)
 
@@ -20,7 +21,8 @@
 
    >*Ensure to add <b>ms-support</b> user to <b>support</b> group under <b> Members</b> section*. 
 
-   ![admin-group](../media/admin-group.png)
+   <img width=600 src="../media/admin-group.png">
+
 3. We should have two groups created as shown below
 
    ![groups](../media/groups.png)
@@ -32,9 +34,7 @@
 
    >*Ensure to change EXTERNAL_IP to your Loadbalancer IP*.     
 
-   ![app-reg](../media/register-app.png)
-
-
+   <img width=600 src="../media/register-app.png">
 
 ### Configure App Registration
 
@@ -45,7 +45,7 @@
 
    >*Ensure to change EXTERNAL_IP to your Loadbalancer IP*.   
 
-   ![auth](../media/Authentication.png)
+   <img width=600 src="../media/Authentication.png">
 
 #### B. Expose an API
 
@@ -53,4 +53,4 @@
 2. Select <b>Add</b> for <b>Application ID URI</b> and then select <b>Save</b>.
 3. Select <b>Add a scope</b> and fill in the information as shown below to prepare for returning the group information of the users.
 
-   ![expose-api](../media/expose-api.png)
+   <img width=600 src="../media/expose-api.png">
