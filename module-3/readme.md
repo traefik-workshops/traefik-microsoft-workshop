@@ -197,6 +197,11 @@ This is the default option for any deployment.
 
 ### [Option 2] OIDC connection to EntraID
 
+   Replace:
+   - `<tenant-id>` with the registered application’s tenant ID.
+   - `<client-id>` with the registered application’s client ID.
+   - `<client-secret>` with the registered application’s client secret value.
+
 1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and navigate to **Auth settings**
 
 2. Under **Portal** section, select OIDC and provide the identity provider details
