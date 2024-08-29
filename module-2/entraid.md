@@ -1,3 +1,11 @@
+<br/>
+
+<div align="center" style="margin: 30px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Microsoft_Entra_ID_color_icon.svg/1920px-Microsoft_Entra_ID_color_icon.svg.png"   style="width:250px;" align="center" />
+</a>
+<br />
+</div>
+
 ## Setup EntraID integration with Traefik Hub
 
 ### Create Demo Users
