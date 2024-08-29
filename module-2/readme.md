@@ -73,6 +73,12 @@ ___
 
 Now that we have **Traefik Hub API Gateway** running, we can use some of the enterprise-level middleware to secure access to our application so only authorized users have access. 
 
+### Configure Entra ID
+
+Microsoft Entra ID needs to be configured to allow Traefik integration. 
+
+Complete steps highlighted under **[Microsoft EntraID](../module-2/entraid.md)** section for successful integration.  
+
 ### Secure access with JWT
 
 The JWT middleware verifies that a valid JWT token is provided in the Authorization header. 
