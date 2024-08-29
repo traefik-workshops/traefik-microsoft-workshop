@@ -201,7 +201,11 @@ This is the default option for any deployment.
 
 2. Under **Portal** section, select OIDC and provide the identity provider details
 
-   ![portal-oidc](../media/portal_oidc.png)
+   ![portal-oidc](../media/auth-settings-oidc.png)
+
+3. Continue to update JWT integration in order to secure APIs as shown below. 
+
+   ![portal-oidc](../media/auth-settings-jwt.png)
 
 ## References
 
