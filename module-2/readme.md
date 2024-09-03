@@ -37,7 +37,7 @@ ___
 
 2. Navigate to **Gateways** and select **Create new gateway** 
 
-   ![add_gateway](../media/add_gateway.png)      
+   ![add_gateway](../media/create-gateway.png)      
 
 3. Copy your new gateway token.     
 
