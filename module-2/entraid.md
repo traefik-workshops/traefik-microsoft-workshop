@@ -57,7 +57,7 @@
 
 #### B. Expose an API
 
-1. From **traefik-workshop**, navigate to **Manage**, **Authentication**.
+1. From **traefik-workshop**, navigate to **Manage**, **Expose an API**.
 2. Select **Add** for **Application ID URI** and then select **Save**.
 3. Select **Add a scope** and fill in the information as shown below to prepare for returning the group information of the users.
 
