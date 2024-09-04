@@ -52,6 +52,9 @@ ___
     ```bash
     helm install traefik -n traefik --create-namespace --values module-1/src/values.yaml traefik/traefik
     ```
+> [!NOTE]
+> it might take a few seconds for loadbalancer service to get an External IP.   
+> Verify using kubectl get svc/traefik -n traefik command before proceeding to next step. 
 
 3. Update the cloned repo with your cluster External IP. We are utilizing sslip.io for DNS services.
 
