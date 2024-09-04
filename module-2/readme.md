@@ -285,9 +285,9 @@ ___
 - Traefik Hub API Gateway installation.    
 https://doc.traefik.io/traefik-hub/api-gateway/setup/installation/kubernetes
 - JWT middleware.     
-https://doc.traefik.io/traefik-hub/api-gateway/configuration/middleware/http/api-gateway-middleware-jwt
+https://doc.traefik.io/traefik-hub/api-gateway/secure/middleware/jwt
 - OIDC middleware.      
-https://doc.traefik.io/traefik-hub/api-gateway/configuration/middleware/http/api-gateway-middleware-oidc
+https://doc.traefik.io/traefik-hub/api-gateway/secure/middleware/oidc
 - Get Microsoft EntraID token.      
 https://learn.microsoft.com/en-us/azure/databricks/dev-tools/service-prin-aad-token
 
