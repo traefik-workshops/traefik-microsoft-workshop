@@ -31,8 +31,8 @@ ___
 1. Traefik Hub API Gateway requires a license key. To obtain a license key, login to **<a href="https://hub.traefik.io/dashboard">Traefik Hub Dashboard</a>**           
 
    ```console
-   email: COMMON-EMAIL
-   password: COMMON-PASSWORD
+   email: WORKSHOP-EMAIL
+   password: WORKSHOP-PASSWORD
    ```
 
 2. Navigate to **Gateways** and select **Create new gateway** 
@@ -61,7 +61,7 @@ ___
       --set hub.token=traefik-hub-license \
       --set image.registry=ghcr.io \
       --set image.repository=traefik/traefik-hub \
-      --set image.tag=v3.3.1 \
+      --set image.tag=v3.4.0 \
        traefik/traefik
    ```
 
