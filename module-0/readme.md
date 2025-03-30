@@ -6,121 +6,8 @@ In this module, we will deploy an AKS cluster using AZ CLI. Traefik Hub will cla
 
 #### Prerequisites
 
-- kubectl installed on your laptop. 
-
-<details><summary>Linux</summary>
-
-1. Download the binary.
-
-```bash
-x86-64  
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
-```
-```bash
-ARM64
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl.sha256"
-```
-
-2. Install kubectl
-
-```bash
-sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-```
-
-3. Verify
-```bash
-kubectl version --client
-```
-</details>
-
-<details><summary>MacOS</summary>
-
-1. Download the binary.
-
-```bash
-x86-64
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"
-```
-```bash
-ARM64
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/arm64/kubectl"
-```
-
-2. Install kubectl
-
-```bash
-chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl && sudo chown root: /usr/local/bin/kubectl
-```
-
-3. Verify
-```bash
-kubectl version --client
-```
-</details>
-
-<details><summary>Windows</summary>
-
-1. Download kubectl executable file.
-
-```bash
-x86-64
-curl.exe -LO "https://dl.k8s.io/release/v1.29.1/bin/windows/amd64/kubectl.exe"
-```
-
-2. Run kubectl from the same directory or add it to your environment variables. 
-
-```bash
-kubectl version --client
-```
-
-</details>
-<br> 
-
-- AZ CLI tools installed 
-
-<details><summary>Linux</summary>
-
-Install with one command
-
-```bash
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-```
-Verify
-
-```bash
-az --version
-```
-</details>
-
-<details><summary>MacOS</summary>
-
-Install with Homebrew
-
-```bash
-brew update && brew install azure-cli
-```
-
-Verify
-
-```bash
-az --version
-```
-</details>
-
-<details><summary>Windows</summary>
-
-Download and install the AZ CLI install file.
-
-https://aka.ms/installazurecliwindowsx64
-Verify
-
-```bash
-az --version
-```
-
-</details>
-<br> 
-
+- kubectl installed on your laptop. See [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/) for installation instructions
+- AZ CLI tools installed. See [here](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli#install) for installation instructions.
 
 #### Deploy a Kubernetes Cluster with the Azure CLI
 
@@ -178,13 +65,6 @@ az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $CLUSTER_NAME
 ```bash
 kubectl get nodes
 ```
-
-#### References
-
-- How to install Azure CLI
-https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
-- How to install Kubectl
-https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 
 ------
 :house: [HOME](../README.md) | :arrow_forward: [Module 1: Traefik Application Proxy](../module-1/readme.md)
