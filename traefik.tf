@@ -6,9 +6,9 @@ resource "helm_release" "traefik" {
   namespace        = "traefik"
   create_namespace = true
 
-  # API Gateway settings - only applied when enable_api_gateway is true
+  # API Gateway settings - only applied when enable_api_gateway or enable_api_management is true
   dynamic "set" {
-    for_each = var.enable_api_gateway ? [1] : []
+    for_each = var.enable_api_gateway || var.enable_api_management ? [1] : []
     content {
       name  = "hub.token"
       value = "traefik-hub-license"
@@ -16,7 +16,7 @@ resource "helm_release" "traefik" {
   }
 
   dynamic "set" {
-    for_each = var.enable_api_gateway ? [1] : []
+    for_each = var.enable_api_gateway || var.enable_api_management ? [1] : []
     content {
       name  = "image.registry"
       value = "ghcr.io"
@@ -24,10 +24,19 @@ resource "helm_release" "traefik" {
   }
 
   dynamic "set" {
-    for_each = var.enable_api_gateway ? [1] : []
+    for_each = var.enable_api_gateway || var.enable_api_management ? [1] : []
     content {
       name  = "image.repository"
       value = "traefik/traefik-hub"
+    }
+  }
+
+  # API Management settings - only applied when enable_api_management is true
+  dynamic "set" {
+    for_each = var.enable_api_management ? [1] : []
+    content {
+      name  = "hub.apimanagement.enabled"
+      value = "true"
     }
   }
 

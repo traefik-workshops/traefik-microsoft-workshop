@@ -24,14 +24,8 @@ Traefik Hub, purpose-built for K8s environments and GitOps workflows, drasticall
 
 Upgrading **Traefik Hub API Gateway** deployment to **API Management** has never been easier. The license key must be updated to include the API Management feature. Then, the **API Management** feature will need to be enabled using the below command:
 
-> [!IMPORTANT]
-> :pencil2: Follow the steps below to enable API Management features.
-
 ```bash
-helm upgrade traefik -n traefik --wait \
-  --reuse-values \
-  --set hub.apimanagement.enabled=true \
-   traefik/traefik
+terraform apply -auto-approve -var="subscription_id=$(az account show --query id -o tsv)" -var="enable_api_management=true"
 ```
 
 ## Manage an API with API Management Services
