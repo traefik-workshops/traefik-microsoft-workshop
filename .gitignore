@@ -11,4 +11,4 @@
 # macOS system files
 **/.DS_Store
 
-**/manifests
+**/**/manifests
