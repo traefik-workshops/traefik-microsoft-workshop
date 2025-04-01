@@ -5,65 +5,55 @@
 In this module, we will deploy an AKS cluster using AZ CLI. Traefik Hub will claim the cluster for easier management of APIs. 
 
 #### Prerequisites
+- AZ CLI. See [here](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli#install) for installation instructions.
+- Terraform. See [here](https://developer.hashicorp.com/terraform/install) for installation instructions.
+- kubectl. See [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/) for installation instructions.
 
-- kubectl installed on your laptop. See [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/) for installation instructions
-- AZ CLI tools installed. See [here](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli#install) for installation instructions.
+1. Clone git repo into your client.
 
-#### Deploy a Kubernetes Cluster with the Azure CLI
+```bash
+git clone git@github.com:traefik-workshops/traefik-microsoft-workshop.git
+cd traefik-microsoft-workshop
+```
 
-1. Log in to your Azure account. The below command should open a new browser. Log in with your Azure credentials. 
+#### Deploy a Kubernetes Cluster using Terraform
+
+2. Log in to your Azure account. The below command should open a new browser. Log in with your Azure credentials. 
 
 ```bash
 az login
 ```
 
-2. You can verify your subscription details and change subscriptions if needed using the below commands:
+3. Get your subscription ID. You'll need this for the Terraform configuration.
 
+List all available subscriptions:
 ```bash
-# View subscriptions
-az account list --out table
-
-# Verify selected subscription
-az account show --out table
-
-# Set the correct subscription (if needed)
-az account set --subscription <subscription_id>
-
-# Verify that the correct subscription is now set
-az account show --out table
+az account list --output table
 ```
 
-3. Define the variables we will utilize below during Kubernetes cluster creation. 
-
+Optional: Switch to a different subscription if needed:
 ```bash
-export CLUSTER_NAME=                            # example: firstName-lastName
-export AKS_RESOURCE_GROUP=$CLUSTER_NAME         # example: we will use the same name for our resource group. 
-export AKS_REGION=                              # example: westus, centralus, eastus. For the full list, "az account list-locations --output table"
-export KUBECONFIG=                              # example: ~/.kube/$CLUSTER_NAME.yaml
+az account set --subscription <subscription-id>
 ```
 
-4. Create a resource group that would hold all AKS resources associated with this cluster
+4. Initialize Terraform
 
 ```bash
-az group create -n $AKS_RESOURCE_GROUP -l $AKS_REGION
+terraform init
 ```
 
-5. Create a production-ready Kubernetes cluster using a single command
+5. Deploy the cluster
 
 ```bash
-az aks create --resource-group $AKS_RESOURCE_GROUP --name $CLUSTER_NAME --node-count 2 --ssh-key=~/.ssh/id_rsa.pub 
+terraform apply -auto-approve
 ```
 
-6. Retrieve AKS credentials so you can manage the cluster from your laptop.
+6. Get AKS credentials and connect to the cluster
 
 ```bash
-az aks get-credentials --resource-group $AKS_RESOURCE_GROUP --name $CLUSTER_NAME --file $KUBECONFIG
-```
-
-7. Verify access to the AKS cluster
-
-```bash
-kubectl get nodes
+export RESOURCE_GROUP=$(terraform output -raw resource_group_name)
+export CLUSTER_NAME=$(terraform output -raw cluster_name)
+az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
 ```
 
 ------

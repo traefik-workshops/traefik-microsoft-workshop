@@ -34,15 +34,9 @@ ___
 ## Get started with Traefik Application Proxy
 
 > [!IMPORTANT]
-> :pencil2: Run the steps below in your cluster.
+> :pencil2: Make sure you create the cluster in module-0 and connect to it before running the following commands:
 
-1. Clone git repo into your client.
-
-    ```bash
-    git clone git@github.com:traefik-workshops/traefik-microsoft-workshop.git
-    ```
-
-2. Install Traefik using helm.
+1. Install Traefik using helm.
 
     - Add the helm repository
     ```bash

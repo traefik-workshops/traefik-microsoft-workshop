@@ -1,0 +1,13 @@
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+**/*.tfstate
+**/*.tfstate.*
+
+# Ignore .terraform.lock.hcl files
+.terraform.lock.hcl
+
+# macOS system files
+.DS_Store
+
