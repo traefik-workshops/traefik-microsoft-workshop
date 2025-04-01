@@ -7,10 +7,17 @@ metadata:
 spec:
   plugin:
     oidc:
-      issuer: "https://sts.windows.net/<tenant-id>/"
+      issuer: "https://login.microsoftonline.com/<tenant-id>/v2.0"
       clientID: "<client-id>"
       clientSecret: "<client-secret>"
       redirectUrl: "/cback"
+      scopes:
+        - openid
+        - profile
+        - email
+        - offline_access
+        - User.Read
+      forwardToken: true
       
 ---
 apiVersion: traefik.io/v1alpha1

@@ -26,3 +26,9 @@ variable "subscription_id" {
   type        = string
   description = "Azure subscription ID to use for the deployment"
 }
+
+variable "enable_api_gateway" {
+  description = "Enable Traefik Hub API Gateway features"
+  type        = bool
+  default     = false
+}

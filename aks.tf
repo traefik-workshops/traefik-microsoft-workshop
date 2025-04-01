@@ -1,18 +1,4 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "4.25.0"
-    }
-  }
-}
-
 data "azurerm_client_config" "this" {}
-
-provider "azurerm" {
-  features {}
-  subscription_id = var.subscription_id
-}
 
 resource "azurerm_resource_group" "this" {
   name     = "traefik-${var.cluster_location}"

@@ -53,19 +53,13 @@ ___
     ```bash
     kubectl create secret generic traefik-hub-license --namespace traefik --from-literal=token=$TRAEFIK_HUB_TOKEN
     ```
-6. Now that the license key is stored under the same namespace as our existing Traefik Application proxy deployment, we can perform an in-place upgrade to **Traefik Hub API Gateway** using the same Helm chart. 
+6. Now that the license key is stored under the same namespace as our existing Traefik Application proxy deployment, we can upgrade to **Traefik Hub API Gateway** using Terraform. 
 
     ```bash
-    helm upgrade traefik -n traefik --wait \
-      --reuse-values \
-      --set hub.token=traefik-hub-license \
-      --set image.registry=ghcr.io \
-      --set image.repository=traefik/traefik-hub \
-      --set image.tag=v3.4.0 \
-       traefik/traefik
-   ```
+    terraform apply -auto-approve -var="subscription_id=$(az account show --query id -o tsv)" -var="enable_api_gateway=true"
+    ```
 
-7. Once the Helm upgrade command is executed successfully, you can refresh the Traefik local dashboard and be presented with the new UI. Since **Traefik API Gateway** is based on **Traefik Application Proxy**, there is no impact on any of the existing services. 
+7. Once Terraform completes successfully, you can refresh the Traefik local dashboard and be presented with the new UI. Since **Traefik API Gateway** is based on **Traefik Application Proxy**, there is no impact on any of the existing services. 
 
 ___
 
@@ -133,7 +127,7 @@ kubectl apply -f module-2/manifests/customer-ingress.yaml
 3. Any request to **customer-app** application will fail without a proper access token. 
 
    ```bash
-   curl -I https://api.traefik.${EXTERNAL_IP}.sslip.io/customers
+   curl -I https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
    
    HTTP/2 401 
    ```
@@ -141,23 +135,18 @@ kubectl apply -f module-2/manifests/customer-ingress.yaml
 4. Use the below command to obtain an access token from EntraID
 
    ```bash
-   curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
-   https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token \
-   -d 'client_id=<client-id>' \
+   export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+   https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
+   -d "client_id=$(terraform output -raw application_client_id)" \
    -d 'grant_type=client_credentials' \
    -d 'scope=2ff814a6-3304-4ab8-85cb-cd0e6f879c1d%2F.default' \
-   -d 'client_secret=<client-secret>'
+   -d "client_secret=$(terraform output -raw application_client_secret)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
    ```
 
-   Replace:
-   - `<tenant-id>` with the registered application’s tenant ID.
-   - `<client-id>` with the registered application’s client ID.
-   - `<client-secret>` with the registered application’s client secret value.
-
-   To interact with the application, an access token will be provided as follows:
+   Now you can use the token to access the application:
 
    ```bash
-   curl -H "Authorization: Bearer $access_token" https://api.traefik.${EXTERNAL_IP}.sslip.io/customers
+   curl -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
    ```
 
 ### Secure access with OIDC
@@ -222,30 +211,25 @@ The middleware redirects to the authentication provider to authenticate the user
 > :pencil2: Run the steps below in your cluster.
    
    ```bash
-   vi module-2/manifests/whoami-ingress.yaml
-   ```
-   Replace:
-   - `<tenant-id>` with the registered application’s tenant ID.
-   - `<client-id>` with the registered application’s client ID.
-   - `<client-secret>` with the registered application’s client secret value.
-
-   ```bash
    kubectl apply -f module-2/manifests/whoami-ingress.yaml
    ```
 
    <details><summary>Verification commands</summary>
 
    ```bash
-   # Verify IngressRoute
+   kubectl -n apps get ingressroute.traefik.io whoami-ingress
+   ```
    
-   kubectl -n apps get ingressroute.traefik.io
-   
+   ```text
    NAME             AGE
    whoami-ingress   173m
    ```
+
    ```bash
    kubectl -n apps describe ingressroute.traefik.io whoami-ingress
+   ```
    
+   ```text
    Name:         whoami-ingress
    Namespace:    apps
    Labels:       <none>

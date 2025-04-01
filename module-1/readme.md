@@ -34,33 +34,26 @@ ___
 ## Get started with Traefik Application Proxy
 
 > [!IMPORTANT]
-> :pencil2: Make sure you create the cluster in module-0 and connect to it before running the following commands:
+> :pencil2: Run the steps below in your cluster. Traefik has already been installed with Terraform in module-0.
 
-1. Install Traefik using helm.
-
-    - Add the helm repository
-    ```bash
-    helm repo add --force-update traefik https://traefik.github.io/charts
-    ```
-    - Install Traefik Application Proxy using Helm and create a new namespace.
-    ```bash
-    helm install traefik -n traefik --create-namespace --values module-1/src/values.yaml traefik/traefik
-    ```
-> [!NOTE]
-> It might take a few seconds for loadbalancer service to get an External IP.   
-> Verify using kubectl get svc/traefik -n traefik command before proceeding to next step. 
-
-3. Update the cloned repo with your cluster External IP. We are utilizing sslip.io for DNS services.
+1. Generate application manifests from templates using your cluster External IP. We are utilizing sslip.io for DNS services.
 
     ```bash
-    export EXTERNAL_IP=$(kubectl get svc/traefik -n traefik --no-headers | awk {'print $4'})
-    for i in $(grep -Rl '${EXTERNAL_IP}'); do sed -i 's/${EXTERNAL_IP}/'$EXTERNAL_IP'/g' $i; done
+    export EXTERNAL_IP=$(terraform output -raw external_ip)
+    for i in {1..4}; do \
+      rm -rf module-$i/manifests && \
+      cp -r module-$i/templates module-$i/manifests && \
+      find module-$i/manifests -type f -exec sed -i '' \
+        -e "s/\${EXTERNAL_IP}/$EXTERNAL_IP/g" \
+        -e "s#https://sts.windows.net/<tenant-id>/#https://sts.windows.net/$(terraform output -raw tenant_id)/#g" \
+        -e "s/<client-id>/$(terraform output -raw application_client_id)/g" \
+        -e "s/<client-secret>/$(terraform output -raw application_client_secret)/g" {} + 2>/dev/null || true
+    done
     ```
-
-4. Publish the Traefik Dashboard.
+2. Publish the Traefik Dashboard.
 
    ```bash
-   kubectl apply -f module-1/src/dashboard-ingress.yaml
+   kubectl apply -f module-1/manifests/dashboard-ingress.yaml
    ```
    
    Traefik uses **IngressRoute** to publish the application based on the concept of **EntryPoint**, **Routers**, **Middleware** and **Service**.
@@ -75,7 +68,7 @@ ___
      entryPoints:                                                # Network port which will receive the packet (HTTP, HTTPS, TCP,..etc).
        - websecure
      routes:
-     - match: Host(`dashboard.traefik.${EXTERNAL_IP}.sslip.io`)     # URL to match before routing to backend service
+     - match: Host(`dashboard.traefik.${EXTERNAL_IP}.sslip.io`)  # URL to match before routing to backend service
        kind: Rule
        services:                                                 # Backend service name and port number.
        - name: api@internal
@@ -84,17 +77,17 @@ ___
        certResolver: le
    ```
 
-5. Verify Access to the Traefik Dashboard
+3. Verify Access to the Traefik Dashboard
 
     - View dashboard ingress definition.
     ```bash
-    kubectl -n traefik describe ingressroute traefik-dashboard
+    kubectl --namespace traefik describe ingressroute traefik-dashboard
     ```
     - From the browser, navigate to the **Host** URL defined in dashboard-ingress manifest file.
 
     example:
     ```bash
-    https://dashboard.traefik.${EXTERNAL_IP}.sslip.io
+    echo https://dashboard.traefik.$(terraform output -raw external_ip).sslip.io
     ```
 
     - We should be able to access the Traefik Proxy Dashboard
@@ -118,16 +111,11 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 > [!IMPORTANT]
 > :pencil2: *Run below steps in your cluster.*
 
-1. Create a new namespace for the application
+Create a new namespace and deploy the demo applications that we will use throughout the lab
 
     ```bash
     kubectl create namespace apps
-    ```
-
-2. Deploy the demo applications that we will use throughout the lab.
-
-    ```bash
-    kubectl apply -f module-1/apps/customers/ -f module-1/apps/employee/ -f module-1/apps/flight/ -f module-1/apps/ticket/ -f module-1/apps/external/ -f module-1/apps/whoami/whoami.yaml
+    kubectl apply -f module-1/manifests/customers/ -f module-1/manifests/employee/ -f module-1/manifests/flight/ -f module-1/manifests/ticket/ -f module-1/manifests/external/ -f module-1/manifests/whoami/whoami.yaml
     ```
 
    <div align="left">
@@ -135,6 +123,9 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 
      ```bash
      kubectl get pod,svc --namespace apps
+     ```
+
+     ```text
      NAME                                   READY   STATUS    RESTARTS   AGE
      pod/customer-app-v4-795fbf45bf-cqss2   1/1     Running   0          84s
      pod/customer-app-v3-698c85568c-nsv54   1/1     Running   0          84s
@@ -155,10 +146,10 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
      service/ticket-app        ClusterIP      10.43.73.169    <none>             3000/TCP   83s
      service/world-time-api    ExternalName   <none>          worldtimeapi.org   443/TCP    83s
      service/whoami            ClusterIP      10.43.142.176   <none>             80/TCP     84s
-     ```
 
      </details>
    </div>
+   ```
 
 ## Publish the demo app
 
@@ -175,7 +166,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
         - websecure                                                                       # Request is coming on HTTPS (port 443).
       routes:
         - kind: Rule
-          match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
+          match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)  # Traefik will be monitoring for this specific URL.
           services:
             - name: customer-app                                                          # The request routed to customer-app service on port 3000.
               port: 3000
@@ -186,7 +177,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 > :pencil2: *Let's apply the IngressRoute definition.*
 
   ```bash
-  kubectl apply -f module-1/apps/customers/ingress/customer-ingress.yaml
+  kubectl apply -f module-1/manifests/customers/ingress/customer-ingress.yaml
   ```
 
 2. Traefik Dashboard will list the newly created route.
@@ -199,8 +190,10 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
     kubectl -n apps describe ingressroute api-ingress-customers
     ```
     ```bash
-    $ curl https://api.traefik.${EXTERNAL_IP}.sslip.io/customers
+    curl -k https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
+    ```
 
+    ```json
     {
       "customers": [
         { "id": 1, "firstName": "John", "lastName": "Doe", "points": 100, "status": "bronze" },
@@ -245,7 +238,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
         - websecure                                                                       # Request is coming on HTTPS (port 443).
       routes:
         - kind: Rule
-          match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
+          match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)  # Traefik will be monitoring for this specific URL.
           services:
             - name: customer-app                                                          # The request is routed to customer-app service on port 3000.
               port: 3000
@@ -261,14 +254,16 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 > :pencil2: *Run the below step in your cluster.*
 
    ```bash
-   kubectl apply -f module-1/apps/customers/ingress/customer-ingress-middleware.yaml
+   kubectl apply -f module-1/manifests/customers/ingress/customer-ingress-middleware.yaml
    ```
 
 5. Verify the new custom header is received
 
     ```bash
-    $ curl -I https://api.traefik.${EXTERNAL_IP}.sslip.io/customers
+    curl -Ik https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
+    ```
 
+    ```
     HTTP/2 200
     date: Thu, 01 Aug 2024 18:30:32 GMT
     x-header-app: Customer API              <<< New custom response header added by the middleware
@@ -283,7 +278,7 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 Now that we understand how to publish an application using **IngressRoute** and tweak the request with **middelware**, let us publish all the demo apps that we have deployed.
 
 ```bash
-  kubectl apply -f module-1/apps/employee/ingress/ -f module-1/apps/flight/ingress/ -f module-1/apps/ticket/ingress/ -f module-1/apps/external/ingress/ -f module-1/apps/whoami/ingress/
+  kubectl apply -f module-1/manifests/employee/ingress/ -f module-1/manifests/flight/ingress/ -f module-1/manifests/ticket/ingress/ -f module-1/manifests/external/ingress/ -f module-1/manifests/whoami/ingress/
 ```
 
 ## Reference

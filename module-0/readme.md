@@ -45,7 +45,7 @@ terraform init
 5. Deploy the cluster
 
 ```bash
-terraform apply -auto-approve
+terraform apply -auto-approve -var="subscription_id=$(az account show --query id -o tsv)"
 ```
 
 6. Get AKS credentials and connect to the cluster
@@ -54,6 +54,12 @@ terraform apply -auto-approve
 export RESOURCE_GROUP=$(terraform output -raw resource_group_name)
 export CLUSTER_NAME=$(terraform output -raw cluster_name)
 az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+```
+
+7. Verify the connection
+
+```bash
+kubectl get nodes
 ```
 
 ------
