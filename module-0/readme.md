@@ -1,8 +1,11 @@
-![AKS](../media/aks.png)
-
 ## Introduction
 
-In this module, we will deploy an AKS cluster using AZ CLI. Traefik Hub will claim the cluster for easier management of APIs. 
+This module uses Terraform to automatically deploy and configure:
+- Azure Kubernetes Service (AKS) cluster with multiple node pools
+- Microsoft Entra ID (formerly Azure AD) with users, groups, and RBAC
+- Traefik as the ingress controller with API Gateway capabilities
+
+The infrastructure is designed to support the subsequent modules in this workshop, with security and scalability in mind.
 
 #### Prerequisites
 - AZ CLI. See [here](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli#install) for installation instructions.
