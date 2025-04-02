@@ -215,14 +215,14 @@ The middleware redirects to the authentication provider to authenticate the user
     kubectl apply -f module-2/manifests/whoami-ingress.yaml
     ```
 
-    <details><summary>Verification commands</summary>
+  <details><summary>Verification commands</summary>
 
     Verify IngressRoute
     ```bash
     kubectl -n apps get ingressroute.traefik.io whoami-ingress
     ```
    
-    ```text
+    ```
     NAME             AGE
     whoami-ingress   173m
     ```
@@ -231,7 +231,7 @@ The middleware redirects to the authentication provider to authenticate the user
     kubectl -n apps describe ingressroute.traefik.io whoami-ingress
     ```
    
-    ```text
+    ```
     Name:         whoami-ingress
     Namespace:    apps
     Labels:       <none>
@@ -268,8 +268,8 @@ The middleware redirects to the authentication provider to authenticate the user
     echo https://whoami.$(terraform output -raw external_ip).sslip.io
     ```
 
-    </details>
-    <br/>
+  </details>
+  <br/>
 
 3. The whoami application should be accessible using the URL in the IngressRoute definition. The request will be redirected to EntraID for verification before being routed to the backend service.
 
