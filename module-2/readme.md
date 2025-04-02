@@ -67,11 +67,11 @@ ___
 
 Now that we have **Traefik Hub API Gateway** running, we can use some of the enterprise-level middleware to secure access to our application so only authorized users have access. 
 
-### Configure Entra ID
+### Microsoft Entra ID
 
-Microsoft Entra ID needs to be configured to allow Traefik integration. 
+Microsoft Entra ID was installed and configured in module-0. 
 
-Complete steps highlighted under **[Microsoft EntraID](../module-2/entraid.md)** section for successful integration.  
+View **[Microsoft EntraID](../module-2/entraid.md)** section if you would like to understand what was deployed. 
 
 ### Secure access with JWT
 
@@ -106,7 +106,7 @@ To add a JWT verification method to the incoming request for **customer-app** AP
         - websecure                                                                       # Request is coming on HTTPS (port 443).
       routes:
         - kind: Rule
-          match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)     # Traefik will be monitoring for this specific URL.
+          match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)  # Traefik will be monitoring for this specific URL.
           services:
             - name: customer-app                                                          # The request is routed to customer-app service on port 3000.
               port: 3000
@@ -252,6 +252,12 @@ The middleware redirects to the authentication provider to authenticate the user
          Port:  80
    Events:      <none>
    ```
+
+
+   ```bash
+   echo https://whoami.$(terraform output -raw external_ip).sslip.io
+   ```
+
    </details>
    <br/>
 

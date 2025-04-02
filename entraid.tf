@@ -7,17 +7,9 @@ resource "azuread_user" "admin" {
   disable_strong_password = true
 }
 
-resource "azuread_user" "developer" {
-  user_principal_name = "developer@${data.azuread_domains.default.domains[0].domain_name}"
-  display_name        = "Developer"
-  password           = "topsecretpassword"
-  force_password_change = false
-  disable_strong_password = true
-}
-
-resource "azuread_user" "maintainer" {
-  user_principal_name = "maintainer@${data.azuread_domains.default.domains[0].domain_name}"
-  display_name        = "Maintainer"
+resource "azuread_user" "support" {
+  user_principal_name = "support@${data.azuread_domains.default.domains[0].domain_name}"
+  display_name        = "Support"
   password           = "topsecretpassword"
   force_password_change = false
   disable_strong_password = true
@@ -29,13 +21,8 @@ resource "azuread_group" "admin" {
   security_enabled = true
 }
 
-resource "azuread_group" "developer" {
-  display_name     = "developer"
-  security_enabled = true
-}
-
-resource "azuread_group" "maintainer" {
-  display_name     = "maintainer"
+resource "azuread_group" "support" {
+  display_name     = "support"
   security_enabled = true
 }
 
@@ -45,14 +32,9 @@ resource "azuread_group_member" "admin" {
   member_object_id = azuread_user.admin.object_id
 }
 
-resource "azuread_group_member" "developer" {
-  group_object_id  = azuread_group.developer.object_id
-  member_object_id = azuread_user.developer.object_id
-}
-
-resource "azuread_group_member" "maintainer" {
-  group_object_id  = azuread_group.maintainer.object_id
-  member_object_id = azuread_user.maintainer.object_id
+resource "azuread_group_member" "support" {
+  group_object_id  = azuread_group.support.object_id
+  member_object_id = azuread_user.support.object_id
 }
 
 # Get default domain
@@ -113,29 +95,20 @@ resource "azuread_application" "traefik_workshop" {
   # Define app roles
   app_role {
     allowed_member_types = ["User", "Application"]
-    description         = "Admin role for full access"
-    display_name       = "Admin"
-    enabled           = true
-    id                = "00000000-0000-0000-0000-000000000001" # Custom UUID
-    value            = "admin"
+    description          = "Admin role for full access"
+    display_name         = "Admin"
+    enabled              = true
+    id                   = "00000000-0000-0000-0000-000000000001" # Custom UUID
+    value                = "admin"
   }
 
   app_role {
     allowed_member_types = ["User", "Application"]
-    description         = "Developer role for limited access"
-    display_name       = "Developer"
-    enabled           = true
-    id                = "00000000-0000-0000-0000-000000000002" # Custom UUID
-    value            = "developer"
-  }
-
-  app_role {
-    allowed_member_types = ["User", "Application"]
-    description         = "Maintainer role for maintenance access"
-    display_name       = "Maintainer"
-    enabled           = true
-    id                = "00000000-0000-0000-0000-000000000003" # Custom UUID
-    value            = "maintainer"
+    description          = "Support role for limited access"
+    display_name         = "Support"
+    enabled              = true
+    id                   = "00000000-0000-0000-0000-000000000003" # Custom UUID
+    value                = "support"
   }
 }
 
@@ -158,14 +131,8 @@ resource "azuread_app_role_assignment" "admin_role" {
   resource_object_id  = azuread_service_principal.traefik_workshop.object_id
 }
 
-resource "azuread_app_role_assignment" "developer_role" {
-  app_role_id         = [for role in azuread_application.traefik_workshop.app_role : role.id if role.value == "developer"][0]
-  principal_object_id = azuread_user.developer.object_id
-  resource_object_id  = azuread_service_principal.traefik_workshop.object_id
-}
-
-resource "azuread_app_role_assignment" "maintainer_role" {
-  app_role_id         = [for role in azuread_application.traefik_workshop.app_role : role.id if role.value == "maintainer"][0]
-  principal_object_id = azuread_user.maintainer.object_id
+resource "azuread_app_role_assignment" "support_role" {
+  app_role_id         = [for role in azuread_application.traefik_workshop.app_role : role.id if role.value == "support"][0]
+  principal_object_id = azuread_user.support.object_id
   resource_object_id  = azuread_service_principal.traefik_workshop.object_id
 }

@@ -11,7 +11,7 @@
 This module uses Terraform to configure Microsoft Entra ID (formerly Azure AD) integration with Traefik Hub. The following resources are automatically provisioned:
 
 ## Users and Groups
-- Three demo users (admin, developer, maintainer) with their respective groups
+- Two demo users (admin, support) with their respective groups
 - Each user is assigned to their corresponding group (e.g., admin user → admin group)
 - Default password for all users: `topsecretpassword`
 
@@ -28,10 +28,9 @@ This module uses Terraform to configure Microsoft Entra ID (formerly Azure AD) i
 - Redirect URIs configured for Traefik Hub integration
 
 ## Role-Based Access Control
-- Three application roles defined:
+- Two application roles defined:
   - Admin: Full access
-  - Developer: Limited access
-  - Maintainer: Maintenance access
+  - Support: Limited access
 - Each user is automatically assigned their corresponding role
 
 All configuration is managed through Terraform in the `entraid.tf` file, ensuring consistent and reproducible deployments.
