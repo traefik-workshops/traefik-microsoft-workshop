@@ -40,78 +40,78 @@ Let us promote **customer-app** API application to be managed by API Management 
 
 1. Create an API object for **customer-app**.
 
-   ```yaml
-   apiVersion: hub.traefik.io/v1alpha1
-   kind: API                        # API Object
-   metadata:
-     name: customer-api             # Name of the object         
-     namespace: apps                # Namespace where the app is deployed
-     labels:
-       area: customer               # Labels for easier referencing
-       module: crm
-   spec:
-     openApiSpec:
-       path: /openapi.yaml           # Path to OAS (OpenAPISpec)file
-   ```
+```yaml
+apiVersion: hub.traefik.io/v1alpha1
+kind: API                        # API Object
+metadata:
+  name: customer-api             # Name of the object         
+  namespace: apps                # Namespace where the app is deployed
+  labels:
+    area: customer               # Labels for easier referencing
+    module: crm
+spec:
+  openApiSpec:
+    path: /openapi.yaml           # Path to OAS (OpenAPISpec)file
+```
 
 2. Create an API Catalog Item object to control access to this API. 
 
-    ```yaml
-      ---
-      apiVersion: hub.traefik.io/v1alpha1
-      kind: APIPlan
-      metadata:
-        name: support
-        namespace: apps
-      spec:
-        title: "Support Plan"
-        description: "Support rate limits and quotas"
-        rateLimit:
-          limit: 5
-          period: 10s
-        quota:
-          limit: 1000
-          period: 720h # Approximately 30 days
+```yaml
+  ---
+  apiVersion: hub.traefik.io/v1alpha1
+  kind: APIPlan
+  metadata:
+    name: support
+    namespace: apps
+  spec:
+    title: "Support Plan"
+    description: "Support rate limits and quotas"
+    rateLimit:
+      limit: 5
+      period: 10s
+    quota:
+      limit: 1000
+      period: 720h # Approximately 30 days
 
-      ---
-      apiVersion: hub.traefik.io/v1alpha1
-      kind: APICatalogItem
-      metadata:
-        name: customer-api
-        namespace: apps
-      spec:
-        groups:
-          - support
-        apis:
-          - name: customer-api
-          - name: flights-api
-        apiPlan:
-          name: support
-    ```
+  ---
+  apiVersion: hub.traefik.io/v1alpha1
+  kind: APICatalogItem
+  metadata:
+    name: customer-api
+    namespace: apps
+  spec:
+    groups:
+      - support
+    apis:
+      - name: customer-api
+      - name: flights-api
+    apiPlan:
+      name: support
+```
 
 3. Promote the existing **IngressRoute** to be managed by **APIM**.
 
-   ```yaml
-   ---
-   apiVersion: traefik.io/v1alpha1
-   kind: IngressRoute
-   metadata:
-     name: api-ingress-customers
-     namespace: apps
-     annotations:                                      # Add API annotation to enable APIM
-       hub.traefik.io/api: customer-api                # API object that the ingressroute needs to bind to.
-   spec:
-     entryPoints:
-       - websecure
-     routes:
-       - kind: Rule
-         match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)
-         services:
-           - name: customer-app
-             port: 3000
-     tls:
-       certResolver: le
-   ```
+```yaml
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-customers
+  namespace: apps
+  annotations:                                      # Add API annotation to enable APIM
+    hub.traefik.io/api: customer-api                # API object that the ingressroute needs to bind to.
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`)
+      services:
+        - name: customer-app
+          port: 3000
+  tls:
+    certResolver: le
+```
 
 > [!IMPORTANT]
 > :pencil2: Follow the steps below to promote the customer-api to be a managed by APIM.
@@ -122,9 +122,9 @@ kubectl apply -f module-3/manifests/apis/customer-ingress-api.yaml
 
 4. Now that we understand how to promote an **IngressRoute** to be managed by APIM services, let us promote **employee**, **flights**, **tickets**, and **external** API applications to be managed by Traefik Hub APIM. 
 
-   ```bash
-   kubectl apply -f module-3/manifests/apis/
-   ```
+```bash
+kubectl apply -f module-3/manifests/apis/
+```
 
 ## API Developer Portal
 
@@ -134,42 +134,42 @@ Now that we have the application managed by Traefik Hub API Management, let us d
 
 1. Deploy an API Dev Portal. 
 
-   ```yaml
-   apiVersion: hub.traefik.io/v1alpha1
-   kind: APIPortal
-   metadata:
-     name: demo-portal
-     namespace: apps
-   spec:
-     title: Demo API Portal
-     description: "Demo Developer Portal"
-     trustedUrls:
-       - https://demo-portal.traefik.${EXTERNAL_IP}.sslip.io
-   ```
+```yaml
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPortal
+metadata:
+  name: demo-portal
+  namespace: apps
+spec:
+  title: Demo API Portal
+  description: "Demo Developer Portal"
+  trustedUrls:
+    - https://demo-portal.traefik.${EXTERNAL_IP}.sslip.io
+```
 
 2. Create an Ingress definition to publish the API Dev Portal.
  
-   ```yaml
-   apiVersion: traefik.io/v1alpha1
-   kind: IngressRoute
-   metadata:
-     name: demo-apiportal
-     namespace: apps
-     annotations:                              
-       hub.traefik.io/api-portal: demo-portal          # Add annotation to reference api-portal object
-   spec:
-     entryPoints:
-       - websecure
-     routes:
-     - match: Host(`demo-portal.traefik.${EXTERNAL_IP}.sslip.io`)
-       kind: Rule
-       services:
-       - name: apiportal
-         namespace: traefik
-         port: 9903
-     tls:
-       certResolver: le
-   ```
+```yaml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: demo-apiportal
+  namespace: apps
+  annotations:                              
+    hub.traefik.io/api-portal: demo-portal          # Add annotation to reference api-portal object
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`demo-portal.traefik.${EXTERNAL_IP}.sslip.io`)
+    kind: Rule
+    services:
+    - name: apiportal
+      namespace: traefik
+      port: 9903
+  tls:
+    certResolver: le
+```
 
 > [!IMPORTANT]
 > :pencil2: Deploy API Dev Portal and IngressRoute.
@@ -180,14 +180,14 @@ kubectl apply -f module-3/manifests/api-portal.yaml
 
 3. Traefik Dashboard should list a new route for the api-portal. The portal can be accessible using the HOST URL defined in the Ingress definition
 
-   ```bash
-   echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
-   ```
-   <details><summary> :bulb: API Developer Portal </summary> 
+```bash
+echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
+```
 
-   ![Dev Portal](../media/dev_portal.png)
-   
-   </details>
+<details><summary> :bulb: API Developer Portal </summary> 
+
+![Dev Portal](../media/dev_portal.png)
+</details>
 
 
 ## API Dev Portal Access
@@ -202,22 +202,22 @@ This is the default option for any deployment.
 
 1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and create users and groups as shown below. 
 
-    Email: 
-    ```
-    admin@traefik.io
-    ```
-    Password: 
-    ```
-    topsecretpassword
-    ```
+Email: 
+```
+admin@traefik.io
+```
+Password: 
+```
+topsecretpassword
+```
 
-    Portal URL:
-    ```bash
-    echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
-    ```
+Portal URL:
+```bash
+echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
+```
 
-    ![built-in-user](../media/built-in-user.png)
-    ![built-in-group](../media/built-in-group.png)
+![built-in-user](../media/built-in-user.png)
+![built-in-group](../media/built-in-group.png)
 
 2. Log in to the API Dev Portal with the user account that you've just created (ex: admin@traefik.io)
 
@@ -227,54 +227,54 @@ This is the default option for any deployment.
 
 2. Under **Portal** section, select OIDC and provide the identity provider details
 
-    Issuer URL:
-    ```bash
-    echo login.microsoftonline.com/$(terraform output -raw tenant_id)/v2.0
-    ```
-    
-    Client ID:
-    ```bash
-    terraform output -raw application_client_id
-    ```
-    
-    Client Secret:
-    ```bash
-    terraform output -raw application_client_secret
-    ```
+Issuer URL:
+```bash
+echo login.microsoftonline.com/$(terraform output -raw tenant_id)/v2.0
+```
 
-    ![portal-oidc](../media/auth-settings-oidc.png)
+Client ID:
+```bash
+terraform output -raw application_client_id
+```
+
+Client Secret:
+```bash
+terraform output -raw application_client_secret
+```
+
+![portal-oidc](../media/auth-settings-oidc.png)
 
 3. Continue to update JWT integration in order to secure APIs as shown below. 
     
-    Issuer URL:
-    ```bash
-    echo login.microsoftonline.com/$(terraform output -raw tenant_id)/v2.0
-    ```
+Issuer URL:
+```bash
+echo login.microsoftonline.com/$(terraform output -raw tenant_id)/v2.0
+```
 
-    ![portal-oidc](../media/auth-settings-jwt.png)
+![portal-oidc](../media/auth-settings-jwt.png)
 
 4. Use provisioned user credentials to log in to the API Dev Portal.
   
-    Admin user email and password:
-    ```bash
-    terraform output -raw admin_email
-    ```
-    ```bash
-    terraform output -raw admin_password
-    ```
+Admin user email and password:
+```bash
+terraform output -raw admin_email
+```
+```bash
+terraform output -raw admin_password
+``
 
-    Support user email and password:
-    ```bash
-    terraform output -raw support_email
-    ```
-    ```bash
-    terraform output -raw support_password
-    ```
+Support user email and password:
+```bash
+terraform output -raw support_email
+```
+```bash
+terraform output -raw support_password
+```
 
-    Portal URL:
-    ```bash
-    echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
-    ```
+Portal URL:
+```bash
+echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
+```
 
 ## References
 
