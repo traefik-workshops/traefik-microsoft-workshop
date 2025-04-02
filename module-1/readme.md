@@ -94,7 +94,7 @@ echo https://dashboard.traefik.$(terraform output -raw external_ip).sslip.io
 - We should be able to access the Traefik Proxy Dashboard
 
 <details><summary> :bulb: Traefik Dashboard</summary>
-    <img src="../media/proxy_dashboard.png" width="2900" height="600">
+  <img src="../media/proxy_dashboard.png" width="2900" height="600">
 </details>
 
 ___
