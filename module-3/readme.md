@@ -33,7 +33,7 @@ terraform apply -auto-approve -var="subscription_id=$(az account show --query id
 To manage an API application using API Management services, we will need to do the following:
 
 1. Create an API object for the Hub APIM service to manage.
-2. Create an API Access object to control which group has access to this API.
+2. Create an API Plan and API Catalog Item object to control which group has access to this API.
 3. Update the Ingress definition for the application to bind it to the newly created API. 
 
 Let us promote **customer-app** API application to be managed by API Management services. 
@@ -54,21 +54,39 @@ Let us promote **customer-app** API application to be managed by API Management 
        path: /openapi.yaml           # Path to OAS (OpenAPISpec)file
    ```
 
-2. Create an API Access object to control access to this API. 
+2. Create an API Catalog Item object to control access to this API. 
 
     ```yaml
-    apiVersion: hub.traefik.io/v1alpha1
-    kind: APIAccess                         # API Access Object
-    metadata:
-      name: admin-access                    # Name of API Access
-      namespace: apps                       # Namespace where App is deployed
-    spec:
-      groups:
-        - admin                             # Admin group has access to the APIs matched under API selector section.
-      apiSelector:
-        matchExpressions:
-          - key: area                       # Match any API with label that has "area" set as a key value. 
-            operator: Exists 
+      ---
+      apiVersion: hub.traefik.io/v1alpha1
+      kind: APIPlan
+      metadata:
+        name: admins
+        namespace: apps
+      spec:
+        title: "Admins Plan"
+        description: "Admins rate limits and quotas"
+        rateLimit:
+          limit: 5
+          period: 10s
+        quota:
+          limit: 1000
+          period: 720h # Approximately 30 days
+
+      ---
+      apiVersion: hub.traefik.io/v1alpha1
+      kind: APICatalogItem
+      metadata:
+        name: customer-api
+        namespace: apps
+      spec:
+        everyone: true
+        apis:
+          - name: customer-api
+          - name: employee-api
+          - name: flights-api
+        apiPlan:
+          name: admins
     ```
 
 3. Promote the existing **IngressRoute** to be managed by **APIM**.
@@ -99,7 +117,7 @@ Let us promote **customer-app** API application to be managed by API Management 
 > :pencil2: Follow the steps below to promote the customer-api to be a managed by APIM.
 
 ```bash
-kubectl apply -f module-3/manifests/customer-ingress-api.yaml
+kubectl apply -f module-3/manifests/apis/customer-ingress-api.yaml
 ```
 
 4. Now that we understand how to promote an **IngressRoute** to be managed by APIM services, let us promote **employee**, **flights**, **tickets**, and **external** API applications to be managed by Traefik Hub APIM. 
@@ -163,7 +181,7 @@ kubectl apply -f module-3/manifests/api-portal.yaml
 3. Traefik Dashboard should list a new route for the api-portal. The portal can be accessible using the HOST URL defined in the Ingress definition
 
    ```bash
-   https://demo-portal.traefik.${EXTERNAL_IP}.sslip.io
+   echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
    ```
    <details><summary> :bulb: API Developer Portal </summary> 
 
@@ -193,8 +211,21 @@ This is the default option for any deployment.
 
    Replace:
    - `<tenant-id>` with the registered application’s tenant ID.
+
+  ```bash
+  $(terraform output -raw tenant_id)
+  ```
+
    - `<client-id>` with the registered application’s client ID.
+
+  ```bash
+  $(terraform output -raw application_client_id)
+  ```
    - `<client-secret>` with the registered application’s client secret value.
+
+  ```bash
+  $(terraform output -raw application_client_secret)
+  ```
 
 1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and navigate to **Auth settings**
 

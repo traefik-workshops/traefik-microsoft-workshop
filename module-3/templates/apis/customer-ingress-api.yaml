@@ -13,17 +13,34 @@ spec:
 
 ---
 apiVersion: hub.traefik.io/v1alpha1
-kind: APIAccess
+kind: APIPlan
 metadata:
-  name: admin-access
+  name: admins
   namespace: apps
 spec:
-  groups:
-    - admin
-  apiSelector:
-    matchExpressions:
-      - key: area
-        operator: Exists
+  title: "Admins Plan"
+  description: "Admins rate limits and quotas"
+  rateLimit:
+    limit: 5
+    period: 10s
+  quota:
+    limit: 1000
+    period: 720h # Approximately 30 days
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APICatalogItem
+metadata:
+  name: customer-api
+  namespace: apps
+spec:
+  everyone: true
+  apis:
+    - name: customer-api
+    - name: employee-api
+    - name: flights-api
+  apiPlan:
+    name: admins
 
 ---
 apiVersion: traefik.io/v1alpha1
