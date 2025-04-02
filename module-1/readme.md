@@ -157,7 +157,7 @@ kubectl apply -f module-1/manifests/customers/ -f module-1/manifests/employee/ -
     kubectl -n apps describe ingressroute api-ingress-customers
     ```
     ```bash
-    curl -k https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
+    curl  https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
     ```
 
     ```json
@@ -227,7 +227,7 @@ kubectl apply -f module-1/manifests/customers/ -f module-1/manifests/employee/ -
 5. Verify the new custom header is received
 
     ```bash
-    curl -Ik https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
+    curl -I https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
     ```
 
     ```
