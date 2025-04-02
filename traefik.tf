@@ -31,6 +31,14 @@ resource "helm_release" "traefik" {
     }
   }
 
+  dynamic "set" {
+    for_each = var.enable_api_gateway || var.enable_api_management ? [1] : []
+    content {
+    name  = "image.tag"
+    value = "v3.15.0"
+    }
+  }
+
   # API Management settings - only applied when enable_api_management is true
   dynamic "set" {
     for_each = var.enable_api_management ? [1] : []
@@ -61,11 +69,6 @@ resource "helm_release" "traefik" {
   set {
     name  = "deployment.replicas"
     value = "1"
-  }
-
-  set {
-    name  = "image.tag"
-    value = "v3.15.0"
   }
 
   # Certificate resolver settings
