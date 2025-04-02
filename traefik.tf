@@ -40,6 +40,23 @@ resource "helm_release" "traefik" {
     }
   }
 
+  # Redis configuration - only applied when API Management is enabled
+  dynamic "set" {
+    for_each = var.enable_api_management ? [1] : []
+    content {
+      name  = "hub.redis.endpoints"
+      value = "redis-redis-cluster.traefik.svc:6379"
+    }
+  }
+
+  dynamic "set" {
+    for_each = var.enable_api_management ? [1] : []
+    content {
+      name  = "hub.redis.password"
+      value = "topsecretpassword"
+    }
+  }
+
   # Deployment settings
   set {
     name  = "deployment.replicas"
@@ -216,6 +233,28 @@ resource "helm_release" "traefik" {
   }
 
   depends_on = [
-    azurerm_kubernetes_cluster.this
+    azurerm_kubernetes_cluster.this,
+    helm_release.redis
   ]
+}
+
+# Install Redis Cluster when API Management is enabled
+resource "helm_release" "redis" {
+  count            = var.enable_api_management ? 1 : 0
+  name             = "redis"
+  repository       = "https://charts.bitnami.com/bitnami"
+  chart            = "redis"
+  version          = "19.6.4"
+  namespace        = "traefik"
+  create_namespace = true
+
+  set {
+    name  = "auth.password"
+    value = "topsecretpassword"
+  }
+
+  set {
+    name  = "replica.replicaCount"
+    value = 1
+  }
 }
