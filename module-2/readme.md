@@ -211,12 +211,12 @@ The middleware redirects to the authentication provider to authenticate the user
 > [!IMPORTANT]
 > :pencil2: Run the steps below in your cluster.
 
-    ```bash
-    kubectl apply -f module-2/manifests/whoami-ingress.yaml
-    ```
+  ```bash
+  kubectl apply -f module-2/manifests/whoami-ingress.yaml
+  ```
 
   <details><summary>Verification commands</summary>
-  <br/>
+  
   Verify IngressRoute
   ```bash
   kubectl -n apps get ingressroute.traefik.io whoami-ingress
