@@ -45,7 +45,7 @@ ___
       cp -r module-$i/templates module-$i/manifests && \
       find module-$i/manifests -type f -exec sed -i '' \
         -e "s/\${EXTERNAL_IP}/$EXTERNAL_IP/g" \
-        -e "s#https://sts.windows.net/<tenant-id>/#https://sts.windows.net/$(terraform output -raw tenant_id)/#g" \
+        -e "s/<tenant-id>/$(terraform output -raw tenant_id)/g" \
         -e "s/<client-id>/$(terraform output -raw application_client_id)/g" \
         -e "s/<client-secret>/$(terraform output -raw application_client_secret)/g" {} + 2>/dev/null || true
     done

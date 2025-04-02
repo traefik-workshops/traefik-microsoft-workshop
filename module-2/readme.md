@@ -161,7 +161,8 @@ The middleware redirects to the authentication provider to authenticate the user
 
     ```bash
     kubectl -n apps get pod,svc | egrep "NAME|whoami"
-
+    ```
+    ```
     NAME                                   READY   STATUS    RESTARTS        AGE
     pod/whoami-697f8c6cbc-qp5nw            1/1     Running   0               68m
 
@@ -265,7 +266,7 @@ The middleware redirects to the authentication provider to authenticate the user
   ```
 
   ```bash
-  echo https://whoami.$(terraform output -raw external_ip).sslip.io
+  echo https://whoami.traefik.$(terraform output -raw external_ip).sslip.io
   ```
 
   </details>
