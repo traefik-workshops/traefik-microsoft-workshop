@@ -217,56 +217,56 @@ The middleware redirects to the authentication provider to authenticate the user
 
   <details><summary>Verification commands</summary>
 
-    Verify IngressRoute
-    ```bash
-    kubectl -n apps get ingressroute.traefik.io whoami-ingress
-    ```
-   
-    ```
-    NAME             AGE
-    whoami-ingress   173m
-    ```
+  Verify IngressRoute
+  ```bash
+  kubectl -n apps get ingressroute.traefik.io whoami-ingress
+  ```
+  
+  ```
+  NAME             AGE
+  whoami-ingress   173m
+  ```
 
-    ```bash
-    kubectl -n apps describe ingressroute.traefik.io whoami-ingress
-    ```
-   
-    ```
-    Name:         whoami-ingress
-    Namespace:    apps
-    Labels:       <none>
-    Annotations:  <none>
-    API Version:  traefik.io/v1alpha1
-    Kind:         IngressRoute
-    Metadata:
-      Creation Timestamp:  2024-02-29T18:34:03Z
-      Generation:          1
-      Resource Version:    1230
-      UID:                 306f20de-9c84-4a81-9c2b-02e06360c89f
-    Spec:
-      Entry Points:
-        web
-      Routes:
-        Kind:   Rule
-        Match:  Host(`whoami.${EXTERNAL_IP}.sslip.io`)      # URL the service is exposed on
-        Services:
-          Name:  whoami
-          Port:  80
-    Events:      <none>
-    ```
+  ```bash
+  kubectl -n apps describe ingressroute.traefik.io whoami-ingress
+  ```
+  
+  ```
+  Name:         whoami-ingress
+  Namespace:    apps
+  Labels:       <none>
+  Annotations:  <none>
+  API Version:  traefik.io/v1alpha1
+  Kind:         IngressRoute
+  Metadata:
+    Creation Timestamp:  2024-02-29T18:34:03Z
+    Generation:          1
+    Resource Version:    1230
+    UID:                 306f20de-9c84-4a81-9c2b-02e06360c89f
+  Spec:
+    Entry Points:
+      web
+    Routes:
+      Kind:   Rule
+      Match:  Host(`whoami.${EXTERNAL_IP}.sslip.io`)      # URL the service is exposed on
+      Services:
+        Name:  whoami
+        Port:  80
+  Events:      <none>
+  ```
 
-    Login to the whoami application:
-    Username and password:
-    ```bash
-    echo $(terraform output -raw admin_email)
-    ```
-    ```bash
-    echo $(terraform output -raw admin_password)
-    ```
+  Login to the whoami application:
+  Username and password:
+  ```bash
+  echo $(terraform output -raw admin_email)
+  ```
+  ```bash
+  echo $(terraform output -raw admin_password)
+  ```
 
-    ```bash
-    echo https://whoami.$(terraform output -raw external_ip).sslip.io
-    ```
+  ```bash
+  echo https://whoami.$(terraform output -raw external_ip).sslip.io
+  ```
 
   </details>
   <br/>
