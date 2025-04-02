@@ -113,43 +113,10 @@ The demo application consists of 4 deployments (Customers, Employees, Flights, a
 
 Create a new namespace and deploy the demo applications that we will use throughout the lab
 
-    ```bash
-    kubectl create namespace apps
-    kubectl apply -f module-1/manifests/customers/ -f module-1/manifests/employee/ -f module-1/manifests/flight/ -f module-1/manifests/ticket/ -f module-1/manifests/external/ -f module-1/manifests/whoami/whoami.yaml
-    ```
-
-   <div align="left">
-     <details><summary>Expected output</summary>
-
-     ```bash
-     kubectl get pod,svc --namespace apps
-     ```
-
-     ```text
-     NAME                                   READY   STATUS    RESTARTS   AGE
-     pod/customer-app-v4-795fbf45bf-cqss2   1/1     Running   0          84s
-     pod/customer-app-v3-698c85568c-nsv54   1/1     Running   0          84s
-     pod/employee-app-6d7656d69f-m8lnr      1/1     Running   0          84s
-     pod/flight-app-8f696784f-g8qn8         1/1     Running   0          83s
-     pod/customer-app-59bcb5b9bc-4z7xw      1/1     Running   0          84s
-     pod/ticket-app-867959bdbd-vkwx5        1/1     Running   0          83s
-     pod/customer-app-v2-5ccf4544f7-tv7lt   1/1     Running   0          84s
-     pod/whoami-697f8c6cbc-qp5nw            1/1     Running   0          84s
-
-     NAME                      TYPE           CLUSTER-IP      EXTERNAL-IP        PORT(S)    AGE
-     service/customer-app-v2   ClusterIP      10.43.233.33    <none>             3000/TCP   84s
-     service/customer-app-v3   ClusterIP      10.43.47.208    <none>             3000/TCP   84s
-     service/customer-app-v4   ClusterIP      10.43.127.91    <none>             3000/TCP   84s
-     service/customer-app      ClusterIP      10.43.64.46     <none>             3000/TCP   84s
-     service/employee-app      ClusterIP      10.43.211.198   <none>             3000/TCP   84s
-     service/flight-app        ClusterIP      10.43.174.194   <none>             3000/TCP   83s
-     service/ticket-app        ClusterIP      10.43.73.169    <none>             3000/TCP   83s
-     service/world-time-api    ExternalName   <none>          worldtimeapi.org   443/TCP    83s
-     service/whoami            ClusterIP      10.43.142.176   <none>             80/TCP     84s
-
-     </details>
-   </div>
-   ```
+```bash
+kubectl create namespace apps
+kubectl apply -f module-1/manifests/customers/ -f module-1/manifests/employee/ -f module-1/manifests/flight/ -f module-1/manifests/ticket/ -f module-1/manifests/external/ -f module-1/manifests/whoami/whoami.yaml
+```
 
 ## Publish the demo app
 
