@@ -202,21 +202,27 @@ This is the default option for any deployment.
 
 1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and create users and groups as shown below. 
 
-Email: 
-```
-admin@traefik.io
-```
-Password: 
-```
-topsecretpassword
-```
+  Email: 
+  ```
+  admin@traefik.io
+  ```
+  Password: 
+  ```
+  topsecretpassword
+  ```
 
-   ![built-in-user](../media/built-in-user.png)
-   ![built-in-user](../media/built-in-group.png)
+  ```bash
+  echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
+  ```
+
+  ![built-in-user](../media/built-in-user.png)
+  ![built-in-group](../media/built-in-group.png)
 
 2. Log in to the API Dev Portal with the user account that you've just created (ex: admin@traefik.io)
 
 ### [Option 2] OIDC connection to EntraID
+
+1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and navigate to **Auth settings**
 
   Issuer URL:
   ```bash
@@ -233,6 +239,23 @@ topsecretpassword
   terraform output -raw application_client_secret
   ```
 
+2. Under **Portal** section, select OIDC and provide the identity provider details
+
+   ![portal-oidc](../media/auth-settings-oidc.png)
+
+3. Continue to update JWT integration in order to secure APIs as shown below. 
+
+   ![portal-oidc](../media/auth-settings-jwt.png)
+
+4. Use provisioned user credentials to log in to the API Dev Portal.
+  Admin user email and password:
+  ```bash
+  terraform output -raw admin_email
+  ```
+  ```bash
+  terraform output -raw admin_password
+  ```
+
   Support user email and password:
   ```bash
   terraform output -raw support_email
@@ -241,15 +264,10 @@ topsecretpassword
   terraform output -raw support_password
   ```
 
-1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and navigate to **Auth settings**
-
-2. Under **Portal** section, select OIDC and provide the identity provider details
-
-   ![portal-oidc](../media/auth-settings-oidc.png)
-
-3. Continue to update JWT integration in order to secure APIs as shown below. 
-
-   ![portal-oidc](../media/auth-settings-jwt.png)
+  Portal URL:
+  ```bash
+  echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
+  ```
 
 ## References
 
