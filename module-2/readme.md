@@ -216,7 +216,7 @@ The middleware redirects to the authentication provider to authenticate the user
     ```
 
   <details><summary>Verification commands</summary>
-
+  <br/>
   Verify IngressRoute
   ```bash
   kubectl -n apps get ingressroute.traefik.io whoami-ingress
