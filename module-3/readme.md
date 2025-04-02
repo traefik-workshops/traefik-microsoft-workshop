@@ -61,11 +61,11 @@ Let us promote **customer-app** API application to be managed by API Management 
       apiVersion: hub.traefik.io/v1alpha1
       kind: APIPlan
       metadata:
-        name: admins
+        name: support
         namespace: apps
       spec:
-        title: "Admins Plan"
-        description: "Admins rate limits and quotas"
+        title: "Support Plan"
+        description: "Support rate limits and quotas"
         rateLimit:
           limit: 5
           period: 10s
@@ -80,13 +80,13 @@ Let us promote **customer-app** API application to be managed by API Management 
         name: customer-api
         namespace: apps
       spec:
-        everyone: true
+        groups:
+          - support
         apis:
           - name: customer-api
-          - name: employee-api
           - name: flights-api
         apiPlan:
-          name: admins
+          name: support
     ```
 
 3. Promote the existing **IngressRoute** to be managed by **APIM**.
@@ -202,6 +202,15 @@ This is the default option for any deployment.
 
 1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and create users and groups as shown below. 
 
+Email: 
+```
+admin@traefik.io
+```
+Password: 
+```
+topsecretpassword
+```
+
    ![built-in-user](../media/built-in-user.png)
    ![built-in-user](../media/built-in-group.png)
 
@@ -209,22 +218,27 @@ This is the default option for any deployment.
 
 ### [Option 2] OIDC connection to EntraID
 
-   Replace:
-   - `<tenant-id>` with the registered application’s tenant ID.
-
+  Issuer URL:
   ```bash
-  $(terraform output -raw tenant_id)
+  echo login.microsoftonline.com/$(terraform output -raw tenant_id)/v2.0
+  ```
+  
+  Client ID:
+  ```bash
+  terraform output -raw application_client_id
+  ```
+  
+  Client Secret:
+  ```bash
+  terraform output -raw application_client_secret
   ```
 
-   - `<client-id>` with the registered application’s client ID.
-
+  Support user email and password:
   ```bash
-  $(terraform output -raw application_client_id)
+  terraform output -raw support_email
   ```
-   - `<client-secret>` with the registered application’s client secret value.
-
   ```bash
-  $(terraform output -raw application_client_secret)
+  terraform output -raw support_password
   ```
 
 1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and navigate to **Auth settings**
