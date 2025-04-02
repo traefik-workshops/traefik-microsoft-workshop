@@ -202,21 +202,22 @@ This is the default option for any deployment.
 
 1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and create users and groups as shown below. 
 
-  Email: 
-  ```
-  admin@traefik.io
-  ```
-  Password: 
-  ```
-  topsecretpassword
-  ```
+    Email: 
+    ```
+    admin@traefik.io
+    ```
+    Password: 
+    ```
+    topsecretpassword
+    ```
 
-  ```bash
-  echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
-  ```
+    Portal URL:
+    ```bash
+    echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
+    ```
 
-  ![built-in-user](../media/built-in-user.png)
-  ![built-in-group](../media/built-in-group.png)
+    ![built-in-user](../media/built-in-user.png)
+    ![built-in-group](../media/built-in-group.png)
 
 2. Log in to the API Dev Portal with the user account that you've just created (ex: admin@traefik.io)
 
@@ -224,50 +225,56 @@ This is the default option for any deployment.
 
 1. Log in to the **[Hub Dashboard](https://hub.traefik.io)** and navigate to **Auth settings**
 
-  Issuer URL:
-  ```bash
-  echo login.microsoftonline.com/$(terraform output -raw tenant_id)/v2.0
-  ```
-  
-  Client ID:
-  ```bash
-  terraform output -raw application_client_id
-  ```
-  
-  Client Secret:
-  ```bash
-  terraform output -raw application_client_secret
-  ```
-
 2. Under **Portal** section, select OIDC and provide the identity provider details
 
-   ![portal-oidc](../media/auth-settings-oidc.png)
+    Issuer URL:
+    ```bash
+    echo login.microsoftonline.com/$(terraform output -raw tenant_id)/v2.0
+    ```
+    
+    Client ID:
+    ```bash
+    terraform output -raw application_client_id
+    ```
+    
+    Client Secret:
+    ```bash
+    terraform output -raw application_client_secret
+    ```
+
+    ![portal-oidc](../media/auth-settings-oidc.png)
 
 3. Continue to update JWT integration in order to secure APIs as shown below. 
+    
+    Issuer URL:
+    ```bash
+    echo login.microsoftonline.com/$(terraform output -raw tenant_id)/v2.0
+    ```
 
-   ![portal-oidc](../media/auth-settings-jwt.png)
+    ![portal-oidc](../media/auth-settings-jwt.png)
 
 4. Use provisioned user credentials to log in to the API Dev Portal.
-  Admin user email and password:
-  ```bash
-  terraform output -raw admin_email
-  ```
-  ```bash
-  terraform output -raw admin_password
-  ```
+  
+    Admin user email and password:
+    ```bash
+    terraform output -raw admin_email
+    ```
+    ```bash
+    terraform output -raw admin_password
+    ```
 
-  Support user email and password:
-  ```bash
-  terraform output -raw support_email
-  ```
-  ```bash
-  terraform output -raw support_password
-  ```
+    Support user email and password:
+    ```bash
+    terraform output -raw support_email
+    ```
+    ```bash
+    terraform output -raw support_password
+    ```
 
-  Portal URL:
-  ```bash
-  echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
-  ```
+    Portal URL:
+    ```bash
+    echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
+    ```
 
 ## References
 

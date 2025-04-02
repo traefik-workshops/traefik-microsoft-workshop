@@ -23,7 +23,9 @@ compatibility and supporting existing clients.
 We have multiple versions of **customer-app** deployed in our cluster. 
 
 ```bash
-$ kubectl -n apps get pod | grep customer
+kubectl -n apps get pod | grep customer
+```
+```
 customer-app-5c5bdcf6fc-9s2jx      1/1     Running   0          27h
 customer-app-v2-5b47b4d744-wmvbk   1/1     Running   0          27h
 customer-app-v3-978988d6b-48bwv    1/1     Running   0          27h
@@ -98,6 +100,12 @@ kubectl apply -f module-4/manifests/api-versioning.yaml
 ```
 
 Now, you should be able to interact with all versions of the API via API Dev Portal. 
+
+
+Portal URL:
+```bash
+echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
+```
 
 ![APIVersion](../media/api-version.png)
 
