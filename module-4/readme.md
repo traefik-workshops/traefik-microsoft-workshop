@@ -109,6 +109,24 @@ echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
 
 ![APIVersion](../media/api-version.png)
 
+<details><summary>Validate API versioning and Plans:</summary>
+
+```bash
+export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
+-d "client_id=$(terraform output -raw application_client_id)" \
+-d "client_secret=$(terraform output -raw application_client_secret)" \
+-d "scope=$(terraform output -raw entraid_api_id)/.default" \
+-d "grant_type=password" \
+-d "username=$(terraform output -raw admin_email)" \
+-d "password=$(terraform output -raw admin_password)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
+```
+
+```bash
+curl -Ik -H "version: v1" -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
+```
+
+</details>
 ___
 
 ## API Rate Limit Policy

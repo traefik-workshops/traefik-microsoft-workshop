@@ -147,7 +147,7 @@ spec:
 apiVersion: hub.traefik.io/v1alpha1
 kind: APICatalogItem
 metadata:
-  name: multi-version-customer-api
+  name: multi-version-customer
   namespace: apps
 spec:
   everyone: true
@@ -160,7 +160,7 @@ spec:
 apiVersion: hub.traefik.io/v1alpha1
 kind: ManagedSubscription
 metadata:
-  name: platinum-subscription
+  name: multi-version-customer-platinum
   namespace: apps
 spec:
   applications:
