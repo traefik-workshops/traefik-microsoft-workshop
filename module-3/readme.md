@@ -211,10 +211,16 @@ Portal URL:
 echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
 ```
 
+![create-built-in-user](../media/create-built-in-user.png)
 ![built-in-user](../media/built-in-user.png)
 ![built-in-group](../media/built-in-group.png)
 
 2. Log in to the API Dev Portal with the user account that you've just created (ex: admin@traefik.io)
+
+Portal URL:
+```bash
+echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
+```
 
 ### [Option 2] OIDC connection to EntraID
 
@@ -256,7 +262,7 @@ terraform output -raw admin_email
 ```
 ```bash
 terraform output -raw admin_password
-``
+```
 
 Support user email and password:
 ```bash
