@@ -56,7 +56,7 @@ terraform apply -auto-approve -var="subscription_id=$(az account show --query id
 ```bash
 export RESOURCE_GROUP=$(terraform output -raw resource_group_name)
 export CLUSTER_NAME=$(terraform output -raw cluster_name)
-az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --overwrite-existing
 ```
 
 7. Verify the connection
