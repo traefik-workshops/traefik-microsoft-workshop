@@ -1,7 +1,7 @@
-<div style="display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px;">
-    <img src="../media/aks.png" alt="AKS" width="auto" height="150px" />
-    <img src="../media/entraid.png" alt="EntraID" width="auto" height="150px" />
-    <img src="../media/traefik.png" alt="Traefik" width="auto" height="150px" />
+<div align="center">
+  <img src="../media/aks.png" alt="AKS" width="auto" height="150px" />
+  <img src="../media/traefik.png" alt="Traefik" width="auto" height="150px" />
+  <img src="../media/entraid.png" alt="EntraID" width="auto" height="150px" />
 </div>
 
 # Introduction
