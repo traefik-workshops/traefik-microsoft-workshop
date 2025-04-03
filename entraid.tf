@@ -45,7 +45,7 @@ data "azuread_domains" "default" {
 # Create app registration
 resource "azuread_application" "traefik_workshop" {
   display_name = "traefik-workshop"
-  identifier_uris = ["api://c51d02df-7bc5-4478-a41f-86c743ac783c"]
+  identifier_uris = ["api://traefik-workshop"]
   
   # Configure optional claims and group membership claims
   optional_claims {
