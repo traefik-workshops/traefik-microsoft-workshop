@@ -277,7 +277,7 @@ Portal URL:
 echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
 ```
 
-5. Test API access
+6. Test API access
 
 ```bash
 curl -I https://api.traefik.$(terraform output -raw external_ip).sslip.io/flights
@@ -287,7 +287,7 @@ curl -I https://api.traefik.$(terraform output -raw external_ip).sslip.io/flight
 HTTP/2 401 
 ```
 
-6. Use the below command to obtain an access token from EntraID
+7. Use the below command to obtain an access token from EntraID
 
 ```bash
 export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
@@ -300,7 +300,7 @@ https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0
 -d "password=$(terraform output -raw admin_password)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
 ```
 
-7. Use the access token to access the API
+8. Use the access token to access the API
 
 ```bash
 curl -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/flights
