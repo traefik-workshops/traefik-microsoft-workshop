@@ -123,3 +123,22 @@ spec:
     - name: employee-api
   apiPlan:
     name: platinum
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: ManagedSubscription
+metadata:
+  name: platinum-subscription
+  namespace: apps
+spec:
+  applications:
+    - appId: "admin"
+    - appId: "support"
+  apis:
+    - name: flight-api
+    - name: ticket-api
+    - name: customer-api
+    - name: employee-api
+  apiPlan:
+    name: platinum
+  weight: 10
