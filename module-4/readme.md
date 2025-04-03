@@ -110,7 +110,7 @@ echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
 <details><summary>Validate API versioning and Plans:</summary>
 
 ```bash
-export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+export access_token=$(curl -s -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
 https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
 -d "client_id=$(terraform output -raw application_client_id)" \
 -d "client_secret=$(terraform output -raw application_client_secret)" \
@@ -161,7 +161,7 @@ spec:
 <details><summary>Validate API Plans:</summary>
 
 ```bash
-export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+export access_token=$(curl -s -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
 https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
 -d "client_id=$(terraform output -raw application_client_id)" \
 -d "client_secret=$(terraform output -raw application_client_secret)" \
@@ -245,7 +245,7 @@ kubectl apply -f module-4/manifests/api-granular-access.yaml
 <details><summary>Validate granular API access control:</summary>
 
 ```bash
-export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+export access_token=$(curl -s -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
 https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
 -d "client_id=$(terraform output -raw application_client_id)" \
 -d "client_secret=$(terraform output -raw application_client_secret)" \
