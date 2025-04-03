@@ -278,21 +278,14 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 > [!IMPORTANT]
 > :pencil2: Follow the below steps to deploy the monitoring stack on your AKS cluster.
 
-1. Create a namespace for the monitoring stack.
+1. Create a namespace and deploy the Prometheus and Grafana stack.
 
 ```bash
 kubectl create namespace monitoring
+kubectl apply -R -f module-4/manifests/monitoring/
 ```
 
-2. Deploy the Prometheus and Grafana stack.
-
-```bash
-kubectl apply -R -f module-4/monitoring/
-```
-
-3. Verify everything is running. 
-
-4. Get the Grafana URL and access the Grafana dashboard (user/password: **admin/admin**)
+2. Verify everything is running. Get the Grafana URL and access the Grafana dashboard (user/password: **admin/admin**)
 
 ```bash
 kubectl -n monitoring describe ingressroute.traefik.io grafana
