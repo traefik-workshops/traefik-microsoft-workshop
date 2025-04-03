@@ -20,7 +20,7 @@ spec:
 apiVersion: hub.traefik.io/v1alpha1
 kind: APICatalogItem
 metadata:
-  name: flight-restricted-platinum
+  name: flight-restricted-bronze
   namespace: apps
 spec:
   everyone: true
@@ -36,7 +36,7 @@ spec:
 apiVersion: hub.traefik.io/v1alpha1
 kind: ManagedSubscription
 metadata:
-  name: platinum-restricted-subscription
+  name: bronze-restricted-subscription
   namespace: apps
 spec:
   applications:

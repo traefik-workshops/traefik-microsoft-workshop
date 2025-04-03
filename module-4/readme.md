@@ -8,7 +8,7 @@ API access management allows organizations to tailor access control policies to 
 In this module, we will cover:
 
 - API versioning
-- API rate limit policy 
+- API rate-limit policy 
 - Granular API access 
 - OTel with Grafana
 
