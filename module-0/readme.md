@@ -1,4 +1,6 @@
-## Introduction
+![AKS](../media/aks.png)![EntraID](../media/entraid.png)![Traefik](../media/traefik.png)
+
+# Introduction
 
 This module uses Terraform to automatically deploy and configure:
 - Azure Kubernetes Service (AKS) cluster with multiple node pools
