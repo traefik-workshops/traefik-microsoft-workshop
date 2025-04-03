@@ -255,9 +255,18 @@ https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0
 -d "password=$(terraform output -raw admin_password)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
 ```
 
+Get request that will pass:
+```bash
+curl -I --request GET -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/flights
+```
+
+Post request that will fail:
 ```bash
 curl -I --request POST -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/flights
 ```
+
+</details>
+
 ___
 
 ## OTel with Grafana
