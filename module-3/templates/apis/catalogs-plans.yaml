@@ -1,0 +1,125 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPlan
+metadata:
+  name: bronze
+  namespace: apps
+spec:
+  title: "Bronze"
+  description: "Bronze rate limits and quotas"
+  rateLimit:
+    limit: 5
+    period: 10s
+  quota:
+    limit: 10
+    period: 720h # Approximately 30 days
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPlan
+metadata:
+  name: silver
+  namespace: apps
+spec:
+  title: "Silver"
+  description: "Silver rate limits and quotas"
+  rateLimit:
+    limit: 10
+    period: 10s
+  quota:
+    limit: 100
+    period: 720h # Approximately 30 days
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPlan
+metadata:
+  name: gold
+  namespace: apps
+spec:
+  title: "Gold"
+  description: "Gold rate limits and quotas"
+  rateLimit:
+    limit: 100
+    period: 10s
+  quota:
+    limit: 1000
+    period: 720h # Approximately 30 days
+
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIPlan
+metadata:
+  name: platinum
+  namespace: apps
+spec:
+  title: "Platinum"
+  description: "Platinum rate limits and quotas"
+  rateLimit:
+    limit: 1000
+    period: 10s
+  quota:
+    limit: 10000
+    period: 720h # Approximately 30 days
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APICatalogItem
+metadata:
+  name: airline-bronze
+  namespace: apps
+spec:
+  everyone: true
+  apis:
+    - name: flight-api
+    - name: tickets-api
+  apiPlan:
+    name: bronze
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APICatalogItem
+metadata:
+  name: airline-silver
+  namespace: apps
+spec:
+  everyone: true
+  apis:
+    - name: flight-api
+    - name: tickets-api
+  apiPlan:
+    name: silver
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APICatalogItem
+metadata:
+  name: airline-gold
+  namespace: apps
+spec:
+  everyone: true
+  apis:
+    - name: flight-api
+    - name: tickets-api
+    - name: customer-api
+  apiPlan:
+    name: gold
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APICatalogItem
+metadata:
+  name: airline-platinum
+  namespace: apps
+spec:
+  groups:
+    - support
+    - admin
+  apis:
+    - name: flight-api
+    - name: tickets-api
+    - name: customer-api
+    - name: employee-api
+  apiPlan:
+    name: platinum
