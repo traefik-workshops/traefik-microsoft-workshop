@@ -11,7 +11,7 @@
   <a href="https://doc.traefik.io/traefik/">Documentation</a>
 </div>
 
-<br>
+<br/>
 
 # What is Traefik Application Proxy
 
@@ -28,7 +28,7 @@ Traefik Application proxy is based on the concept of **EntryPoints**, **Routers*
 
 ![proxy](../media/proxy.png)
 
-<br>
+<br/>
 ___
 
 ## Get started with Traefik Application Proxy
