@@ -53,7 +53,7 @@ resource "helm_release" "traefik" {
     for_each = var.enable_api_management ? [1] : []
     content {
       name  = "hub.redis.endpoints"
-      value = "redis-redis-cluster.traefik.svc:6379"
+      value = "redis-master.traefik.svc:6379"
     }
   }
 

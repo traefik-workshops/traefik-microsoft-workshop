@@ -73,7 +73,7 @@ spec:
   everyone: true
   apis:
     - name: flight-api
-    - name: tickets-api
+    - name: ticket-api
   apiPlan:
     name: bronze
 
@@ -87,7 +87,7 @@ spec:
   everyone: true
   apis:
     - name: flight-api
-    - name: tickets-api
+    - name: ticket-api
   apiPlan:
     name: silver
 
@@ -101,7 +101,7 @@ spec:
   everyone: true
   apis:
     - name: flight-api
-    - name: tickets-api
+    - name: ticket-api
     - name: customer-api
   apiPlan:
     name: gold
@@ -118,7 +118,7 @@ spec:
     - admin
   apis:
     - name: flight-api
-    - name: tickets-api
+    - name: ticket-api
     - name: customer-api
     - name: employee-api
   apiPlan:

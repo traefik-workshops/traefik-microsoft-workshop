@@ -45,7 +45,18 @@ data "azuread_domains" "default" {
 # Create app registration
 resource "azuread_application" "traefik_workshop" {
   display_name = "traefik-workshop"
+  identifier_uris = ["api://c51d02df-7bc5-4478-a41f-86c743ac783c"]
   
+  # Configure optional claims and group membership claims
+  optional_claims {
+    access_token {
+      name = "groups"
+      essential = true
+    }
+  }
+  
+  group_membership_claims = ["All"]
+
   web {
     homepage_url = "https://whoami.traefik.${data.kubernetes_service.traefik.status.0.load_balancer.0.ingress.0.ip}.sslip.io"
     redirect_uris = [
@@ -73,6 +84,10 @@ resource "azuread_application" "traefik_workshop" {
       id   = "7427e0e9-2fba-42fe-b0c0-848c9e6a8182" # offline_access
       type = "Scope"
     }
+    resource_access {
+      id   = "62a82d76-70ea-41e2-9197-370581804d09" # Group.Read.All
+      type = "Role"
+    }
   }
 
   # Add API scope
@@ -84,7 +99,7 @@ resource "azuread_application" "traefik_workshop" {
       admin_consent_description  = "Allow the application to access group membership information"
       admin_consent_display_name = "Access Groups"
       enabled                   = true
-      id                        = "00000000-0000-0000-0000-000000000004"
+      id                        = "00000000-0000-0000-0000-000000000003"
       type                      = "User"
       user_consent_description  = "Allow this application to access your group membership information"
       user_consent_display_name = "Access your groups"
@@ -107,7 +122,7 @@ resource "azuread_application" "traefik_workshop" {
     description          = "Support role for limited access"
     display_name         = "Support"
     enabled              = true
-    id                   = "00000000-0000-0000-0000-000000000003" # Custom UUID
+    id                   = "00000000-0000-0000-0000-000000000002" # Custom UUID
     value                = "support"
   }
 }

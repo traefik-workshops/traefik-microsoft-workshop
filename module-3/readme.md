@@ -113,18 +113,13 @@ spec:
     certResolver: le
 ```
 
-> [!IMPORTANT]
-> :pencil2: Follow the steps below to promote the customer-api to be a managed by APIM.
-
-```bash
-kubectl apply -f module-3/manifests/apis/customer-ingress-api.yaml
-```
-
-4. Now that we understand how to promote an **IngressRoute** to be managed by APIM services, let us promote **employee**, **flights**, **tickets**, and **external** API applications to be managed by Traefik Hub APIM. 
+4. Now that we understand how to promote an **IngressRoute** to be managed by APIM services, let us promote **customer**, **employee**, **flight**, **ticket**, and **external** API applications to be managed by Traefik Hub APIM. 
 
 ```bash
 kubectl apply -f module-3/manifests/apis/
 ```
+
+You can now view the APIs in the Traefik Hub API Management dashboard.
 
 ## API Developer Portal
 
@@ -248,7 +243,7 @@ terraform output -raw application_client_secret
     
 Issuer URL:
 ```bash
-echo login.microsoftonline.com/$(terraform output -raw tenant_id)/v2.0
+echo login.microsoftonline.com/$(terraform output -raw tenant_id)/discovery/v2.0/keys
 ```
 
 ![portal-oidc](../media/auth-settings-jwt.png)
