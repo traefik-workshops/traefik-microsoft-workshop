@@ -18,7 +18,7 @@ data:
         name: Apache 2.0
         url: 'https://spdx.org/licenses/Apache-2.0.html'
     servers:
-      - url: https://api.traefik.localhost
+      - url: https://api.traefik.${EXTERNAL_IP}.sslip.io
     paths:
       /customers:
         get:
