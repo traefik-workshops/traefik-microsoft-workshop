@@ -18,39 +18,38 @@ spec:
 
 ---
 apiVersion: hub.traefik.io/v1alpha1
-kind: API
+kind: APICatalogItem
 metadata:
-  name: ticket-api
+  name: flight-restricted-platinum
   namespace: apps
-  labels:
-    area: tickets
-    module: crm
 spec:
-  openApiSpec:
-    path: /openapi.yaml
-    operationSets:
-      - name: cru-tickets
-        matchers:
-          - pathPrefix: "/ticket"
-            methods: ["GET","POST","PUT","PATCH"]
+  everyone: true
+  apis:
+    - name: flight-api
+  apiPlan:
+    name: bronze
+  operationFilter:
+    include:
+      - read-flights
 
 ---
 apiVersion: hub.traefik.io/v1alpha1
-kind: APIAccess
+kind: ManagedSubscription
 metadata:
-  name: support-access
+  name: platinum-restricted-subscription
   namespace: apps
 spec:
-  groups:
-    - support
+  applications:
+    - appId: "admin"
+  apiPlan:
+    name: bronze
   apiSelector:
     matchExpressions:
       - key: area
         operator: In
         values:
           - flights
-          - tickets
   operationFilter:
     include:
-      - cru-tickets
       - read-flights
+  weight: 1

@@ -100,14 +100,12 @@ kubectl apply -f module-4/manifests/api-versioning.yaml
 ```
 
 Now, you should be able to interact with all versions of the API via API Dev Portal. 
-
+![APIVersion](../media/api-version.png)
 
 Portal URL:
 ```bash
 echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
 ```
-
-![APIVersion](../media/api-version.png)
 
 <details><summary>Validate API versioning and Plans:</summary>
 
@@ -123,39 +121,35 @@ https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0
 ```
 
 ```bash
-curl -Ik -H "version: v1" -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
+curl -I -H "version: v1" -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
 ```
 
 </details>
 ___
 
-## API Rate Limit Policy
+## API Plans
 
-API rate limiting defines consumption limits for API consumers. It serves three primary purposes: protecting infrastructure, managing quotas, and enabling API monetization.
+API Plans define the rate limits and quotas for API consumers. It serves three primary purposes: protecting infrastructure, managing quotas, and enabling API monetization.
 
-By using the **_APIRateLimit_** object, you can apply rate limits to **_user groups_** for specific **APIs**.
+By using the **_APIPlan_** object, you can apply rate limits and quotas to **_APICatalogItem_** and **_ManagedSubscription_** for specific **APIs**.
 This helps to prevent API abuse, control traffic, and ensure a stable and predictable user experience. 
 
-Multiple rate limits can be configured using any combination of groups and APIs.
-
-Traefik Hub supports two strategies for rate limiting:
-- **Local strategy**: applies rate limiting policies to a single Traefik Hub API Gateway replica. Each instance manages its own counter. 
-- **Distributed strategy**: shares rate limiting policies across all Traefik Hub API Gateway replicas. This ensures consistency across all instances.
-
 ```yaml
+
 apiVersion: hub.traefik.io/v1alpha1
-kind: APIRateLimit
+kind: APIPlan
 metadata:
-  name: apim-employees-drl
+  name: platinum
   namespace: apps
 spec:
-  apis:
-  - name: employee-api
-  groups:
-  - admin                           # Apply to all users who are part of the admin group
-  limit: 5                          # Number of requests allowed (5 requests)    
-  period: 30s                       # Over the time period (30s)
-  strategy: distributed             # Limit will be enforced across all API Gateway instances.  
+  title: "Platinum"
+  description: "Platinum rate limits and quotas"
+  rateLimit:
+    limit: 1000
+    period: 10s
+  quota:
+    limit: 10000
+    period: 720h # Approximately 30 days
 ```
 
 <br/>
@@ -164,22 +158,26 @@ spec:
 > :pencil2: Deploy **_api-rate-limit_** to the cluster.
 > Apply the API rate policy manifest file.
 
+<details><summary>Validate API Plans:</summary>
+
 ```bash
-kubectl apply -f module-4/manifests/api-rate-limit.yaml
+export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
+-d "client_id=$(terraform output -raw application_client_id)" \
+-d "client_secret=$(terraform output -raw application_client_secret)" \
+-d "scope=$(terraform output -raw entraid_api_id)/.default" \
+-d "grant_type=password" \
+-d "username=$(terraform output -raw admin_email)" \
+-d "password=$(terraform output -raw admin_password)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
 ```
 
-<details><summary>Rate Limit Policy - Traefik Hub UI :bulb:</summary>
+```bash
+curl -I -H "version: v1" -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
+```
 
-- Rate-limit policies across all clusters are listed under **Rate Limits** view.
-
-![get-apiportal](../media/hub-rate-limit.png)
-
-- Rate-limit policy details can be obtained by selecting the policy
-
-![get-apiportal](../media/hub-rate-limit-detail.png)
+Observe the `x-quota-remaining` header.
 
 </details>
-
 ___
 
 ## Granular API access
@@ -217,24 +215,23 @@ In the below example, we are restricting the **_support_** user group to only "G
 
 ```yaml
 apiVersion: hub.traefik.io/v1alpha1
-kind: APIAccess
+kind: APICatalogItem
 metadata:
-  name: support-access
+  name: airline-restricted-platinum
   namespace: apps
 spec:
   groups:
     - support
-  apiSelector:
-    matchExpressions:
-      - key: area
-        operator: In
-        values:
-          - flights
-          - tickets
-  operationFilter:                  # Add operationFilter into APIAccess definition file.
+    - admin
+  apis:
+    - name: flight-api
+    - name: ticket-api
+  apiPlan:
+    name: platinum
+  operationFilter:
     include:
-      - read-flights                # Specify the name of the operationSets to include for this group.
       - cru-tickets
+      - read-flights
 ```
 
 <br/>
@@ -248,18 +245,6 @@ kubectl apply -f module-4/manifests/api-granular-access.yaml
 ```
 
 <br>
-
-<details><summary>Granular Access Policy - Traefik Hub UI :bulb:</summary>
-
-- **support** user has only GET access to flight-api
-
-![get-apiportal](../media/support-get.png)
-
-- API Access display allowed methods under the **Portal** view
-
-![get-apiportal](../media/apiaccess-get.png)
-
-</details>
 
 ___
 
@@ -278,107 +263,52 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 kubectl create namespace monitoring
 ```
 
-2. Deploy the Prometheus stack.
+2. Deploy the Prometheus and Grafana stack.
 
-  ```bash
-  kubectl apply -f module-4/monitoring/prometheus/
-  ```
+```bash
+kubectl apply -R -f module-4/monitoring/
+```
 
-3. Deploy the Grafana stack.
+3. Verify everything is running. 
 
-  ```bash
-  kubectl apply -f module-4/monitoring/grafana
-  ```
+4. Get the Grafana URL and access the Grafana dashboard (user/password: **admin/admin**)
 
-4. Verify everything is running. 
+```bash
+kubectl -n monitoring describe ingressroute.traefik.io grafana
+```
 
+```
+Name:         grafana
+Namespace:    monitoring
+Labels:       <none>
+Annotations:  <none>
+API Version:  traefik.io/v1alpha1
+Kind:         IngressRoute
+Metadata:
+  Creation Timestamp:  2024-02-29T19:00:25Z
+  Generation:          1
+  Resource Version:    2200
+  UID:                 f8967e4b-aff8-4b28-97f2-ab4fefd9a18b
+Spec:
+  Entry Points:
+    web
+  Routes:
+    Kind:   Rule
+    Match:  Host(`grafana.${EXTERNAL_IP}.sslip.io`)    # Grafana URL
+    Services:
+      Name:       grafana
+      Namespace:  monitoring
+      Port:       3000
+Events:           <none>
+```
 
-5. Get the Grafana URL and access the Grafana dashboard (user/password: **admin/admin**)
+```bash
+echo http://grafana.$(terraform output -raw external_ip).sslip.io
+```
 
-    ```bash
-    kubectl -n monitoring describe ingressroute.traefik.io grafana
+5. Once logged in to Grafana, navigate to Dashboards > Traefik Hub > Hub Dashboard.
 
-    Name:         grafana
-    Namespace:    monitoring
-    Labels:       <none>
-    Annotations:  <none>
-    API Version:  traefik.io/v1alpha1
-    Kind:         IngressRoute
-    Metadata:
-      Creation Timestamp:  2024-02-29T19:00:25Z
-      Generation:          1
-      Resource Version:    2200
-      UID:                 f8967e4b-aff8-4b28-97f2-ab4fefd9a18b
-    Spec:
-      Entry Points:
-        web
-      Routes:
-        Kind:   Rule
-        Match:  Host(`grafana.${EXTERNAL_IP}.sslip.io`)    # Grafana URL
-        Services:
-          Name:       grafana
-          Namespace:  monitoring
-          Port:       3000
-    Events:           <none>
-    ```
-    ```yaml
-    http://grafana.${EXTERNAL_IP}.sslip.io
-    ```
-
-6. Once logged in to Grafana, navigate to Dashboards > Traefik Hub > Hub Dashboard.
-
-    ![grafana](../media/grafana.png)
-
-    <br>
-
-### Generate Traffic:
-
-Now that the observability stack is deployed, let's generate some traffic! 
-
-> [!NOTE]     
-> :pencil2: *Follow the below steps to deploy the monitoring stack on your AKS cluster.* 
-
-<br>
-
-1. Create a new namespace to host traffic generator deployment. 
-
-   ```bash
-   kubectl create ns traffic
-   ```
-
-2. To interact with the APIs, we need to generate API Keys for **admin** and **support** users that we created in module-3. 
-
-    - If you don't have the token saved, log in to **API Portal** and **Create token**.
-
-      <details><summary>Create Token - Traefik Hub UI :bulb:</summary>
-
-      ![api-portal](../media/hub-login.png)
-
-      ![api-portal](../media/create-token.png)
-      </details>
-
-    - Create a **Kubernetes Secret** containing the tokens to enable the traffic app to generate load
-
-    ```bash
-    export ADMIN_TOKEN="xxx"
-    export SUPPORT_TOKEN="yyy"
-    ```
-    ```bash
-    kubectl create secret generic tokens -n traffic --from-literal=admin="${ADMIN_TOKEN}" --from-literal=support="${SUPPORT_TOKEN}"
-    ```  
-3.  Deploy the load generator app. This should start with two instances for each user. 
-
-    ```bash
-    kubectl apply -f module-4/traffic/
-    ```
-    ```bash
-    kubectl -n traffic get pod
-
-    NAME                                   READY   STATUS    RESTARTS   AGE
-    traffic-app-admin-764cdfdb95-ctgm9     1/1     Running   0          20h
-    traffic-app-support-55f77d7fb5-hsdr5   1/1     Running   0          20h
-    ```
-4. Explore Grafana dashboard! 
+![grafana](../media/grafana.png)
 
 ## References
 

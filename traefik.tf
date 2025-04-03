@@ -65,6 +65,11 @@ resource "helm_release" "traefik" {
     }
   }
 
+  set {
+    name  = "logs.general.level"
+    value = "INFO"
+  }
+
   # Deployment settings
   set {
     name  = "deployment.replicas"
