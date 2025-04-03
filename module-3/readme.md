@@ -266,13 +266,11 @@ terraform output -raw admin_email
 terraform output -raw admin_password
 ```
 
-Support user email and password:
-```bash
-terraform output -raw support_email
-```
-```bash
-terraform output -raw support_password
-```
+5. Log in to the API Dev Portal with a user and create a new Application with the name `admin`
+
+![portal-oidc](../media/managed-subscription-application.png)
+
+The managed subscription will give you access to a set of APIs once you create an application with a matching id.
 
 Portal URL:
 ```bash
@@ -296,7 +294,7 @@ export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urle
 https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
 -d "client_id=$(terraform output -raw application_client_id)" \
 -d "client_secret=$(terraform output -raw application_client_secret)" \
--d "scope=c51d02df-7bc5-4478-a41f-86c743ac783c/.default" \
+-d "scope=$(terraform output -raw entraid_api_id)/.default" \
 -d "grant_type=password" \
 -d "username=$(terraform output -raw admin_email)" \
 -d "password=$(terraform output -raw admin_password)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)

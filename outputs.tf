@@ -49,6 +49,11 @@ output "external_ip" {
   value       = data.kubernetes_service.traefik.status.0.load_balancer.0.ingress.0.ip
 }
 
+output "entraid_api_id" {
+  sensitive = true
+  value     = local.app_id
+}
+
 # Data source to get the Traefik service details
 data "kubernetes_service" "traefik" {
   metadata {

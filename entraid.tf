@@ -1,3 +1,7 @@
+locals {
+  app_id = "68893b3f-7c63-4a90-b74a-ae0ef14b78c3"
+}
+
 # Create users
 resource "azuread_user" "admin" {
   user_principal_name = "admin@${data.azuread_domains.default.domains[0].domain_name}"
@@ -45,7 +49,7 @@ data "azuread_domains" "default" {
 # Create app registration
 resource "azuread_application" "traefik_workshop" {
   display_name = "traefik-workshop"
-  identifier_uris = ["api://traefik-workshop"]
+  identifier_uris = ["api://${local.app_id}"]
   
   # Configure optional claims and group membership claims
   optional_claims {
