@@ -37,60 +37,60 @@ Each version of the application will have its own ingress definition which allow
 
 1. Create an **_API_** object 
 
-   ```yaml
-   apiVersion: hub.traefik.io/v1alpha1
-   kind: API
-   metadata:
-     name: customer-api-versioned     # API Name
-     namespace: apps
-     labels:
-       area: customers
-       module: crm
-   spec:
-     versions:                         # Attach APIVersion objects
-       - name: customer-api-v1         # APIVersion object name 
-       - name: customer-api-v2
-       - name: customer-api-v3
-       - name: customer-api-v4   
-   ```
+```yaml
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: customer-api-versioned     # API Name
+  namespace: apps
+  labels:
+    area: customers
+    module: crm
+spec:
+  versions:                         # Attach APIVersion objects
+    - name: customer-api-v1         # APIVersion object name 
+    - name: customer-api-v2
+    - name: customer-api-v3
+    - name: customer-api-v4   
+```
 
 2. Create **_APIVersion_** object for each version of the application. 
 
-   ```yaml
-   apiVersion: hub.traefik.io/v1alpha1
-   kind: APIVersion                   
-   metadata:
-     name: customer-api-v1            # APIVersion Object Name     
-     namespace: apps
-   spec:
-     release: 1.0.0
-     openApiSpec:
-       path: /openapi.yaml
-   ```
+```yaml
+apiVersion: hub.traefik.io/v1alpha1
+kind: APIVersion                   
+metadata:
+  name: customer-api-v1            # APIVersion Object Name     
+  namespace: apps
+spec:
+  release: 1.0.0
+  openApiSpec:
+    path: /openapi.yaml
+```
 
 3. Promote **_IngressRoute_** definition to be managed by Hub APIM **_APIVersion_** object.
 
-   ```yaml
-   apiVersion: traefik.io/v1alpha1
-   kind: IngressRoute
-   metadata:
-     name: api-ingress-customers-v1
-     namespace: apps
-     annotations:                                      
-       hub.traefik.io/api: customer-api-versioned      # API Name  
-       hub.traefik.io/api-version: customer-api-v1     # APIVersion Object Name
-   spec:
-     entryPoints:
-       - websecure
-     routes:
-       - kind: Rule
-         match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`) && Header(`version`, `v1`)
-         services:
-           - name: customer-app
-             port: 3000
-     tls:
-       certResolver: le
-   ```
+```yaml
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: api-ingress-customers-v1
+  namespace: apps
+  annotations:                                      
+    hub.traefik.io/api: customer-api-versioned      # API Name  
+    hub.traefik.io/api-version: customer-api-v1     # APIVersion Object Name
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`api.traefik.${EXTERNAL_IP}.sslip.io`) && PathPrefix(`/customers`) && Header(`version`, `v1`)
+      services:
+        - name: customer-app
+          port: 3000
+  tls:
+    certResolver: le
+```
 
 > [!IMPORTANT]     
 > :pencil2: Deploy **_`api-versioning`_** to the cluster. 
@@ -149,29 +149,18 @@ spec:
 ```bash
 kubectl apply -f module-4/manifests/api-rate-limit.yaml
 ```
-```bash
-# Verify API rate limit policies.
-
-kubectl -n apps get apiratelimit
-
-NAME                 AGE
-apim-employees-drl   14s
-apim-fallback-drl    14s
-```
-
-<br/>
 
 <details><summary>Rate Limit Policy - Traefik Hub UI :bulb:</summary>
 
 - Rate-limit policies across all clusters are listed under **Rate Limits** view.
 
-  ![get-apiportal](../media/hub-rate-limit.png)
+![get-apiportal](../media/hub-rate-limit.png)
 
 - Rate-limit policy details can be obtained by selecting the policy
 
-  ![get-apiportal](../media/hub-rate-limit-detail.png)
+![get-apiportal](../media/hub-rate-limit-detail.png)
 
-  </details>
+</details>
 
 ___
 
@@ -246,11 +235,11 @@ kubectl apply -f module-4/manifests/api-granular-access.yaml
 
 - **support** user has only GET access to flight-api
 
-  ![get-apiportal](../media/support-get.png)
+![get-apiportal](../media/support-get.png)
 
 - API Access display allowed methods under the **Portal** view
 
-  ![get-apiportal](../media/apiaccess-get.png)
+![get-apiportal](../media/apiaccess-get.png)
 
 </details>
 
@@ -267,34 +256,24 @@ Traefik Hub showcases a wealth of OpenTelemetry metrics and labels that redefine
 
 1. Create a namespace for the monitoring stack.
 
-    ```bash
-    kubectl create namespace monitoring
-    ```
+```bash
+kubectl create namespace monitoring
+```
 
 2. Deploy the Prometheus stack.
 
-    ```bash
-    kubectl apply -f module-4/monitoring/prometheus/
-    ```
+  ```bash
+  kubectl apply -f module-4/monitoring/prometheus/
+  ```
 
 3. Deploy the Grafana stack.
 
-    ```bash
-    kubectl apply -f module-4/monitoring/grafana
-    ```
+  ```bash
+  kubectl apply -f module-4/monitoring/grafana
+  ```
+
 4. Verify everything is running. 
 
-    ```bash
-    kubectl -n monitoring get pods,svc
-    NAME                                   READY   STATUS    RESTARTS     AGE
-    pod/grafana-5b88f776dd-b5fmk           1/1     Running   0            25h
-    pod/prometheus-core-547f84fdd4-5sx55   2/2     Running   1 (8h ago)   8h
-    
-    NAME                              TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-    service/prometheus-remote-write   ClusterIP   10.43.158.82   <none>        80/TCP     25h
-    service/grafana                   ClusterIP   10.43.40.181   <none>        3000/TCP   25h
-    service/prometheus                ClusterIP   10.43.8.73     <none>        9090/TCP   25h
-    ```
 
 5. Get the Grafana URL and access the Grafana dashboard (user/password: **admin/admin**)
 
