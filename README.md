@@ -37,4 +37,4 @@ The hands-on lab is divided into multiple modules. Each module covers a particul
 - [Module 4: API Advanced Capabilities](module-4/readme.md)
 
 ------
-:arrow_forward: [Module 0: Provision AKS cluster](module-0/readme.md)
+:arrow_forward: [Module 0: Provision resources](module-0/readme.md)
