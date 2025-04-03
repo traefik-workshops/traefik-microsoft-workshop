@@ -1,0 +1,55 @@
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: API
+metadata:
+  name: flight-api
+  namespace: apps
+  labels:
+    area: flights
+    module: erp
+spec:
+  openApiSpec:
+    path: /openapi.yaml
+    operationSets:
+      - name: read-flights
+        matchers:
+          - pathPrefix: "/flight"
+            methods: ["GET"]
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: APICatalogItem
+metadata:
+  name: flight-restricted-bronze
+  namespace: apps
+spec:
+  everyone: true
+  apis:
+    - name: flight-api
+  apiPlan:
+    name: bronze
+  operationFilter:
+    include:
+      - read-flights
+
+---
+apiVersion: hub.traefik.io/v1alpha1
+kind: ManagedSubscription
+metadata:
+  name: bronze-restricted-subscription
+  namespace: apps
+spec:
+  applications:
+    - appId: "admin"
+  apiPlan:
+    name: bronze
+  apiSelector:
+    matchExpressions:
+      - key: area
+        operator: In
+        values:
+          - flights
+  operationFilter:
+    include:
+      - read-flights
+  weight: 1

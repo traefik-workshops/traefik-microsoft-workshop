@@ -1,0 +1,230 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+  - kind: ServiceAccount
+    name: prometheus-k8s
+    namespace: monitoring
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus
+rules:
+  - apiGroups: [""]
+    resources:
+      - nodes
+      - services
+      - endpoints
+      - pods
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources:
+      - configmaps
+    verbs: ["get"]
+  - nonResourceURLs: ["/metrics"]
+    verbs: ["get"]
+  - apiGroups: ["extensions"]
+    resources:
+      - ingresses
+    verbs: ["get", "list", "watch"]
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus-k8s
+  namespace: monitoring
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-storage
+  namespace: monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+  namespace: monitoring
+data:
+  general.yaml: |
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-core
+  namespace: monitoring
+data:
+  prometheus.yaml: |
+    global:
+      scrape_interval: 10s
+      scrape_timeout: 10s
+      evaluation_interval: 10s
+
+    # Prom is deployed statically, not through the Prom Operator, so instead of using a ServiceMonitor or an annotation, we add the jobs here
+    # @see: https://www.infracloud.io/blogs/prometheus-operator-helm-guide/#how-does-prometheus-find-all-the-targets-to-monitor-and-scrape
+    scrape_configs:
+      # Scrape prometheus itself, the job name is added as a label `job=<job_name>` to any timeseries scraped from this config
+      - job_name: 'prometheus'
+        # metrics_path defaults to '/metrics'
+        # scheme defaults to 'http'.
+        static_configs:
+          - targets: ['localhost:9090']
+      - job_name: 'flux-system'
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: replace
+            replacement: $1
+            target_label: app
+          - target_label: namespace
+            source_labels: [__meta_kubernetes_namespace]
+          - target_label: pod
+            source_labels: [__meta_kubernetes_pod_name]
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - flux-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-core
+  namespace: monitoring
+  labels:
+    app: prometheus
+    component: core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      name: prometheus-main
+      labels:
+        app: prometheus
+        component: core
+    spec:
+      serviceAccountName: prometheus-k8s
+      securityContext:
+        fsGroup: 2000
+        runAsUser: 1000
+        runAsNonRoot: true
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.48.0-rc.1
+          args:
+            - '--enable-feature=otlp-write-receiver'
+            - '--storage.tsdb.retention=60d'
+            - '--storage.tsdb.path="/prometheus/data/"'
+            - '--web.enable-lifecycle'
+            - '--config.file=/prometheus/config/prometheus.yaml'
+          ports:
+            - name: web
+              containerPort: 80
+            - name: webui
+              containerPort: 9090
+          resources:
+            requests:
+              cpu: 500m
+              memory: 500M
+            limits:
+              cpu: 500m
+              memory: 500M
+          volumeMounts:
+            - name: config-volume
+              mountPath: /prometheus/config
+            - name: rules-volume
+              mountPath: /prometheus/rules
+            - name: prometheus-storage
+              mountPath: /prometheus
+        - name: configmap-reload
+          image: jimmidyson/configmap-reload:v0.2.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - --volume-dir=/etc/config
+            - --volume-dir=/etc/rules
+            - --webhook-url=http://localhost:9090/-/reload
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/config
+              readOnly: true
+            - name: rules-volume
+              mountPath: /etc/rules
+              readOnly: true
+          resources:
+            limits:
+              cpu: 10m
+              memory: 10Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+      volumes:
+        - name: prometheus-storage
+          persistentVolumeClaim:
+            claimName: prometheus-storage
+        - name: config-volume
+          configMap:
+            name: prometheus-core
+        - name: rules-volume
+          configMap:
+            name: prometheus-rules
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-remote-write
+  namespace: monitoring
+  labels:
+    app: prometheus
+    component: core
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      name: web
+  selector:
+    app: prometheus
+    component: core
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: monitoring
+  labels:
+    app: prometheus
+    component: core
+spec:
+  ports:
+    - port: 9090
+      protocol: TCP
+      name: webui
+  selector:
+    app: prometheus
+    component: core
