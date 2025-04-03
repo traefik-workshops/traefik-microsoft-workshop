@@ -63,6 +63,8 @@ terraform apply -auto-approve -var="subscription_id=$(az account show --query id
 
 7. Once Terraform completes successfully, you can refresh the Traefik local dashboard and be presented with the new UI. Since **Traefik API Gateway** is based on **Traefik Application Proxy**, there is no impact on any of the existing services.
 
+![copy_token](../media/gateway_dashboard.png)
+
 ___
 
 ## Secure access to your application
@@ -218,48 +220,9 @@ spec:
 kubectl apply -f module-2/manifests/whoami-ingress.yaml
 ```
 
-<details><summary>Verification commands</summary>
+<details><summary>Verification steps:</summary>
   
-Verify IngressRoute
-```bash
-kubectl -n apps get ingressroute.traefik.io whoami-ingress
-```
-  
-```
-NAME             AGE
-whoami-ingress   173m
-```
-
-```bash
-kubectl -n apps describe ingressroute.traefik.io whoami-ingress
-```
-
-```
-Name:         whoami-ingress
-Namespace:    apps
-Labels:       <none>
-Annotations:  <none>
-API Version:  traefik.io/v1alpha1
-Kind:         IngressRoute
-Metadata:
-  Creation Timestamp:  2024-02-29T18:34:03Z
-  Generation:          1
-  Resource Version:    1230
-  UID:                 306f20de-9c84-4a81-9c2b-02e06360c89f
-Spec:
-  Entry Points:
-    web
-  Routes:
-    Kind:   Rule
-    Match:  Host(`whoami.${EXTERNAL_IP}.sslip.io`)      # URL the service is exposed on
-    Services:
-      Name:  whoami
-      Port:  80
-Events:      <none>
-```
-
-Login to the whoami application:
-Username and password:
+- Login to the whoami application. Username and password:
 ```bash
 echo $(terraform output -raw admin_email)
 ```
@@ -267,6 +230,7 @@ echo $(terraform output -raw admin_email)
 echo $(terraform output -raw admin_password)
 ```
 
+- API URL:
 ```bash
 echo https://whoami.traefik.$(terraform output -raw external_ip).sslip.io
 ```
