@@ -72,7 +72,6 @@ metadata:
 spec:
   everyone: true
   apis:
-    - name: flight-api
     - name: ticket-api
   apiPlan:
     name: bronze
@@ -86,7 +85,6 @@ metadata:
 spec:
   everyone: true
   apis:
-    - name: flight-api
     - name: ticket-api
   apiPlan:
     name: silver
@@ -100,7 +98,6 @@ metadata:
 spec:
   everyone: true
   apis:
-    - name: flight-api
     - name: ticket-api
     - name: customer-api
   apiPlan:
@@ -117,7 +114,6 @@ spec:
     - support
     - admin
   apis:
-    - name: flight-api
     - name: ticket-api
     - name: customer-api
     - name: employee-api
@@ -135,7 +131,6 @@ spec:
     - appId: "admin"
     - appId: "support"
   apis:
-    - name: flight-api
     - name: ticket-api
     - name: customer-api
     - name: employee-api

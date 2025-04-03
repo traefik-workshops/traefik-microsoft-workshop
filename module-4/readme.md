@@ -114,7 +114,7 @@ export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urle
 https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
 -d "client_id=$(terraform output -raw application_client_id)" \
 -d "client_secret=$(terraform output -raw application_client_secret)" \
--d "scope=$(terraform output -raw entraid_api_id)/.default" \
+-d "scope=$(terraform output -raw application_client_id)/.default" \
 -d "grant_type=password" \
 -d "username=$(terraform output -raw admin_email)" \
 -d "password=$(terraform output -raw admin_password)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
@@ -165,7 +165,7 @@ export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urle
 https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
 -d "client_id=$(terraform output -raw application_client_id)" \
 -d "client_secret=$(terraform output -raw application_client_secret)" \
--d "scope=$(terraform output -raw entraid_api_id)/.default" \
+-d "scope=$(terraform output -raw application_client_id)/.default" \
 -d "grant_type=password" \
 -d "username=$(terraform output -raw admin_email)" \
 -d "password=$(terraform output -raw admin_password)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
@@ -205,7 +205,7 @@ spec:
     operationSets:                   # Add operationSets into the API definition file.
       - name: read-flights           # Provide a name that will be referenced by operationFilter.    
         matchers:                    # Restrict access based on specific criteria. 
-          - pathPrefix: "/flight"    # In this example, only "GET" is allowed to "/flights"   
+          - pathPrefix: "/flights"   # In this example, only "GET" is allowed to "/flights"   
             methods: ["GET"]
 ```
 
@@ -217,20 +217,16 @@ In the below example, we are restricting the **_support_** user group to only "G
 apiVersion: hub.traefik.io/v1alpha1
 kind: APICatalogItem
 metadata:
-  name: airline-restricted-platinum
+  name: flight-restricted-bronze
   namespace: apps
 spec:
-  groups:
-    - support
-    - admin
+  everyone: true
   apis:
     - name: flight-api
-    - name: ticket-api
   apiPlan:
-    name: platinum
+    name: bronze
   operationFilter:
     include:
-      - cru-tickets
       - read-flights
 ```
 
@@ -246,6 +242,22 @@ kubectl apply -f module-4/manifests/api-granular-access.yaml
 
 <br>
 
+<details><summary>Validate granular API access control:</summary>
+
+```bash
+export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
+https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
+-d "client_id=$(terraform output -raw application_client_id)" \
+-d "client_secret=$(terraform output -raw application_client_secret)" \
+-d "scope=$(terraform output -raw application_client_id)/.default" \
+-d "grant_type=password" \
+-d "username=$(terraform output -raw admin_email)" \
+-d "password=$(terraform output -raw admin_password)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
+```
+
+```bash
+curl -I --request POST -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/flights
+```
 ___
 
 ## OTel with Grafana

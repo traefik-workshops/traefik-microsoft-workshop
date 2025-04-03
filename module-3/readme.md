@@ -280,7 +280,7 @@ echo https://demo-portal.traefik.$(terraform output -raw external_ip).sslip.io
 6. Test API access
 
 ```bash
-curl -I https://api.traefik.$(terraform output -raw external_ip).sslip.io/flights
+curl -I https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
 ```
 
 ```
@@ -294,7 +294,7 @@ export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urle
 https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
 -d "client_id=$(terraform output -raw application_client_id)" \
 -d "client_secret=$(terraform output -raw application_client_secret)" \
--d "scope=$(terraform output -raw entraid_api_id)/.default" \
+-d "scope=$(terraform output -raw application_client_id)/.default" \
 -d "grant_type=password" \
 -d "username=$(terraform output -raw admin_email)" \
 -d "password=$(terraform output -raw admin_password)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
@@ -303,7 +303,7 @@ https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0
 8. Use the access token to access the API
 
 ```bash
-curl -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/flights
+curl -H "Authorization: Bearer $access_token" https://api.traefik.$(terraform output -raw external_ip).sslip.io/customers
 ```
 
 ## References

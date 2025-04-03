@@ -145,7 +145,7 @@ export access_token=$(curl -X POST -H 'Content-Type: application/x-www-form-urle
 https://login.microsoftonline.com/$(terraform output -raw tenant_id)/oauth2/v2.0/token \
 -d "client_id=$(terraform output -raw application_client_id)" \
 -d 'grant_type=client_credentials' \
--d 'scope=2ff814a6-3304-4ab8-85cb-cd0e6f879c1d%2F.default' \
+-d "scope=$(terraform output -raw application_client_id)/.default" \
 -d "client_secret=$(terraform output -raw application_client_secret)" | grep -o '"access_token":"[^"]*' | cut -d'"' -f4)
 ```
 

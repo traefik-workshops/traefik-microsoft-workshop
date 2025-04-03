@@ -13,7 +13,7 @@ spec:
     operationSets:
       - name: read-flights
         matchers:
-          - pathPrefix: "/flight"
+          - pathPrefix: "/flights"
             methods: ["GET"]
 
 ---
@@ -36,7 +36,7 @@ spec:
 apiVersion: hub.traefik.io/v1alpha1
 kind: ManagedSubscription
 metadata:
-  name: bronze-restricted-subscription
+  name: flight-restricted-bronze-subscription
   namespace: apps
 spec:
   applications:
