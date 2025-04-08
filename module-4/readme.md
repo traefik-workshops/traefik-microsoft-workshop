@@ -186,7 +186,7 @@ For more fine-grained control over API exposure, Traefik Hub offers the ability 
 
 This is done through the use of two definitions:      
 1. `operationSets` defines the methods allowed as part of the **API** resource definition.       
-2. `operationFilter` references `operationSets` definition as part the **APIAccess** policy. 
+2. `operationFilter` references `operationSets` definition as part the **APICatalogItem** or **ManagedSubscription** definitions. 
 
 Below, we modified the flight API that we deployed in module-3 to only allow the **GET** method. 
 
